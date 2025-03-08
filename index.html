@@ -67,9 +67,54 @@
         </div>
 
         <div class="project">
-            <h2>🔧 Managing and creating spotify playlist using Terraform</h2>
-            <p>Created a fully automated CI/CD pipeline using AWS CodePipeline, CodeBuild, and GitHub Actions.</p>
-            <a href="https://github.com/Harsxch/DevOps_Project" class="btn btn-primary" target="_blank">View on GitHub</a>
+            <h2>🔧 Managing and Creating Multiple Spotify Playlists Using Terraform</h2>
+            <p>
+                This project demonstrates how to use Terraform to create and manage multiple Spotify playlists programmatically.
+                Below is a brief summary of the key points and workflow:
+            </p>
+            <ul>
+                <li><strong>Prerequisites:</strong> 
+                    <ul>
+                        <li>Spotify Developer account to obtain <em>Client ID</em> and <em>Client Secret</em>.</li>
+                        <li>Terraform installed locally.</li>
+                        <li>Docker (if using an auth proxy to handle Spotify OAuth).</li>
+                    </ul>
+                </li>
+                <li><strong>Project Setup:</strong>
+                    <ul>
+                        <li>Clone the repository from GitHub.</li>
+                        <li>Create a <code>.env</code> file (or export environment variables) with your Spotify credentials.</li>
+                        <li>Set or export variables (like <code>SPOTIFY_CLIENT_ID</code>, <code>SPOTIFY_CLIENT_SECRET</code>, and <code>SPOTIFY_API_KEY</code> if needed).</li>
+                    </ul>
+                </li>
+                <li><strong>Authentication Proxy (Optional):</strong>
+                    <ul>
+                        <li>Run <code>docker run -it -p 27228:27228 --env-file .env ghcr.io/conradludgate/spotify-auth-proxy</code> to handle local OAuth.</li>
+                        <li>Ensure it’s accessible at <code>http://localhost:27228</code>.</li>
+                    </ul>
+                </li>
+                <li><strong>Terraform Workflow:</strong>
+                    <ul>
+                        <li>In your Terraform code, define multiple <code>spotify_playlist</code> resources for each playlist.</li>
+                        <li>Initialize with <code>terraform init</code>.</li>
+                        <li>Review changes with <code>terraform plan</code>.</li>
+                        <li>Apply the configuration with <code>terraform apply</code> to create or update playlists.</li>
+                    </ul>
+                </li>
+                <li><strong>Result:</strong>
+                    <ul>
+                        <li>Terraform will create/update all specified playlists in your Spotify account.</li>
+                        <li>Tracks, descriptions, and other properties can be managed via Terraform code.</li>
+                        <li>Useful for quickly spinning up multiple playlists or syncing changes automatically.</li>
+                    </ul>
+                </li>
+            </ul>
+            <p>
+                This approach streamlines playlist management by leveraging Infrastructure as Code principles with Terraform.
+            </p>
+            <a href="https://github.com/Harsxch/DevOps_Project" class="btn btn-primary" target="_blank">
+                View on GitHub
+            </a>
         </div>
 
         <div class="project">
@@ -123,4 +168,3 @@
     </script>
 </body>
 </html>
-
