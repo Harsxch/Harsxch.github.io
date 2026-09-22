@@ -279,46 +279,25 @@ async function main() {
     });
   }
 
-  console.log("Seeding tracking links and coupons...");
-  const rahulLink = await prisma.trackingLink.upsert({
-    where: { code: "rahul-python-yt-v1" },
-    create: {
-      code: "rahul-python-yt-v1",
-      influencerId: rahul.id,
-      courseId: pythonDsa.id,
-      platformId: youtube.id,
-      campaignId: campaign.id,
-      content: "Video 1",
-      utmSource: "youtube",
-      utmMedium: "influencer",
-      utmCampaign: "september_launch",
-      utmContent: "rahul_video_1",
-      status: "ACTIVE",
-    },
-    update: {},
-  });
-  await prisma.trackingLink.upsert({
-    where: { code: "priya-ai-ig-story" },
-    create: {
-      code: "priya-ai-ig-story",
-      influencerId: priya.id,
-      courseId: aiCourse.id,
-      platformId: instagram.id,
-      campaignId: campaign.id,
-      content: "Story",
-      utmSource: "instagram",
-      utmMedium: "influencer",
-      utmCampaign: "september_launch",
-      utmContent: "priya_story",
-      status: "ACTIVE",
-    },
-    update: {},
-  });
-
+  console.log("Seeding coupons...");
   const rahulCoupon = await prisma.coupon.upsert({
     where: { code: "RAHUL10" },
     create: {
       code: "RAHUL10",
+      influencerId: rahul.id,
+      discountType: "PERCENTAGE",
+      discountValue: 10,
+      startDate: new Date("2026-06-01"),
+      status: "ACTIVE",
+    },
+    update: {},
+  });
+  // Mirrors a real link in production: a full 5-dimension UTM set plus a
+  // coupon that auto-applies at checkout, both carried by one shared link.
+  const rahulDedicatedCoupon = await prisma.coupon.upsert({
+    where: { code: "HPDSPAPP" },
+    create: {
+      code: "HPDSPAPP",
       influencerId: rahul.id,
       discountType: "PERCENTAGE",
       discountValue: 10,
@@ -347,6 +326,65 @@ async function main() {
       discountType: "FIXED_AMOUNT",
       discountValue: 1000,
       startDate: new Date("2026-08-01"),
+      status: "ACTIVE",
+    },
+    update: {},
+  });
+
+  console.log("Seeding tracking links...");
+  const rahulLink = await prisma.trackingLink.upsert({
+    where: { code: "rahul-python-yt-v1" },
+    create: {
+      code: "rahul-python-yt-v1",
+      influencerId: rahul.id,
+      courseId: pythonDsa.id,
+      platformId: youtube.id,
+      campaignId: campaign.id,
+      content: "Video 1",
+      utmSource: "youtube",
+      utmMedium: "influencer",
+      utmCampaign: "september_launch",
+      utmContent: "rahul_video_1",
+      status: "ACTIVE",
+    },
+    update: {},
+  });
+  // Real-world example: storefront link combining a full UTM set with an
+  // auto-applied coupon, exactly matching how these get built in production
+  // (courses.vedantu.com/...?utm_source=storefront&utm_medium=V_Upskill_Academy
+  // &utm_term=HarshPriyam&utm_campaign=Dedicated&utm_content=sf&couponCode=HPDSPAPP).
+  await prisma.trackingLink.upsert({
+    where: { code: "rahul-python-dedicated-sf" },
+    create: {
+      code: "rahul-python-dedicated-sf",
+      influencerId: rahul.id,
+      courseId: pythonDsa.id,
+      platformId: other.id,
+      campaignId: campaign.id,
+      couponId: rahulDedicatedCoupon.id,
+      content: "Storefront - Dedicated",
+      utmSource: "storefront",
+      utmMedium: "V_Upskill_Academy",
+      utmCampaign: "Dedicated",
+      utmContent: "sf",
+      utmTerm: "HarshPriyam",
+      status: "ACTIVE",
+    },
+    update: {},
+  });
+  await prisma.trackingLink.upsert({
+    where: { code: "priya-ai-ig-story" },
+    create: {
+      code: "priya-ai-ig-story",
+      influencerId: priya.id,
+      courseId: aiCourse.id,
+      platformId: instagram.id,
+      campaignId: campaign.id,
+      content: "Story",
+      utmSource: "instagram",
+      utmMedium: "influencer",
+      utmCampaign: "september_launch",
+      utmContent: "priya_story",
       status: "ACTIVE",
     },
     update: {},

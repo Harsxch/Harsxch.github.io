@@ -4,15 +4,24 @@ import { requireSession, resolveInfluencerScope, assertOwnInfluencerScope } from
 import { assertCan } from "@/lib/auth/rbac";
 import type { OrderStatus } from "@/generated/prisma/enums";
 
-export async function listOrders(params: {
+export interface OrderFilters {
   influencerId?: string;
   courseId?: string;
+  campaignId?: string;
   status?: OrderStatus;
   from?: Date;
   to?: Date;
+  couponCode?: string;
+  utmSource?: string;
+  utmMedium?: string;
+  utmCampaign?: string;
+  utmContent?: string;
+  utmTerm?: string;
   page?: number;
   pageSize?: number;
-}) {
+}
+
+export async function listOrders(params: OrderFilters) {
   const session = await requireSession();
   assertCan(session.user.role, "orders", "read");
   const influencerId = resolveInfluencerScope(session.user, params.influencerId);
@@ -20,13 +29,35 @@ export async function listOrders(params: {
   const page = params.page ?? 1;
   const pageSize = Math.min(params.pageSize ?? 25, 100);
 
+  // UTM dimensions only ever live on the TrackingLink an order was
+  // attributed through - only add this nested filter when at least one is
+  // actually requested, otherwise it would wrongly exclude every
+  // coupon-only-attributed order (no tracking link at all).
+  const utmFilters = {
+    ...(params.utmSource ? { utmSource: params.utmSource } : {}),
+    ...(params.utmMedium ? { utmMedium: params.utmMedium } : {}),
+    ...(params.utmCampaign ? { utmCampaign: params.utmCampaign } : {}),
+    ...(params.utmContent ? { utmContent: params.utmContent } : {}),
+    ...(params.utmTerm ? { utmTerm: params.utmTerm } : {}),
+  };
+  const hasUtmFilter = Object.keys(utmFilters).length > 0;
+
   const where = {
     ...(params.courseId ? { courseId: params.courseId } : {}),
     ...(params.status ? { status: params.status } : {}),
+    ...(params.couponCode ? { coupon: { code: params.couponCode.toUpperCase().trim() } } : {}),
     ...(params.from || params.to
       ? { placedAt: { ...(params.from ? { gte: params.from } : {}), ...(params.to ? { lte: params.to } : {}) } }
       : {}),
-    ...(influencerId ? { attribution: { influencerId } } : {}),
+    ...(influencerId || params.campaignId || hasUtmFilter
+      ? {
+          attribution: {
+            ...(influencerId ? { influencerId } : {}),
+            ...(params.campaignId ? { campaignId: params.campaignId } : {}),
+            ...(hasUtmFilter ? { trackingLink: utmFilters } : {}),
+          },
+        }
+      : {}),
   };
 
   const [rows, total] = await Promise.all([
@@ -35,7 +66,13 @@ export async function listOrders(params: {
       include: {
         course: { select: { name: true } },
         coupon: { select: { code: true } },
-        attribution: { include: { influencer: { select: { id: true, name: true } }, campaign: true } },
+        attribution: {
+          include: {
+            influencer: { select: { id: true, name: true } },
+            campaign: true,
+            trackingLink: { select: { code: true, utmSource: true, utmMedium: true, utmCampaign: true, utmContent: true, utmTerm: true } },
+          },
+        },
         transactions: { where: { type: "EARNING" } },
         // Never include `customer` for INFLUENCER role - PII must not leak
         // (spec section 17). Admin roles get it via getOrderDetail instead.
@@ -58,6 +95,12 @@ export async function listOrders(params: {
       couponCode: o.coupon?.code ?? null,
       influencerName: o.attribution?.influencer?.name ?? null,
       campaignName: o.attribution?.campaign?.name ?? null,
+      trackingLinkCode: o.attribution?.trackingLink?.code ?? null,
+      utmSource: o.attribution?.trackingLink?.utmSource ?? null,
+      utmMedium: o.attribution?.trackingLink?.utmMedium ?? null,
+      utmCampaign: o.attribution?.trackingLink?.utmCampaign ?? null,
+      utmContent: o.attribution?.trackingLink?.utmContent ?? null,
+      utmTerm: o.attribution?.trackingLink?.utmTerm ?? null,
       originalPrice: o.originalPrice.toString(),
       discountAmount: o.discountAmount.toString(),
       finalAmount: o.finalAmount.toString(),

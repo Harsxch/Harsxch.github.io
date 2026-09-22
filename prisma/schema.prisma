@@ -434,6 +434,12 @@ model TrackingLink {
   utmMedium    String             @default("influencer")
   utmCampaign  String
   utmContent   String
+  utmTerm      String?
+  // Optional: this link's outbound redirect also carries a coupon code
+  // (mirrors real-world links that combine a full UTM set with a
+  // ?couponCode= param pointing straight at an external checkout page).
+  couponId     String?
+  coupon       Coupon?            @relation(fields: [couponId], references: [id])
   status       TrackingLinkStatus @default(ACTIVE)
   clicks       Int                @default(0)
   createdAt    DateTime           @default(now())
@@ -463,11 +469,12 @@ model Coupon {
   createdAt          DateTime                    @default(now())
   updatedAt          DateTime                    @updatedAt
 
-  courses      CouponCourse[]
-  orders       Order[]
-  attributions OrderAttribution[]
-  campaign     Campaign?          @relation(fields: [campaignId], references: [id])
-  campaignId   String?
+  courses       CouponCourse[]
+  orders        Order[]
+  attributions  OrderAttribution[]
+  trackingLinks TrackingLink[]
+  campaign      Campaign?          @relation(fields: [campaignId], references: [id])
+  campaignId    String?
 
   @@index([influencerId])
   @@index([status])

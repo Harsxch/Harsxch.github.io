@@ -99,6 +99,33 @@ checkout; a UTM parameter can be stale or shared). Reordering, adding
 first-click/last-click logic, or adding a new source requires touching only
 this one file, not `process-order.ts`.
 
+### 6.1 Full UTM control and self-serve links
+
+`TrackingLink` carries all five real-world UTM dimensions - source, medium,
+campaign, content, **term** - plus an optional `couponId`. The public
+redirect (`src/app/r/[code]/route.ts`) forwards every set dimension and, if
+a coupon is attached, appends `couponCode` too - one shared link can both
+track and auto-apply a discount at checkout, matching how these links are
+actually built in production (a full UTM set + `couponCode` on a single
+URL to an external checkout page).
+
+Influencers can create their own links (`trackingLinks: INFLUENCER →
+["read","write"]` in the RBAC matrix), not just admins. `createTrackingLink()`
+never trusts a client-supplied `influencerId` for an INFLUENCER-role caller -
+it's always overwritten with the caller's own session influencerId - and
+additionally checks course access (`CourseInfluencer`) and coupon ownership
+(a coupon can only be attached to a link if it belongs to that same
+influencer) before creating anything. `setTrackingLinkStatus()` re-checks
+row ownership on every call for the same reason.
+
+Both the admin Sales page and the influencer's My Sales page expose a
+shared filter bar (`src/components/filters/sales-filter-bar.tsx`) across
+course, campaign, coupon code, date range, and every UTM dimension.
+`listOrders()` only adds the `attribution.trackingLink` sub-filter when at
+least one UTM param is actually requested - otherwise it would wrongly
+exclude every coupon-only-attributed order, which has no tracking link at
+all. The CSV export endpoint accepts and forwards the identical filter set.
+
 ## 7. RBAC & row-level scoping (spec sections 9, 34)
 
 Two independent layers, both server-side, both required:

@@ -55,7 +55,7 @@ const MATRIX: Record<Resource, Partial<Record<Role, Action[]>>> = {
     SUPER_ADMIN: ["read", "write"],
     INFLUENCER_MANAGER: ["read", "write"],
     ANALYST: ["read"],
-    INFLUENCER: ["read"], // own links only
+    INFLUENCER: ["read", "write"], // self-serve: can create/view own links only, enforced in createTrackingLink
   },
   coupons: {
     SUPER_ADMIN: ["read", "write"],
