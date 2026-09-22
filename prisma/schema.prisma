@@ -1,0 +1,717 @@
+// Influencer Partnership & Sales Management Platform
+// Core design principle (see README): Influencer -> Commercial Agreement (versioned) ->
+// Campaign/Platform -> Tracking Link/Coupon -> Course -> Order -> Attribution ->
+// Eligible Revenue -> Influencer/Company Split -> Payout.
+//
+// Financial transactions always store a full snapshot of the agreement terms used to
+// calculate them. Agreement versions are never edited or deleted once orders reference
+// them; changes create a new version instead (see docs/ARCHITECTURE.md).
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Role {
+  SUPER_ADMIN
+  FINANCE
+  INFLUENCER_MANAGER
+  ANALYST
+  INFLUENCER
+}
+
+enum InfluencerStatus {
+  PROSPECT
+  ONBOARDING
+  ACTIVE
+  PAUSED
+  INACTIVE
+}
+
+enum AgreementModelType {
+  REVENUE_SHARE
+  PERCENTAGE_COMMISSION
+  FIXED_PER_SALE
+  HYBRID
+}
+
+enum EligibleRevenueBasis {
+  GROSS
+  DISCOUNTED
+  NET_OF_REFUND
+}
+
+enum AgreementStatus {
+  DRAFT
+  ACTIVE
+  SUPERSEDED
+  EXPIRED
+  CANCELLED
+}
+
+enum CourseStatus {
+  ACTIVE
+  INACTIVE
+  ARCHIVED
+}
+
+enum CampaignStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum TrackingLinkStatus {
+  ACTIVE
+  DISABLED
+}
+
+enum CouponDiscountType {
+  PERCENTAGE
+  FIXED_AMOUNT
+}
+
+enum CouponStatus {
+  ACTIVE
+  INACTIVE
+  EXPIRED
+}
+
+enum OrderStatus {
+  PENDING
+  SUCCESSFUL
+  REFUNDED
+  PARTIALLY_REFUNDED
+  CANCELLED
+}
+
+enum OrderSource {
+  MANUAL
+  API
+  WEBHOOK
+  CSV_IMPORT
+}
+
+enum AttributionSource {
+  COUPON
+  TRACKING_LINK
+  MANUAL
+  NONE
+}
+
+enum TransactionType {
+  EARNING
+  REVERSAL
+  BONUS
+}
+
+enum TransactionStatus {
+  PENDING
+  APPROVED
+  PAID
+  REVERSED
+}
+
+enum PayoutStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+enum GoalMetric {
+  SALES
+  REVENUE
+}
+
+enum AssetType {
+  IMAGE
+  VIDEO
+  DOCUMENT
+  LINK
+}
+
+enum NotificationType {
+  NEW_SALE
+  EARNING_APPROVED
+  EARNING_PAID
+  EARNING_REVERSED
+  NEW_COURSE
+  NEW_CAMPAIGN
+  NEW_ASSET
+  COUPON_CREATED
+  COUPON_UPDATED
+  TARGET_MILESTONE
+}
+
+// ---------------------------------------------------------------------------
+// Identity & Access
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         Role
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+
+  // Only set when role = INFLUENCER. One user maps to exactly one influencer profile.
+  influencer Influencer?
+
+  managedInfluencers Influencer[]                 @relation("InfluencerManager")
+  createdAgreements  CommercialAgreement[]        @relation("AgreementCreatedBy")
+  createdVersions    CommercialAgreementVersion[] @relation("VersionCreatedBy")
+  createdCampaigns   Campaign[]                   @relation("CampaignCreatedBy")
+  createdGoals       Goal[]                       @relation("GoalCreatedBy")
+  uploadedAssets     MarketingAsset[]             @relation("AssetUploadedBy")
+  initiatedPayouts   Payout[]                     @relation("PayoutInitiatedBy")
+  ordersCreated      Order[]                      @relation("OrderCreatedBy")
+  notifications      Notification[]
+  auditLogs          AuditLog[]
+
+  @@index([role])
+}
+
+// ---------------------------------------------------------------------------
+// Platforms, Influencers, Courses
+// ---------------------------------------------------------------------------
+
+model Platform {
+  id   String @id @default(cuid())
+  name String @unique
+  slug String @unique
+
+  influencersPrimary Influencer[]     @relation("PrimaryPlatform")
+  trackingLinks      TrackingLink[]
+  assets             MarketingAsset[]
+
+  @@index([slug])
+}
+
+model Influencer {
+  id                String           @id @default(cuid())
+  userId            String?          @unique
+  user              User?            @relation(fields: [userId], references: [id])
+  name              String
+  email             String           @unique
+  phone             String?
+  profilePhotoUrl   String?
+  youtubeUrl        String?
+  instagramUrl      String?
+  otherSocials      Json?
+  primaryPlatformId String?
+  primaryPlatform   Platform?        @relation("PrimaryPlatform", fields: [primaryPlatformId], references: [id])
+  category          String?
+  managerId         String?
+  manager           User?            @relation("InfluencerManager", fields: [managerId], references: [id])
+  joiningDate       DateTime?
+  status            InfluencerStatus @default(PROSPECT)
+  paymentInfo       Json?
+  notes             String?
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  agreements    CommercialAgreement[]
+  courseAccess  CourseInfluencer[]
+  campaigns     CampaignInfluencer[]
+  trackingLinks TrackingLink[]
+  coupons       Coupon[]
+  attributions  OrderAttribution[]
+  transactions  FinancialTransaction[]
+  payouts       Payout[]
+  goals         Goal[]
+
+  @@index([status])
+  @@index([managerId])
+  @@index([primaryPlatformId])
+}
+
+model Course {
+  id                   String              @id @default(cuid())
+  name                 String
+  slug                 String              @unique
+  description          String?
+  courseUrl            String
+  originalPrice        Decimal             @db.Decimal(12, 2)
+  sellingPrice         Decimal             @db.Decimal(12, 2)
+  thumbnailUrl         String?
+  category             String?
+  status               CourseStatus        @default(ACTIVE)
+  startDate            DateTime?
+  endDate              DateTime?
+  defaultModelType     AgreementModelType?
+  marketingDescription String?
+  sellingPoints        Json?
+  faqs                 Json?
+  createdAt            DateTime            @default(now())
+  updatedAt            DateTime            @updatedAt
+
+  influencerAccess       CourseInfluencer[]
+  trackingLinks          TrackingLink[]
+  couponCourses          CouponCourse[]
+  orders                 Order[]
+  campaignCourses        CampaignCourse[]
+  assets                 MarketingAsset[]
+  agreementVersionScopes AgreementVersionCourse[]
+
+  @@index([status])
+  @@index([category])
+}
+
+model CourseInfluencer {
+  id           String     @id @default(cuid())
+  courseId     String
+  course       Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  influencerId String
+  influencer   Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@unique([courseId, influencerId])
+  @@index([influencerId])
+}
+
+// ---------------------------------------------------------------------------
+// Campaigns
+// ---------------------------------------------------------------------------
+
+model Campaign {
+  id            String         @id @default(cuid())
+  name          String
+  slug          String         @unique
+  description   String?
+  startDate     DateTime
+  endDate       DateTime?
+  status        CampaignStatus @default(DRAFT)
+  targetSales   Int?
+  targetRevenue Decimal?       @db.Decimal(12, 2)
+  createdById   String?
+  createdBy     User?          @relation("CampaignCreatedBy", fields: [createdById], references: [id])
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+
+  courses                CampaignCourse[]
+  influencers            CampaignInfluencer[]
+  trackingLinks          TrackingLink[]
+  coupons                Coupon[]
+  orderAttributions      OrderAttribution[]
+  assets                 MarketingAsset[]
+  agreementVersionScopes AgreementVersionCampaign[]
+
+  @@index([status])
+  @@index([startDate, endDate])
+}
+
+model CampaignCourse {
+  id         String   @id @default(cuid())
+  campaignId String
+  campaign   Campaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  courseId   String
+  course     Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([campaignId, courseId])
+}
+
+model CampaignInfluencer {
+  id           String     @id @default(cuid())
+  campaignId   String
+  campaign     Campaign   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  influencerId String
+  influencer   Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+
+  @@unique([campaignId, influencerId])
+  @@index([influencerId])
+}
+
+// ---------------------------------------------------------------------------
+// Commercial Agreements (versioned)
+// ---------------------------------------------------------------------------
+
+// Stable identity for "an influencer's deal". Never holds terms directly -
+// terms live on immutable, ordered CommercialAgreementVersion rows.
+model CommercialAgreement {
+  id           String     @id @default(cuid())
+  influencerId String
+  influencer   Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  notes        String?
+  createdById  String?
+  createdBy    User?      @relation("AgreementCreatedBy", fields: [createdById], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  versions CommercialAgreementVersion[]
+
+  @@index([influencerId])
+}
+
+// One immutable row per version. Once an order references a version (via a
+// FinancialTransaction snapshot), that version's terms must never change.
+// "Changing terms" = create version N+1 and mark N as SUPERSEDED.
+model CommercialAgreementVersion {
+  id                   String               @id @default(cuid())
+  agreementId          String
+  agreement            CommercialAgreement  @relation(fields: [agreementId], references: [id], onDelete: Cascade)
+  version              Int
+  modelType            AgreementModelType
+  influencerSharePct   Decimal?             @db.Decimal(5, 2)
+  companySharePct      Decimal?             @db.Decimal(5, 2)
+  commissionPct        Decimal?             @db.Decimal(5, 2)
+  fixedAmount          Decimal?             @db.Decimal(12, 2)
+  eligibleRevenueBasis EligibleRevenueBasis @default(DISCOUNTED)
+  effectiveFrom        DateTime
+  effectiveUntil       DateTime?
+  status               AgreementStatus      @default(ACTIVE)
+  notes                String?
+  createdById          String?
+  createdBy            User?                @relation("VersionCreatedBy", fields: [createdById], references: [id])
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @updatedAt
+
+  // Empty scope tables = applies to ALL of the influencer's courses/campaigns
+  // (the influencer's "general" agreement). A non-empty scope narrows it to
+  // specific courses/campaigns, which the resolution engine prefers over the
+  // general agreement (see src/lib/financial/resolve-agreement.ts).
+  courseScopes   AgreementVersionCourse[]
+  campaignScopes AgreementVersionCampaign[]
+  coupons        Coupon[]
+  transactions   FinancialTransaction[]
+
+  @@unique([agreementId, version])
+  @@index([agreementId, status])
+  @@index([effectiveFrom, effectiveUntil])
+}
+
+model AgreementVersionCourse {
+  id                 String                     @id @default(cuid())
+  agreementVersionId String
+  agreementVersion   CommercialAgreementVersion @relation(fields: [agreementVersionId], references: [id], onDelete: Cascade)
+  courseId           String
+  course             Course                     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([agreementVersionId, courseId])
+}
+
+model AgreementVersionCampaign {
+  id                 String                     @id @default(cuid())
+  agreementVersionId String
+  agreementVersion   CommercialAgreementVersion @relation(fields: [agreementVersionId], references: [id], onDelete: Cascade)
+  campaignId         String
+  campaign           Campaign                   @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+
+  @@unique([agreementVersionId, campaignId])
+}
+
+// ---------------------------------------------------------------------------
+// Tracking Links & Coupons
+// ---------------------------------------------------------------------------
+
+model TrackingLink {
+  id           String             @id @default(cuid())
+  code         String             @unique
+  influencerId String
+  influencer   Influencer         @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  courseId     String
+  course       Course             @relation(fields: [courseId], references: [id])
+  platformId   String
+  platform     Platform           @relation(fields: [platformId], references: [id])
+  campaignId   String?
+  campaign     Campaign?          @relation(fields: [campaignId], references: [id])
+  content      String?
+  utmSource    String
+  utmMedium    String             @default("influencer")
+  utmCampaign  String
+  utmContent   String
+  status       TrackingLinkStatus @default(ACTIVE)
+  clicks       Int                @default(0)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+
+  attributions OrderAttribution[]
+
+  @@index([influencerId])
+  @@index([courseId])
+  @@index([status])
+}
+
+model Coupon {
+  id                 String                      @id @default(cuid())
+  code               String                      @unique
+  influencerId       String
+  influencer         Influencer                  @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  discountType       CouponDiscountType
+  discountValue      Decimal                     @db.Decimal(12, 2)
+  startDate          DateTime                    @default(now())
+  endDate            DateTime?
+  usageLimit         Int?
+  currentUsage       Int                         @default(0)
+  agreementVersionId String?
+  agreementVersion   CommercialAgreementVersion? @relation(fields: [agreementVersionId], references: [id])
+  status             CouponStatus                @default(ACTIVE)
+  createdAt          DateTime                    @default(now())
+  updatedAt          DateTime                    @updatedAt
+
+  courses      CouponCourse[]
+  orders       Order[]
+  attributions OrderAttribution[]
+  campaign     Campaign?          @relation(fields: [campaignId], references: [id])
+  campaignId   String?
+
+  @@index([influencerId])
+  @@index([status])
+}
+
+model CouponCourse {
+  id       String @id @default(cuid())
+  couponId String
+  coupon   Coupon @relation(fields: [couponId], references: [id], onDelete: Cascade)
+  courseId String
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([couponId, courseId])
+}
+
+// ---------------------------------------------------------------------------
+// Customers, Orders, Attribution
+// ---------------------------------------------------------------------------
+
+// Deliberately minimal - influencers must never see customer PII (sec. 17).
+model Customer {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  phone     String?
+  createdAt DateTime @default(now())
+
+  orders Order[]
+}
+
+model Order {
+  id             String      @id @default(cuid())
+  orderNumber    String      @unique
+  customerId     String
+  customer       Customer    @relation(fields: [customerId], references: [id])
+  courseId       String
+  course         Course      @relation(fields: [courseId], references: [id])
+  couponId       String?
+  coupon         Coupon?     @relation(fields: [couponId], references: [id])
+  originalPrice  Decimal     @db.Decimal(12, 2)
+  discountAmount Decimal     @default(0) @db.Decimal(12, 2)
+  finalAmount    Decimal     @db.Decimal(12, 2)
+  currency       String      @default("INR")
+  status         OrderStatus @default(PENDING)
+  source         OrderSource @default(MANUAL)
+  placedAt       DateTime    @default(now())
+  createdById    String?
+  createdBy      User?       @relation("OrderCreatedBy", fields: [createdById], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  attribution  OrderAttribution?
+  transactions FinancialTransaction[]
+  refunds      Refund[]
+
+  @@index([courseId])
+  @@index([status])
+  @@index([placedAt])
+  @@index([couponId])
+}
+
+model OrderAttribution {
+  id             String            @id @default(cuid())
+  orderId        String            @unique
+  order          Order             @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  influencerId   String?
+  influencer     Influencer?       @relation(fields: [influencerId], references: [id])
+  trackingLinkId String?
+  trackingLink   TrackingLink?     @relation(fields: [trackingLinkId], references: [id])
+  couponId       String?
+  coupon         Coupon?           @relation(fields: [couponId], references: [id])
+  campaignId     String?
+  campaign       Campaign?         @relation(fields: [campaignId], references: [id])
+  source         AttributionSource @default(NONE)
+  attributedAt   DateTime          @default(now())
+  notes          String?
+
+  @@index([influencerId])
+  @@index([trackingLinkId])
+  @@index([couponId])
+}
+
+model Refund {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  amount      Decimal  @db.Decimal(12, 2)
+  isPartial   Boolean  @default(false)
+  reason      String?
+  refundedAt  DateTime @default(now())
+  createdById String?
+
+  transaction FinancialTransaction?
+
+  @@index([orderId])
+}
+
+// ---------------------------------------------------------------------------
+// Financial Ledger
+// ---------------------------------------------------------------------------
+
+// One row per calculated financial event. EARNING rows are created when an
+// order settles; REVERSAL rows are created on refund and always link back to
+// the original EARNING row via relatedTransactionId. Rows are never edited
+// after creation except for status transitions (PENDING -> APPROVED -> PAID,
+// or -> REVERSED) - the calculation snapshot fields are immutable.
+model FinancialTransaction {
+  id           String     @id @default(cuid())
+  orderId      String
+  order        Order      @relation(fields: [orderId], references: [id])
+  influencerId String
+  influencer   Influencer @relation(fields: [influencerId], references: [id])
+
+  agreementVersionId String?
+  agreementVersion   CommercialAgreementVersion? @relation(fields: [agreementVersionId], references: [id])
+
+  type   TransactionType
+  status TransactionStatus @default(PENDING)
+
+  // Immutable calculation snapshot - copied from the agreement version at
+  // calculation time so later agreement edits never alter this row.
+  modelTypeSnapshot            AgreementModelType
+  influencerSharePctSnapshot   Decimal?             @db.Decimal(5, 2)
+  companySharePctSnapshot      Decimal?             @db.Decimal(5, 2)
+  commissionPctSnapshot        Decimal?             @db.Decimal(5, 2)
+  fixedAmountSnapshot          Decimal?             @db.Decimal(12, 2)
+  eligibleRevenueBasisSnapshot EligibleRevenueBasis
+
+  eligibleRevenue  Decimal @db.Decimal(12, 2)
+  influencerAmount Decimal @db.Decimal(12, 2)
+  companyAmount    Decimal @db.Decimal(12, 2)
+
+  relatedTransactionId String?
+  relatedTransaction   FinancialTransaction?  @relation("Reversal", fields: [relatedTransactionId], references: [id])
+  reversals            FinancialTransaction[] @relation("Reversal")
+
+  refundId String? @unique
+  refund   Refund? @relation(fields: [refundId], references: [id])
+
+  payoutId String?
+  payout   Payout? @relation(fields: [payoutId], references: [id])
+
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([influencerId, status])
+  @@index([orderId])
+  @@index([payoutId])
+}
+
+model Payout {
+  id            String       @id @default(cuid())
+  influencerId  String
+  influencer    Influencer   @relation(fields: [influencerId], references: [id])
+  amount        Decimal      @db.Decimal(12, 2)
+  status        PayoutStatus @default(PENDING)
+  reference     String?
+  method        String?
+  initiatedById String?
+  initiatedBy   User?        @relation("PayoutInitiatedBy", fields: [initiatedById], references: [id])
+  initiatedAt   DateTime     @default(now())
+  paidAt        DateTime?
+  failureReason String?
+  notes         String?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+
+  transactions FinancialTransaction[]
+
+  @@index([influencerId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Marketing Assets, Goals, Notifications, Audit Log
+// ---------------------------------------------------------------------------
+
+model MarketingAsset {
+  id           String    @id @default(cuid())
+  title        String
+  type         AssetType
+  url          String
+  description  String?
+  courseId     String?
+  course       Course?   @relation(fields: [courseId], references: [id])
+  campaignId   String?
+  campaign     Campaign? @relation(fields: [campaignId], references: [id])
+  platformId   String?
+  platform     Platform? @relation(fields: [platformId], references: [id])
+  uploadedById String?
+  uploadedBy   User?     @relation("AssetUploadedBy", fields: [uploadedById], references: [id])
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([courseId])
+  @@index([campaignId])
+}
+
+model Goal {
+  id           String     @id @default(cuid())
+  influencerId String
+  influencer   Influencer @relation(fields: [influencerId], references: [id], onDelete: Cascade)
+  metric       GoalMetric
+  targetValue  Decimal    @db.Decimal(12, 2)
+  periodStart  DateTime
+  periodEnd    DateTime
+  createdById  String?
+  createdBy    User?      @relation("GoalCreatedBy", fields: [createdById], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@index([influencerId, periodStart, periodEnd])
+}
+
+model Notification {
+  id         String           @id @default(cuid())
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type       NotificationType
+  title      String
+  body       String
+  entityType String?
+  entityId   String?
+  isRead     Boolean          @default(false)
+  createdAt  DateTime         @default(now())
+
+  @@index([userId, isRead])
+}
+
+// Append-only. The application layer must never expose update/delete for
+// this model.
+model AuditLog {
+  id            String   @id @default(cuid())
+  userId        String?
+  user          User?    @relation(fields: [userId], references: [id])
+  userEmail     String
+  action        String
+  entityType    String
+  entityId      String
+  previousValue Json?
+  newValue      Json?
+  createdAt     DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([createdAt])
+}
