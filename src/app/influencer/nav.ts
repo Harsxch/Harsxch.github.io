@@ -10,12 +10,14 @@ import {
   Target,
   Bell,
   User,
+  BarChart3,
 } from "lucide-react";
 import type { NavItem } from "@/components/layout/app-shell";
 
 export const INFLUENCER_NAV: NavItem[] = [
   { href: "/influencer", label: "Dashboard", icon: LayoutDashboard },
   { href: "/influencer/sales", label: "My Sales", icon: ShoppingCart },
+  { href: "/influencer/sales-tracking", label: "Sales Tracking", icon: BarChart3 },
   { href: "/influencer/courses", label: "My Courses", icon: BookOpen },
   { href: "/influencer/links", label: "My Links", icon: Link2 },
   { href: "/influencer/coupons", label: "My Coupons", icon: Ticket },

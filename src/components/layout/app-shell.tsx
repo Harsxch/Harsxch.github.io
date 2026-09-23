@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SignOutButton } from "./sign-out-button";
 import type { LucideIcon } from "lucide-react";
+import { Menu } from "lucide-react";
 
 export interface NavItem {
   href: string;
@@ -8,6 +9,16 @@ export interface NavItem {
   icon: LucideIcon;
 }
 
+/**
+ * Mobile sidebar is a CSS-only off-canvas drawer (a hidden checkbox +
+ * label/peer selectors) rather than client-side state, so this stays a
+ * Server Component - `navItems` carries Lucide icon component references,
+ * which cannot cross a Server->Client boundary as props (they're
+ * functions; only Server Components can pass those to what they render
+ * directly). A full Next.js navigation re-renders this fresh HTML, which
+ * resets the checkbox to unchecked - so the drawer closes on navigation
+ * for free, with no JS needed for that either.
+ */
 export function AppShell({
   navItems,
   userName,
@@ -23,7 +34,26 @@ export function AppShell({
 }) {
   return (
     <div className="min-h-screen flex bg-slate-50">
-      <aside className="w-64 shrink-0 border-r border-slate-200 bg-white flex flex-col">
+      <input type="checkbox" id="mobile-nav-toggle" className="hidden peer" />
+
+      {/* Mobile-only top bar */}
+      <div className="md:hidden fixed top-0 inset-x-0 h-14 bg-white border-b border-slate-200 flex items-center px-4 z-30">
+        <label htmlFor="mobile-nav-toggle" className="p-2 -ml-2 cursor-pointer text-slate-700">
+          <Menu className="w-5 h-5" />
+        </label>
+        <span className="ml-2 font-semibold text-slate-900 text-sm">Influencer Partner Platform</span>
+      </div>
+
+      {/* Backdrop, mobile only, shown while the drawer is open */}
+      <label
+        htmlFor="mobile-nav-toggle"
+        className="hidden peer-checked:block md:hidden fixed inset-0 bg-slate-900/30 z-30"
+      />
+
+      <aside
+        className="fixed md:static inset-y-0 left-0 z-40 w-64 shrink-0 border-r border-slate-200 bg-white flex flex-col
+          -translate-x-full peer-checked:translate-x-0 md:translate-x-0 transition-transform duration-200"
+      >
         <div className="h-16 flex items-center px-5 border-b border-slate-200">
           <span className="font-semibold text-slate-900 text-sm">Influencer Partner Platform</span>
         </div>
@@ -51,8 +81,9 @@ export function AppShell({
           <SignOutButton />
         </div>
       </aside>
-      <main className="flex-1 min-w-0">
-        <div className="max-w-[1400px] mx-auto px-6 py-6">{children}</div>
+
+      <main className="flex-1 min-w-0 pt-14 md:pt-0">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">{children}</div>
       </main>
     </div>
   );
