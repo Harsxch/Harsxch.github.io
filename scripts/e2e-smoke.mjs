@@ -3,10 +3,11 @@
 // (`npm run db:seed`). Run with: node scripts/e2e-smoke.mjs
 //
 // Covers: RBAC (an influencer can never reach /admin or another
-// influencer's data), the full commercial-agreement -> order ->
-// attribution -> financial-calculation -> refund -> approve -> payout
-// pipeline through the real UI (not just the service layer), and CSV
-// exports.
+// influencer's data), the commercial-agreement -> order -> attribution ->
+// financial-calculation -> refund pipeline through the real UI (not just
+// the service layer), and CSV exports. Earnings-approval/payout-creation
+// UI was removed in the two-role simplification; the underlying
+// calculations are still verified here.
 import { chromium } from "playwright";
 
 const BASE_URL = process.env.BASE_URL ?? "http://localhost:3000";
@@ -106,20 +107,11 @@ function assert(condition, message) {
   await page.waitForTimeout(300);
   assert((await page.textContent("body")).includes("PARTIALLY REFUNDED"), "partial refund created a reversal and updated order status");
 
-  await page.goto(`${BASE_URL}/admin/earnings?status=PENDING`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(300);
-  await page.locator('tbody input[type="checkbox"]').first().check();
-  await page.click('button:has-text("Approve selected")');
-  await page.waitForTimeout(1200);
-
-  await page.goto(`${BASE_URL}/admin/payouts`, { waitUntil: "networkidle" });
-  await page.waitForTimeout(300);
-  const payoutBtn = page.locator('button:has-text("Create Payout")').first();
-  if ((await payoutBtn.count()) > 0) {
-    await payoutBtn.click();
-    await page.waitForTimeout(1200);
-    assert((await page.textContent("body")).includes("PENDING"), "payout created from approved earnings");
-  }
+  // Earnings-approval and payout-creation pages were removed in the
+  // platform simplification (Admin/Influencer + Sales Tracking only) -
+  // the underlying ledger/payout data and calculations are still exercised
+  // above (order creation, commission calc, refund reversal) and via the
+  // CSV export checks below, which read the same tables those UI pages did.
 
   await context.close();
 }
