@@ -118,9 +118,11 @@ additionally checks course access (`CourseInfluencer`) and coupon ownership
 influencer) before creating anything. `setTrackingLinkStatus()` re-checks
 row ownership on every call for the same reason.
 
-Both the admin Sales page and the influencer's My Sales page expose a
-shared filter bar (`src/components/filters/sales-filter-bar.tsx`) across
-course, campaign, coupon code, date range, and every UTM dimension.
+The admin Sales Tracking page (the influencer's equivalent "My Sales" page
+was removed in the later platform simplification down to two roles +
+Sales Tracking) exposes a shared filter bar
+(`src/components/filters/sales-filter-bar.tsx`) across course, campaign,
+coupon code, date range, and every UTM dimension.
 `listOrders()` only adds the `attribution.trackingLink` sub-filter when at
 least one UTM param is actually requested - otherwise it would wrongly
 exclude every coupon-only-attributed order, which has no tracking link at

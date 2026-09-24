@@ -13,10 +13,7 @@ export type Resource =
   | "refunds"
   | "transactions"
   | "payouts"
-  | "assets"
-  | "goals"
   | "analytics"
-  | "auditLogs"
   | "users"
   | "exports";
 
@@ -74,20 +71,9 @@ const MATRIX: Record<Resource, Partial<Record<Role, Action[]>>> = {
     ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own payouts only
   },
-  assets: {
-    ADMIN: ["read", "write"],
-    INFLUENCER: ["read"], // assigned assets only
-  },
-  goals: {
-    ADMIN: ["read", "write"],
-    INFLUENCER: ["read"], // own goals only
-  },
   analytics: {
     ADMIN: ["read"],
     INFLUENCER: ["read"], // own dashboard only - row scoping enforced in getInfluencerDashboard
-  },
-  auditLogs: {
-    ADMIN: ["read"],
   },
   users: {
     ADMIN: ["read", "write"],
