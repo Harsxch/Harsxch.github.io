@@ -2,12 +2,17 @@
 
 **Application:** Influencer Partnership & Sales Management Platform
 **Repository:** `Harsxch/Harsxch.github.io` (`main`, merged from branch `claude/influencer-sales-platform-q6bot0`)
-**Audit date:** 2026-09-24 (revised — the product was simplified to a two-role model since the first version of this document; see the note below)
+**Audit date:** 2026-09-24 (third revision — see the note below)
 **Audited by:** direct inspection of the codebase (package files, schema, routes, auth, business logic) — not a description from memory. Anything not verifiable in code is explicitly marked **REQUIRES TECH TEAM CONFIRMATION**.
 
 > Read this if you are the engineer or team taking this application from "built by Claude Code" to "running in production." It documents what exists today, what's mock vs. real, what's missing, and exactly what you need to do/provide to go live.
 
-**What changed since the first handover:** the product was deliberately simplified. The original build had 5 roles and ~20 nav pages across admin and influencer; it's now **2 roles (Admin, Influencer)** with a **3-item admin nav** (Dashboard, Influencers, Sales Tracking) and a **1-item influencer nav** (Sales Tracking). Every section below reflects the current, simplified codebase — not the original broader build.
+**What changed across the three revisions of this document:**
+1. Original build: 5 roles, ~20 nav pages across admin and influencer.
+2. Simplified to **2 roles (Admin, Influencer)** with a 3-item admin nav (Dashboard, Influencers, Sales Tracking) and a 1-item influencer nav (Sales Tracking) — everything else unlinked from nav but still present in the codebase.
+3. **This revision:** the unlinked pages with no dependents were **actually deleted** (not just hidden) — Admin Earnings/Payouts/Audit Logs, and Influencer Campaigns/Coupons/Courses/Earnings/Goals/Links/Notifications/Payouts/Profile/Sales. A smaller set — Courses, Coupons, Tracking Links, Commercial Agreements, Campaigns (admin-only, unlisted) — was deliberately **kept**, because Sales Tracking's real data and filters depend on it. See §2 for the exact current breakdown.
+
+Every section below reflects the codebase as of revision 3 — not the original broader build, and not the "everything hidden, nothing deleted" middle revision either.
 
 ---
 
@@ -19,7 +24,7 @@ This is a deliberately lightweight web platform for running an influencer/creato
 - **Admin** — manages influencers (add/edit/activate/deactivate) and sees Sales Tracking across every influencer, with a breakdown by influencer, course, UTM content, and coupon.
 - **Influencer** — sees only their own Sales Tracking: the same date/UTM/coupon/course filters, scoped to their own sales only, enforced server-side.
 
-The platform also still contains the fuller feature set from an earlier, broader build (commercial agreements, campaigns, tracking-link self-serve creation, coupons, payouts, earnings ledger, goals, notifications) — that code is real, tested, and still runs, but it's now **intentionally hidden from navigation** because the current product direction narrowed scope to Influencer Management + Sales Tracking only. See §2 for exactly what's nav-visible vs. hidden-but-present.
+A small slice of the earlier, broader build still exists as **unlisted admin back-office pages** (Courses, Coupons, Tracking Links, Commercial Agreements, Campaigns) — not because they're "extra," but because Sales Tracking's real data and filters read from them, and deleting them would have frozen the admin view at today's data with no way to add a new course, coupon, or influencer deal. Everything else from the earlier build (Earnings approval, Payouts, Audit Logs, Goals, Notifications, self-serve Tracking Links, and the influencer's old standalone My Sales/Courses/Coupons/Profile pages) has been **deleted outright** — not hidden, gone. See §2 for the exact breakdown of what's nav-visible, what's kept-but-unlisted, and what's deleted.
 
 **Current scope:** A working, fully-implemented core product on top of **mock/manually-entered data** — there is no live payment gateway, LMS, or Metabase connection wired in yet (see §10). The financial calculation engine, RBAC, and data-isolation logic are real and production-grade in design; what's missing before go-live is almost entirely **integration** (real data sources, hosting, CI/CD, secrets) rather than application logic.
 
@@ -43,34 +48,35 @@ The platform also still contains the fuller feature set from an earlier, broader
 | Admin (3 items) | Dashboard, **Influencers**, **Sales Tracking** |
 | Influencer (1 item) | **Sales Tracking** |
 
-Everything else the platform can do still exists in the codebase and works (verified — see §23), it's just not linked from either nav anymore, per the product direction to keep the surface area minimal. The table below marks each module **NAV-VISIBLE** or **HIDDEN (not deleted)** accordingly.
+There are now three categories, not two — nav-visible, kept-but-unlisted (deliberately, because Sales Tracking depends on it), and actually deleted. The table marks each module accordingly.
 
 | Module | Status | Notes |
 |---|---|---|
 | Influencer management (CRUD, profile, manager assignment) | **IMPLEMENTED — NAV-VISIBLE** | Admin-side pages + Server Actions; one of the 2 core features |
 | Sales Tracking — Influencer (UTM/coupon self-serve filtering) | **PLACEHOLDER / MOCK — NAV-VISIBLE** | Fully built UI + API contract; data is synthetically generated, not from a real DB table or Metabase (§10). The influencer's only nav item. |
 | Sales Tracking — Admin (all-influencer view with breakdowns) | **IMPLEMENTED — NAV-VISIBLE** | Real DB-backed (not mock). Extended from the original admin Sales page: added an Influencer filter and by-influencer/course/UTM-content/coupon breakdowns (§11.2) |
-| Influencer dashboard (standalone, own performance) | **REMOVED FROM NAV** | Folded into the Sales Tracking page's own summary cards; the old route now redirects to Sales Tracking rather than rendering separately |
-| Tracking links (admin-issued + influencer self-serve creation) | **IMPLEMENTED — HIDDEN (not deleted)** | Still reachable by direct URL; Sales Tracking's UTM filters read the data this produces |
-| Coupons | **IMPLEMENTED — HIDDEN (not deleted)** | Sales Tracking's coupon filter reads this data |
-| Courses | **IMPLEMENTED — HIDDEN (not deleted)** | Sales Tracking's course filter reads this data |
-| Campaigns | **IMPLEMENTED — HIDDEN (not deleted)** | Not referenced by Sales Tracking's current filter set beyond the underlying order data |
-| Commercial agreements & versioning | **IMPLEMENTED — HIDDEN (not deleted)** | Not shown in either Sales Tracking view; still used by the earnings/payout pipeline it always was |
-| Commission/revenue-share calculation | **IMPLEMENTED** | Pure `decimal.js`-based engine, 4 model types; runs the same as before, just not surfaced in either nav |
-| Earnings ledger | **IMPLEMENTED — HIDDEN (not deleted)** | Immutable per-transaction snapshots |
-| Payouts | **IMPLEMENTED — HIDDEN (not deleted)** | Bundles approved earnings; no real payment-provider integration (money movement itself is manual/external) |
-| Refunds / reversals | **IMPLEMENTED — HIDDEN (not deleted)** | Proportional reversal against original earning, supports partial refunds |
-| Goals | **IMPLEMENTED — HIDDEN (not deleted)** | Per-influencer target tracking |
-| Notifications | **IMPLEMENTED — HIDDEN (not deleted)** | In-app only |
-| Marketing assets | **PARTIALLY IMPLEMENTED — HIDDEN (not deleted)** | Data model + admin listing exist; no file upload — asset URLs are pasted in, not uploaded |
-| Audit log | **IMPLEMENTED — HIDDEN (not deleted)** | Append-only by construction, no update/delete path in the app |
-| CSV exports (sales/earnings/payouts/influencers) | **IMPLEMENTED** | Synchronous, capped at 10,000 rows — flagged as a scale limit in existing docs; the sales export button is still on the admin Sales Tracking page |
+| Influencer dashboard (standalone, own performance) | **DELETED** | Folded into the Sales Tracking page's own summary cards; the old route now redirects to Sales Tracking |
+| Courses (admin CRUD) | **IMPLEMENTED — KEPT, UNLISTED** | Load-bearing: "Record Sale" needs a course to exist, and it's Sales Tracking's course filter/breakdown source |
+| Coupons (admin CRUD) | **IMPLEMENTED — KEPT, UNLISTED** | Load-bearing: Sales Tracking's coupon filter/breakdown source, and coupons are used in order entry |
+| Tracking links (admin CRUD) | **IMPLEMENTED — KEPT, UNLISTED** | Load-bearing: Sales Tracking's UTM filters/breakdown source. The influencer's own **self-serve tracking-link creation UI was deleted** — only the admin side remains |
+| Commercial agreements & versioning | **IMPLEMENTED — KEPT, UNLISTED** | Load-bearing: embedded directly in the Influencer profile page; a new influencer can't have commission terms without it, which "Record Sale" needs to calculate earnings |
+| Campaigns (admin CRUD) | **IMPLEMENTED — KEPT, UNLISTED** | Kept because it's one of Sales Tracking's filter fields; lower stakes than the four above but deleting it would silently disable that one filter's ability to reference a new campaign |
+| Commission/revenue-share calculation | **IMPLEMENTED** | Pure `decimal.js`-based engine, 4 model types; still runs on every "Record Sale" — this is what makes the admin Sales Tracking "Earnings" column correct |
+| Refunds / reversals | **IMPLEMENTED, KEPT, UNLISTED (admin/sales)** | Proportional reversal against original earning, supports partial refunds; reachable from the admin Sales Tracking order detail page |
+| Earnings approval workflow | **DELETED** | The PENDING→APPROVED admin UI and its underlying `approveTransactions()` function are both gone. Earnings computed by "Record Sale" now stay PENDING with **no in-app path to move them forward** — see §22 |
+| Payouts | **DELETED** | The payout-creation UI and its underlying `createPayout()`/`markPayoutPaid()`/`markPayoutFailed()` functions are all gone. `/api/exports/payouts` still returns a CSV of whatever payout rows exist in the DB (historical/seeded only — no new ones can be created) |
+| Goals | **DELETED** | Page, Server Actions, and the `listGoalsWithProgress()` data function all removed. The `Goal` DB table still exists (untouched), just nothing reads/writes it anymore |
+| Notifications (list/mark-read UI) | **DELETED** | The influencer-facing list page and its data functions are gone. The **writer** (`notify()`) is still called by the order/refund pipeline as a side effect — it still inserts `Notification` rows, there's simply no UI left to read them |
+| Marketing assets | **NOT IMPLEMENTED** | Never had a page; data model exists, unused |
+| Audit log (viewer) | **DELETED** | The admin viewer page and `listAuditLogs()` are gone. The **writer** (`recordAudit()`) is untouched and still called throughout the kept flows — audit rows keep being written, there's just no UI to read them anymore |
+| My Sales / My Courses / My Coupons / My Links / Profile (influencer) | **DELETED** | All superseded by, or out of scope of, Sales Tracking; zero remaining dependents, confirmed before deletion |
+| CSV exports (sales/earnings/payouts/influencers) | **IMPLEMENTED** | All 4 endpoints still work standalone, capped at 10,000 rows. Sales/Influencers exports have "Export CSV" buttons on kept pages; Earnings/Payouts exports are now **only reachable by direct URL** since their admin pages were deleted |
 | Order ingestion via real payment/LMS webhook or API | **NOT IMPLEMENTED** | Only manual entry by admin staff exists; schema has `OrderSource.API`/`WEBHOOK`/`CSV_IMPORT` values reserved for later |
-| Email/WhatsApp notification delivery | **NOT IMPLEMENTED** | In-app notifications only |
+| Email/WhatsApp notification delivery | **NOT IMPLEMENTED** | In-app notification writer only, and now has no UI to view it (see Notifications row above) |
 | Payment gateway integration | **NOT IMPLEMENTED** | No Stripe/Razorpay/etc. anywhere in the code |
 | Metabase integration | **NOT IMPLEMENTED** | See §10 |
 | File upload (images/documents) | **NOT IMPLEMENTED** | No upload endpoint exists |
-| Automated tests / CI | **NOT IMPLEMENTED** | One manual Playwright smoke script only, re-verified passing after the simplification (§23) |
+| Automated tests / CI | **NOT IMPLEMENTED** | One manual Playwright smoke script only, re-verified passing after both the nav simplification and the deletion pass (§23) |
 
 ---
 
@@ -78,10 +84,12 @@ Everything else the platform can do still exists in the codebase and works (veri
 
 Roles (`Role` enum): **`ADMIN`, `INFLUENCER` — exactly two, by design.** This is a real database-level change, not a UI relabeling: a migration (`20260924000000_simplify_roles_to_admin_influencer`, §9) collapsed the original 5-role model (`SUPER_ADMIN`, `FINANCE`, `INFLUENCER_MANAGER`, `ANALYST`, `INFLUENCER`) down to these 2, casting every former admin-tier role to `ADMIN` and leaving `INFLUENCER` unchanged. The old distinctions between finance/management/analyst back-office functions no longer exist anywhere in the app — one Admin account does everything on the back-office side.
 
+The `Resource` permission list itself shrank in the deletion pass — `assets`, `goals`, and `auditLogs` were removed from `rbac.ts` entirely since nothing checks them anymore (confirmed via grep before removing).
+
 | Role | Can access | Can create/edit | Cannot access |
 |---|---|---|---|
-| ADMIN | Everything: influencers, courses, campaigns, coupons, agreements, orders, refunds, transactions, payouts, assets, goals, audit logs, staff `users`, exports | Everything listed | — |
-| INFLUENCER | Only their **own** data: own profile, own assigned courses, own tracking links (read+write, self-serve), own coupons, own orders (PII-stripped), own ledger, own payouts, own goals, own Sales Tracking | Own tracking links only | Any other influencer's data, all admin resources, staff users, audit logs |
+| ADMIN | Influencers, courses, campaigns, coupons, tracking links, agreements, orders, refunds, transactions (ledger, read-only now — no approval action exists), payouts (CSV export only — no creation UI/function exists), staff `users`, exports | Influencers, courses, campaigns, coupons, tracking links, agreements, orders (Record Sale), refunds | Staff `users` beyond CRUD scope shown; there is no more earnings-approval or payout-creation action to restrict, since neither exists anymore |
+| INFLUENCER | Only their **own** data: own profile (view only — Profile page was deleted, no self-edit UI remains), own assigned courses, own coupons, own orders (PII-stripped), own ledger (read-only), own Sales Tracking | Nothing — the influencer's self-serve tracking-link creation page was deleted in this pass; `trackingLinks: INFLUENCER: ["read","write"]` still exists in the RBAC matrix as dead permission (no UI calls it) | Any other influencer's data, all admin resources, staff users |
 
 **Influencer data isolation — how it's enforced (this is the critical security property of the app, and it did not change or weaken in the role simplification):**
 
@@ -189,21 +197,21 @@ Everything lives under `src/` (no top-level `/app`). Path alias `@/*` → `./src
     │   │   ├── exports/{earnings,influencers,payouts,sales}/route.ts
     │   │   └── influencer/sales-tracking/route.ts
     │   ├── r/[code]/route.ts   # public tracking-link redirect (not under /api)
-    │   ├── admin/               # staff-facing pages + colocated Server Actions - nav.ts only links Dashboard, Influencers, Sales Tracking; the rest (Courses, Campaigns, Tracking Links, Coupons, Agreements, Earnings, Payouts, Audit Logs) still exist as routes, just unlinked
-    │   └── influencer/          # influencer-facing pages + colocated Server Actions - nav.ts links only Sales Tracking; the old dashboard route now just redirects there
+    │   ├── admin/               # staff-facing pages + colocated Server Actions - nav.ts links Dashboard, Influencers, Sales Tracking (3 items). Courses/Campaigns/Tracking-Links/Coupons/Agreements exist as routes, unlinked but load-bearing (§2). Earnings/Payouts/Audit-Logs pages are GONE (deleted, not just unlinked)
+    │   └── influencer/          # influencer-facing pages + colocated Server Actions - nav.ts links only Sales Tracking (1 item); the old dashboard route redirects there. Every other influencer page (Campaigns/Coupons/Courses/Earnings/Goals/Links/Notifications/Payouts/Profile/Sales) is GONE (deleted)
     ├── components/
     │   ├── charts/               # Recharts wrappers
     │   ├── filters/               # shared sales filter bar (now used by both admin and influencer Sales Tracking, with an added Influencer dropdown on the admin side)
     │   ├── layout/                # app-shell (sidebar/nav), sign-out button
     │   └── ui/                    # badge, button, card, table, stat-card, etc.
     └── lib/                      # ALL business logic — the only place that talks to Prisma
-        ├── auth/                  # auth.config.ts, auth.ts, auth-edge.ts, rbac.ts, session.ts - rbac.ts's matrix now has exactly 2 roles
-        ├── financial/             # calculation engine, agreements, payouts, reversal
+        ├── auth/                  # auth.config.ts, auth.ts, auth-edge.ts, rbac.ts, session.ts - rbac.ts's matrix now has exactly 2 roles and 3 fewer resource types (assets/goals/auditLogs removed as dead)
+        ├── financial/             # calculation engine, agreements, reversal - payouts.ts and transactions.ts (approval workflow) were DELETED, fully orphaned once their pages went
         ├── attribution/           # coupon/tracking-link attribution strategies
         ├── orders/                # order + refund ingestion pipeline (manual-entry only); also where the admin Sales Tracking aggregate query lives
         ├── sales-tracking/        # the influencer Sales Tracking feature (§10–11)
-        ├── data/                  # per-domain read queries (each enforces RBAC + scoping)
-        ├── coupons/, audit/, notifications/, api/, csv.ts, format.ts, date-range.ts, prisma.ts
+        ├── data/                  # per-domain read queries (each enforces RBAC + scoping) - goals.ts, audit.ts, notifications.ts were DELETED (their only callers were the deleted pages); payouts.ts and ledger.ts were KEPT (still read by the CSV export routes and, for ledger.ts, the kept Influencer profile page)
+        ├── coupons/, audit/log.ts (still called by kept flows - only its VIEWER page was deleted), notifications/create.ts (still called by kept flows - only its LIST page was deleted), api/, csv.ts, format.ts, date-range.ts, prisma.ts
 ```
 
 A new engineer mainly needs: `src/lib/auth/` (how identity/permissions work — now a 2-role matrix), `src/lib/financial/` (how money is calculated), `src/lib/sales-tracking/` (the influencer feature needing real data), `src/lib/data/orders.ts` (the admin Sales Tracking aggregate), `prisma/schema.prisma` (the data model), and the relevant `src/app/**` folder for whatever page they're changing.
@@ -317,8 +325,12 @@ flowchart LR
 | `Order` | orderNumber (unique), customerId, courseId, couponId, originalPrice/discountAmount/finalAmount | Indexed on courseId, status, placedAt, couponId |
 | `OrderAttribution` | orderId (1:1, unique), influencerId, trackingLinkId, couponId, source | Indexed on influencerId, trackingLinkId, couponId |
 | `FinancialTransaction` | type, status, immutable snapshot fields of the agreement terms used, eligibleRevenue/influencerAmount/companyAmount | Indexed on `[influencerId, status]`, orderId, payoutId; self-relation for REVERSAL→EARNING linkage |
-| `Payout` | influencerId, amount, status, reference, method | Indexed on `[influencerId, status]` |
-| `AuditLog` | action, entityType/Id, previousValue/newValue (JSON) | Append-only by application-layer convention — no update/delete path exists in the code |
+| `Payout` | influencerId, amount, status, reference, method | Indexed on `[influencerId, status]`. **No UI or function creates new rows anymore** (deleted in the latest revision) — only readable via `/api/exports/payouts` |
+| `AuditLog` | action, entityType/Id, previousValue/newValue (JSON) | Append-only by application-layer convention. The writer (`recordAudit()`) is still called throughout the kept flows, so rows keep being written — the admin **viewer page was deleted**, so there's no UI to read them anymore |
+| `Goal` | influencerId, metric, targetValue, periodStart/End | **No UI or function reads/writes this table anymore** (deleted in the latest revision) |
+| `Notification` | userId, type, title, body, isRead | The writer (`notify()`) is still called throughout the kept order/refund flows, so rows keep being written — the influencer-facing list page was **deleted**, so there's no UI to read them anymore |
+
+The database schema itself was **not** touched in this deletion pass — only application code (pages, Server Actions, and the lib-layer functions with zero remaining callers) was removed. Every table above still exists and is still reachable via Prisma if the tech team wants to query it directly or rebuild a UI on top of it later.
 
 Full enum list: `Role`, `InfluencerStatus`, `AgreementModelType`, `EligibleRevenueBasis`, `AgreementStatus`, `CourseStatus`, `CampaignStatus`, `TrackingLinkStatus`, `CouponDiscountType`, `CouponStatus`, `OrderStatus`, `OrderSource`, `AttributionSource`, `TransactionType`, `TransactionStatus`, `PayoutStatus`, `GoalMetric`, `AssetType`, `NotificationType`.
 
@@ -468,6 +480,7 @@ NextAuth's own internal machinery (signin/callback/session/csrf). Not hand-writt
 - **Query params:** `status` (transaction status filter — passed through without runtime validation against the enum).
 - **Response:** CSV file (`earnings.csv`).
 - **Note:** no row-level influencer scoping is applied — any permitted role receives ALL influencers' earnings.
+- **Orphaned endpoint:** the admin Earnings page that used to link here was deleted. This route still works, but only if someone hits the URL directly — there's no button anywhere pointing at it anymore.
 
 ### `GET /api/exports/influencers`
 - **Auth:** same `assertCan` pattern.
@@ -476,6 +489,7 @@ NextAuth's own internal machinery (signin/callback/session/csrf). Not hand-writt
 
 ### `GET /api/exports/payouts`
 - **Auth:** same pattern. **Query params:** none. **Response:** CSV (`payouts.csv`).
+- **Orphaned endpoint, same as earnings above** — the admin Payouts page was deleted, and so was the ability to create a new payout at all (§22). This will only ever export whatever `Payout` rows already exist (historical/seeded).
 
 ### `GET /api/exports/sales`
 - **Auth:** same pattern.
@@ -660,16 +674,17 @@ Admin → Sales Tracking nav item → optionally select an influencer + any filt
   → summary cards + 4 breakdown tables + paginated detail table rendered
 ```
 
-**Order → Earnings → Payout**
+**Order → Earnings**
 ```
-Admin records a sale (manual entry, only path implemented today)
+Admin records a sale (manual entry, only path implemented today, via the admin Sales Tracking page)
   → attribution resolved (coupon takes priority over tracking link)
   → applicable CommercialAgreementVersion resolved (coupon-linked > campaign-scoped > course-scoped > general)
   → calculateSplit() computes eligible revenue + influencer/company split (decimal.js)
   → FinancialTransaction (EARNING, PENDING) created with a full immutable snapshot of the terms used
-  → Finance/Admin approves the transaction (PENDING → APPROVED)
-  → Payout created, bundling approved transactions → marked PAID once money moves (external to the app)
+  → shows up in the admin Sales Tracking detail table's "Earnings" column and in /api/exports/earnings
 ```
+
+**This flow now ends at PENDING.** The approval step (PENDING → APPROVED) and payout creation were deleted along with their UI and underlying functions (`approveTransactions()`, `createPayout()`) in the latest revision — there is currently **no way, anywhere in the app, to move a transaction past PENDING or to create a payout.** If the business needs to track disbursement again, that's rebuild work, not a hidden feature to re-link — see §22 and §26 Phase 2.
 
 **Refund**
 ```
@@ -687,14 +702,15 @@ Admin records a refund against an order
 | Two-role model (Admin/Influencer) | Implemented — real migration, RBAC rewrite, seed data update | Yes | No — smoke-tested and rebuilt clean from scratch on a fresh DB |
 | Auth / RBAC / row-level scoping | Implemented | Yes (pending secret rotation) | Rotate secrets; confirm session expiry policy |
 | Influencer management | Implemented, nav-visible | Yes | No |
-| Course/campaign/coupon/tracking-link management | Implemented, hidden from nav (not deleted) | Yes | No |
-| Commercial agreements & financial calculation engine | Implemented, hidden from nav | Yes | No |
-| Payouts | Implemented (record-keeping only), hidden from nav | Yes, if manual money movement is acceptable | Confirm whether a real payment-provider integration is needed |
+| Course/campaign/coupon/tracking-link management | Implemented, kept as unlisted admin back-office (load-bearing for Sales Tracking) | Yes | No |
+| Commercial agreements & financial calculation engine | Implemented, kept as unlisted admin back-office (embedded in Influencer profile) | Yes | No |
+| Earnings approval | **DELETED** | No — doesn't exist | Rebuild if disbursement tracking is needed (§26 Phase 2) |
+| Payouts | **DELETED** | No — doesn't exist | Rebuild if disbursement tracking is needed, or confirm manual/external tracking is acceptable (§26 Phase 2) |
 | Sales Tracking — Influencer | Mock data | No | Implement real `SalesTrackingAdapter` (§10) |
 | Sales Tracking — Admin | Real DB data, nav-visible | Yes | No |
-| Order ingestion | Manual entry only | Partially | Decide/build real ingestion path if manual entry isn't sufficient at scale |
-| Marketing assets | Partially implemented | No file upload | Add upload capability if needed |
-| CSV exports | Implemented | Yes at current scale (10k row cap) | Revisit if data volume grows significantly |
+| Order ingestion | Manual entry only, via admin Sales Tracking | Partially | Decide/build real ingestion path if manual entry isn't sufficient at scale |
+| Marketing assets | Not implemented, never had a page | N/A | Build if needed |
+| CSV exports | Implemented (sales/influencers linked from UI; earnings/payouts now URL-only, orphaned) | Yes at current scale (10k row cap) | Revisit if data volume grows significantly |
 | Testing | One manual smoke script | No | Requires integration/CI test coverage before launch |
 | Deployment/CI | Not implemented | No | Requires integration |
 | Monitoring | Not implemented | No | Requires integration |
@@ -703,6 +719,9 @@ Admin records a refund against an order
 
 ## 22. Known Limitations
 
+- **Earnings can never be approved and payouts can never be created — this is new as of the latest revision.** The UI and the underlying functions (`approveTransactions()`, `createPayout()`, `markPayoutPaid()`, `markPayoutFailed()`) were all deleted because nothing else depended on them. Every "Record Sale" still computes and stores a correct PENDING earning (the financial engine itself is untouched), it just has no in-app path forward from there. If the business needs to track influencer disbursement through this app, that's rebuild work — the `Payout`/`FinancialTransaction` schema is still there to build back on top of, but the pages, actions, and functions are gone.
+- Similarly, **there's no more way to view the audit log or in-app notifications** — both writers (`recordAudit()`, `notify()`) are still active and still populating their tables from every kept flow, but their viewer pages were deleted along with the rest.
+- **Influencers can no longer self-serve create their own tracking links.** Only the admin-side Tracking Links CRUD remains; if an influencer needs a new link, an admin has to create it for them now.
 - Sales Tracking runs entirely on synthetic mock data — no real database table or Metabase connection exists yet.
 - Order ingestion is manual-entry only; API/webhook/CSV-import paths are reserved in the schema (`OrderSource` enum) but not built.
 - No payment gateway integration — payouts are recorded, not actually disbursed by the app.
@@ -721,7 +740,7 @@ Admin records a refund against an order
 
 **Existing tests:** none in the traditional sense — no Jest/Vitest/Mocha, no `*.test.ts`/`*.spec.ts` files, no `jest.config.*`/`playwright.config.*`.
 
-**What does exist:** `scripts/e2e-smoke.mjs`, run via `npm run e2e:smoke`. A plain Node script (not the Playwright test runner) that launches Chromium directly, logs in as the seeded influencer (`rahul@creator.dev`), and walks through RBAC enforcement, the full order → attribution → calculation → refund → approval → payout pipeline through the real UI, and the 4 CSV export endpoints. Requires a running dev server and a seeded database; not wired into any CI (none exists).
+**What does exist:** `scripts/e2e-smoke.mjs`, run via `npm run e2e:smoke`. A plain Node script (not the Playwright test runner) that launches Chromium directly, logs in as the seeded influencer (`rahul@creator.dev`), and walks through RBAC enforcement, the order → attribution → calculation → refund pipeline through the real UI, and the 4 CSV export endpoints. Updated in the latest revision to drop the earnings-approval/payout-creation steps it used to click through, since that UI no longer exists. Requires a running dev server and a seeded database; not wired into any CI (none exists).
 
 **What's not covered:** no coverage of the Sales Tracking feature specifically, no admin-side UI flows beyond what the smoke script touches, no unit-level coverage of the financial calculation engine's edge cases (e.g. HYBRID model thresholds, multi-partial-refund sequences).
 
@@ -732,7 +751,7 @@ Admin records a refund against an order
 [ ] Influencer cannot access another influencer's data via any UI action or direct API call
 [ ] Sales Tracking: date filter, each UTM filter individually, coupon filter, course filter, combined filters
 [ ] Sales Tracking: empty-result state, error state (simulate a backend failure)
-[ ] Admin: create/edit an agreement, record a sale, approve earnings, create a payout, process a refund
+[ ] Admin: create/edit an agreement, record a sale, process a refund (earnings-approval and payout-creation no longer exist to test — see §22)
 [ ] CSV exports (all 4) produce correct, complete data
 [ ] Mobile UI spot-check (drawer nav, filter grid reflow)
 [ ] Security: attempt to pass another influencer's id/email as a parameter anywhere it's accepted client-side
@@ -760,7 +779,7 @@ Recommended for the tech team to add before/at launch: application uptime monito
 ## 26. Handover Summary
 
 ### What is already built
-A working platform now deliberately scoped to two roles (Admin, Influencer) and one core function (Sales Tracking) — Admin also manages influencers. The influencer-facing Sales Tracking (mock data, real UI/API) and the admin-facing Sales Tracking (real DB data, influencer/course/UTM-content/coupon breakdowns) are both nav-visible and both fully working. Underneath, the broader platform from an earlier build — auth + two-layer RBAC/data-isolation, commercial-agreement versioning, a decimal-precise financial calculation engine, attribution, tracking links, coupons, campaigns, courses, payouts, refunds/reversals, goals, notifications, audit logging, CSV exports — still exists, still works, and is hidden from navigation rather than deleted, so it can be brought back if scope widens again.
+A working platform scoped to exactly two roles (Admin, Influencer) and one core function (Sales Tracking) — Admin also manages influencers. The influencer-facing Sales Tracking (mock data, real UI/API) and the admin-facing Sales Tracking (real DB data, influencer/course/UTM-content/coupon breakdowns) are both nav-visible and both fully working, backed by a still-intact commercial-agreement engine and decimal-precise financial calculation (both kept as unlisted admin back-office, since Sales Tracking's real data depends on them). What's genuinely gone, not just hidden: earnings approval, payouts, the influencer's self-serve link creation, and every standalone influencer page (My Sales/Courses/Coupons/Links/Profile/Earnings/Payouts/Goals/Notifications) plus the admin Earnings/Payouts/Audit Log pages. Auth, RBAC, and row-level data isolation are unchanged throughout.
 
 ### What the tech team needs to connect
 A real production Postgres database; a real Sales Tracking data source (Metabase or otherwise) behind the existing `SalesTrackingAdapter` interface; a real order-ingestion path if manual entry isn't sufficient; production secrets and a hosting/CI/CD pipeline (none exist today).
@@ -772,4 +791,4 @@ Full RBAC/data-isolation re-verification against production data; the pre-launch
 Environment variables and secrets (§8); hosting, domain, SSL (§15); database migrations-on-deploy; monitoring and backup strategy (§24–25).
 
 ### Recommended for Phase 2
-Real payment/LMS order ingestion (API or webhook); file upload for marketing assets; email/WhatsApp notification delivery; automated test suite + CI; password reset/SSO; pagination and export for the Sales Tracking detail table at scale.
+Real payment/LMS order ingestion (API or webhook); file upload for marketing assets; email/WhatsApp notification delivery; automated test suite + CI; password reset/SSO; pagination and export for the Sales Tracking detail table at scale; **if disbursement tracking turns out to still be needed, rebuilding earnings-approval and payout creation** (the schema is intact, only the pages/actions/functions were removed) rather than assuming it's still there.
