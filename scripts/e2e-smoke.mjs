@@ -44,7 +44,8 @@ function assert(condition, message) {
   const { context, page } = await newPage();
   await login(page, "rahul@creator.dev", "Passw0rd!");
   await page.goto(`${BASE_URL}/influencer`, { waitUntil: "networkidle" });
-  assert((await page.textContent("body")).includes("Welcome back"), "influencer dashboard loads");
+  assert(page.url().endsWith("/influencer/sales-tracking"), "influencer root redirects to Sales Tracking (their only page)");
+  assert((await page.textContent("body")).includes("Sales Tracking"), "influencer Sales Tracking page loads");
 
   await page.goto(`${BASE_URL}/admin`, { waitUntil: "networkidle" });
   assert(page.url().includes("/influencer"), "influencer is redirected away from /admin");

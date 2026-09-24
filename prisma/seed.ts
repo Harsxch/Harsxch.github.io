@@ -19,26 +19,15 @@ async function main() {
   const passwordHash = await bcrypt.hash(DEV_PASSWORD, 10);
 
   console.log("Seeding staff users...");
+  // Only two roles exist now (ADMIN, INFLUENCER) - one admin account covers
+  // everything the former SUPER_ADMIN/FINANCE/INFLUENCER_MANAGER/ANALYST
+  // roles did.
   const superAdmin = await prisma.user.upsert({
     where: { email: "admin@platform.dev" },
-    create: { email: "admin@platform.dev", passwordHash, name: "Super Admin", role: "SUPER_ADMIN" },
-    update: {},
+    create: { email: "admin@platform.dev", passwordHash, name: "Admin", role: "ADMIN" },
+    update: { role: "ADMIN", name: "Admin" },
   });
-  const finance = await prisma.user.upsert({
-    where: { email: "finance@platform.dev" },
-    create: { email: "finance@platform.dev", passwordHash, name: "Finance Lead", role: "FINANCE" },
-    update: {},
-  });
-  const manager = await prisma.user.upsert({
-    where: { email: "manager@platform.dev" },
-    create: { email: "manager@platform.dev", passwordHash, name: "Influencer Manager", role: "INFLUENCER_MANAGER" },
-    update: {},
-  });
-  const analyst = await prisma.user.upsert({
-    where: { email: "analyst@platform.dev" },
-    create: { email: "analyst@platform.dev", passwordHash, name: "Data Analyst", role: "ANALYST" },
-    update: {},
-  });
+  const manager = superAdmin;
 
   console.log("Seeding courses...");
   const pythonDsa = await prisma.course.upsert({
@@ -488,18 +477,13 @@ async function main() {
   console.log("\nSeed complete.");
   console.log("---------------------------------------------");
   console.log("Login credentials (all use password: " + DEV_PASSWORD + ")");
-  console.log("  Super Admin:         admin@platform.dev");
-  console.log("  Finance:             finance@platform.dev");
-  console.log("  Influencer Manager:  manager@platform.dev");
-  console.log("  Analyst:             analyst@platform.dev");
+  console.log("  Admin:               admin@platform.dev");
   console.log("  Influencer (Rahul):  rahul@creator.dev");
   console.log("  Influencer (Priya):  priya@creator.dev");
   console.log("  Influencer (Amina):  amina@creator.dev");
   console.log("---------------------------------------------");
 
   void other;
-  void analyst;
-  void finance;
 }
 
 main()

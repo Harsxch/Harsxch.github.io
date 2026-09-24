@@ -5,6 +5,7 @@ const labelClass = "block text-[10px] font-medium text-slate-500 uppercase track
 export interface SalesFilterValues {
   courseId?: string;
   campaignId?: string;
+  influencerId?: string;
   status?: string;
   couponCode?: string;
   utmSource?: string;
@@ -29,12 +30,14 @@ export function SalesFilterBar({
   values,
   courses,
   campaigns,
+  influencers,
   showStatus = false,
 }: {
   action: string;
   values: SalesFilterValues;
   courses: { id: string; name: string }[];
   campaigns: { id: string; name: string }[];
+  influencers?: { id: string; name: string }[];
   showStatus?: boolean;
 }) {
   return (
@@ -70,6 +73,19 @@ export function SalesFilterBar({
             ))}
           </select>
         </div>
+        {influencers && (
+          <div>
+            <label className={labelClass}>Influencer</label>
+            <select name="influencerId" defaultValue={values.influencerId ?? ""} className={inputClass}>
+              <option value="">All influencers</option>
+              {influencers.map((i) => (
+                <option key={i.id} value={i.id}>
+                  {i.name}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
         <div>
           <label className={labelClass}>Coupon code</label>
           <input type="text" name="couponCode" defaultValue={values.couponCode} placeholder="RAHUL10" className={inputClass} />

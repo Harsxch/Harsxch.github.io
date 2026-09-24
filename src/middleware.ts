@@ -2,13 +2,6 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { auth } from "@/lib/auth/auth-edge";
 
-const ADMIN_ROLES = new Set([
-  "SUPER_ADMIN",
-  "FINANCE",
-  "INFLUENCER_MANAGER",
-  "ANALYST",
-]);
-
 function nextWithPathname(req: NextRequest) {
   const headers = new Headers(req.headers);
   headers.set("x-pathname", req.nextUrl.pathname);
@@ -30,8 +23,8 @@ export default auth((req) => {
 
   const role = session.user.role;
 
-  if (pathname.startsWith("/admin") && !ADMIN_ROLES.has(role)) {
-    return NextResponse.redirect(new URL("/influencer", req.url));
+  if (pathname.startsWith("/admin") && role !== "ADMIN") {
+    return NextResponse.redirect(new URL("/influencer/sales-tracking", req.url));
   }
 
   if (pathname.startsWith("/influencer") && role !== "INFLUENCER") {
@@ -39,7 +32,7 @@ export default auth((req) => {
   }
 
   if (pathname === "/") {
-    const dest = role === "INFLUENCER" ? "/influencer" : "/admin";
+    const dest = role === "INFLUENCER" ? "/influencer/sales-tracking" : "/admin";
     return NextResponse.redirect(new URL(dest, req.url));
   }
 

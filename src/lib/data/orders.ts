@@ -21,14 +21,10 @@ export interface OrderFilters {
   pageSize?: number;
 }
 
-export async function listOrders(params: OrderFilters) {
-  const session = await requireSession();
-  assertCan(session.user.role, "orders", "read");
-  const influencerId = resolveInfluencerScope(session.user, params.influencerId);
-
-  const page = params.page ?? 1;
-  const pageSize = Math.min(params.pageSize ?? 25, 100);
-
+// Shared by listOrders and getSalesTrackingSummary so the two never drift -
+// the detail table and the aggregate breakdowns must always be filtering
+// the exact same set of orders.
+function buildOrderWhere(influencerId: string | null | undefined, params: OrderFilters) {
   // UTM dimensions only ever live on the TrackingLink an order was
   // attributed through - only add this nested filter when at least one is
   // actually requested, otherwise it would wrongly exclude every
@@ -42,7 +38,7 @@ export async function listOrders(params: OrderFilters) {
   };
   const hasUtmFilter = Object.keys(utmFilters).length > 0;
 
-  const where = {
+  return {
     ...(params.courseId ? { courseId: params.courseId } : {}),
     ...(params.status ? { status: params.status } : {}),
     ...(params.couponCode ? { coupon: { code: params.couponCode.toUpperCase().trim() } } : {}),
@@ -59,6 +55,17 @@ export async function listOrders(params: OrderFilters) {
         }
       : {}),
   };
+}
+
+export async function listOrders(params: OrderFilters) {
+  const session = await requireSession();
+  assertCan(session.user.role, "orders", "read");
+  const influencerId = resolveInfluencerScope(session.user, params.influencerId);
+
+  const page = params.page ?? 1;
+  const pageSize = Math.min(params.pageSize ?? 25, 100);
+
+  const where = buildOrderWhere(influencerId, params);
 
   const [rows, total] = await Promise.all([
     prisma.order.findMany({
@@ -113,6 +120,60 @@ export async function listOrders(params: OrderFilters) {
     total,
     page,
     pageSize,
+  };
+}
+
+// Powers the Admin Sales Tracking summary cards + breakdown tables. Same
+// filter semantics as listOrders (and shares its where-builder) but
+// aggregates across every matching order rather than one page of rows.
+export async function getSalesTrackingSummary(params: OrderFilters) {
+  const session = await requireSession();
+  assertCan(session.user.role, "orders", "read");
+  const influencerId = resolveInfluencerScope(session.user, params.influencerId);
+
+  const where = buildOrderWhere(influencerId, params);
+
+  const orders = await prisma.order.findMany({
+    where,
+    select: {
+      finalAmount: true,
+      course: { select: { name: true } },
+      coupon: { select: { code: true } },
+      attribution: {
+        select: {
+          influencer: { select: { id: true, name: true } },
+          trackingLink: { select: { utmContent: true } },
+        },
+      },
+    },
+    take: 10000, // matches the cap already used by the CSV exports
+  });
+
+  const totalSales = orders.length;
+  const totalRevenue = orders.reduce((sum, o) => sum + Number(o.finalAmount), 0);
+
+  function bucket<T extends string>(getKey: (o: (typeof orders)[number]) => T | null) {
+    const map = new Map<T, { sales: number; revenue: number }>();
+    for (const o of orders) {
+      const key = getKey(o);
+      if (key === null) continue;
+      const entry = map.get(key) ?? { sales: 0, revenue: 0 };
+      entry.sales += 1;
+      entry.revenue += Number(o.finalAmount);
+      map.set(key, entry);
+    }
+    return [...map.entries()]
+      .map(([key, v]) => ({ key, ...v }))
+      .sort((a, b) => b.revenue - a.revenue);
+  }
+
+  return {
+    totalSales,
+    totalRevenue,
+    byInfluencer: bucket((o) => o.attribution?.influencer?.name ?? null).map((r) => ({ influencerName: r.key, sales: r.sales, revenue: r.revenue })),
+    byCourse: bucket((o) => o.course.name).map((r) => ({ courseName: r.key, sales: r.sales, revenue: r.revenue })),
+    byUtmContent: bucket((o) => o.attribution?.trackingLink?.utmContent ?? null).map((r) => ({ utmContent: r.key, sales: r.sales, revenue: r.revenue })),
+    byCoupon: bucket((o) => o.coupon?.code ?? null).map((r) => ({ couponCode: r.key, sales: r.sales, revenue: r.revenue })),
   };
 }
 
