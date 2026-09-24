@@ -21,10 +21,7 @@ datasource db {
 // ---------------------------------------------------------------------------
 
 enum Role {
-  SUPER_ADMIN
-  FINANCE
-  INFLUENCER_MANAGER
-  ANALYST
+  ADMIN
   INFLUENCER
 }
 

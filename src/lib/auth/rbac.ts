@@ -28,104 +28,72 @@ type Action = "read" | "write";
  * rows) - that is enforced separately by requireOwnInfluencerScope() and by
  * every data-access function filtering on the caller's influencerId. Never
  * trust an ID that arrives from the client for an INFLUENCER-role caller.
+ *
+ * Only two roles exist: ADMIN (full access - the former SUPER_ADMIN,
+ * FINANCE, INFLUENCER_MANAGER, and ANALYST roles were collapsed into this
+ * one role, since the product no longer distinguishes back-office
+ * functions) and INFLUENCER (restricted to their own data, row-scoped).
  */
 const MATRIX: Record<Resource, Partial<Record<Role, Action[]>>> = {
   influencers: {
-    SUPER_ADMIN: ["read", "write"],
-    INFLUENCER_MANAGER: ["read", "write"],
-    FINANCE: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own record only
   },
   courses: {
-    SUPER_ADMIN: ["read", "write"],
-    INFLUENCER_MANAGER: ["read", "write"],
-    FINANCE: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // assigned courses only
   },
   campaigns: {
-    SUPER_ADMIN: ["read", "write"],
-    INFLUENCER_MANAGER: ["read", "write"],
-    FINANCE: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"],
   },
   trackingLinks: {
-    SUPER_ADMIN: ["read", "write"],
-    INFLUENCER_MANAGER: ["read", "write"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read", "write"], // self-serve: can create/view own links only, enforced in createTrackingLink
   },
   coupons: {
-    SUPER_ADMIN: ["read", "write"],
-    INFLUENCER_MANAGER: ["read", "write"],
-    FINANCE: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own coupons only
   },
   agreements: {
-    SUPER_ADMIN: ["read", "write"],
-    FINANCE: ["read", "write"],
-    INFLUENCER_MANAGER: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own agreement only
   },
   orders: {
-    SUPER_ADMIN: ["read", "write"],
-    FINANCE: ["read", "write"],
-    INFLUENCER_MANAGER: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own attributed orders only, PII stripped
   },
   refunds: {
-    SUPER_ADMIN: ["read", "write"],
-    FINANCE: ["read", "write"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
   },
   transactions: {
-    SUPER_ADMIN: ["read", "write"],
-    FINANCE: ["read", "write"],
-    INFLUENCER_MANAGER: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own ledger only
   },
   payouts: {
-    SUPER_ADMIN: ["read", "write"],
-    FINANCE: ["read", "write"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own payouts only
   },
   assets: {
-    SUPER_ADMIN: ["read", "write"],
-    INFLUENCER_MANAGER: ["read", "write"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // assigned assets only
   },
   goals: {
-    SUPER_ADMIN: ["read", "write"],
-    INFLUENCER_MANAGER: ["read", "write"],
-    ANALYST: ["read"],
+    ADMIN: ["read", "write"],
     INFLUENCER: ["read"], // own goals only
   },
   analytics: {
-    SUPER_ADMIN: ["read"],
-    FINANCE: ["read"],
-    INFLUENCER_MANAGER: ["read"],
-    ANALYST: ["read"],
+    ADMIN: ["read"],
     INFLUENCER: ["read"], // own dashboard only - row scoping enforced in getInfluencerDashboard
   },
   auditLogs: {
-    SUPER_ADMIN: ["read"],
-    FINANCE: ["read"],
+    ADMIN: ["read"],
   },
   users: {
-    SUPER_ADMIN: ["read", "write"],
+    ADMIN: ["read", "write"],
   },
   exports: {
-    SUPER_ADMIN: ["read"],
-    FINANCE: ["read"],
-    INFLUENCER_MANAGER: ["read"],
+    ADMIN: ["read"],
   },
 };
 

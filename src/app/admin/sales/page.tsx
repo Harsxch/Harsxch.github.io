@@ -1,8 +1,10 @@
 import Link from "next/link";
-import { listOrders } from "@/lib/data/orders";
+import { listOrders, getSalesTrackingSummary } from "@/lib/data/orders";
 import { listCourses } from "@/lib/data/courses";
 import { listCampaigns } from "@/lib/data/campaigns";
-import { Card } from "@/components/ui/card";
+import { listInfluencers } from "@/lib/data/influencers";
+import { Card, CardHeader } from "@/components/ui/card";
+import { StatCard } from "@/components/ui/stat-card";
 import { Table, Thead, Th, Tr, Td, EmptyState } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -16,23 +18,27 @@ export default async function SalesPage({
   searchParams: Promise<SalesFilterValues & { page?: string }>;
 }) {
   const params = await searchParams;
-  const [courses, campaigns, { rows, total, page, pageSize }] = await Promise.all([
+  const orderFilters = {
+    status: params.status as never,
+    courseId: params.courseId || undefined,
+    campaignId: params.campaignId || undefined,
+    influencerId: params.influencerId || undefined,
+    couponCode: params.couponCode || undefined,
+    utmSource: params.utmSource || undefined,
+    utmMedium: params.utmMedium || undefined,
+    utmCampaign: params.utmCampaign || undefined,
+    utmContent: params.utmContent || undefined,
+    utmTerm: params.utmTerm || undefined,
+    from: params.from ? new Date(params.from) : undefined,
+    to: params.to ? new Date(params.to) : undefined,
+  };
+
+  const [courses, campaigns, influencers, { rows, total, page, pageSize }, summary] = await Promise.all([
     listCourses(),
     listCampaigns(),
-    listOrders({
-      status: params.status as never,
-      courseId: params.courseId || undefined,
-      campaignId: params.campaignId || undefined,
-      couponCode: params.couponCode || undefined,
-      utmSource: params.utmSource || undefined,
-      utmMedium: params.utmMedium || undefined,
-      utmCampaign: params.utmCampaign || undefined,
-      utmContent: params.utmContent || undefined,
-      utmTerm: params.utmTerm || undefined,
-      from: params.from ? new Date(params.from) : undefined,
-      to: params.to ? new Date(params.to) : undefined,
-      page: params.page ? Number(params.page) : 1,
-    }),
+    listInfluencers({ pageSize: 100 }),
+    listOrders({ ...orderFilters, page: params.page ? Number(params.page) : 1 }),
+    getSalesTrackingSummary(orderFilters),
   ]);
 
   const query = new URLSearchParams();
@@ -43,8 +49,8 @@ export default async function SalesPage({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900">Sales</h1>
-          <p className="text-sm text-slate-500 mt-0.5">{total} orders</p>
+          <h1 className="text-xl font-semibold text-slate-900">Sales Tracking</h1>
+          <p className="text-sm text-slate-500 mt-0.5">Which influencer generated which sales, for which course, through which tracking source.</p>
         </div>
         <div className="flex gap-2">
           <a href={`/api/exports/sales${queryString ? `?${queryString}` : ""}`}>
@@ -66,9 +72,106 @@ export default async function SalesPage({
           values={params}
           courses={courses.map((c) => ({ id: c.id, name: c.name }))}
           campaigns={campaigns.map((c) => ({ id: c.id, name: c.name }))}
+          influencers={influencers.rows.map((i) => ({ id: i.id, name: i.name }))}
           showStatus
         />
+      </Card>
 
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <StatCard label="Total Sales" value={String(summary.totalSales)} />
+        <StatCard label="Total Revenue" value={formatCurrency(summary.totalRevenue)} />
+      </div>
+
+      {summary.totalSales > 0 && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <Card>
+            <CardHeader title="Sales by influencer" />
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Influencer</Th>
+                  <Th align="right">Sales</Th>
+                  <Th align="right">Revenue</Th>
+                </Tr>
+              </Thead>
+              <tbody>
+                {summary.byInfluencer.map((r) => (
+                  <Tr key={r.influencerName}>
+                    <Td>{r.influencerName}</Td>
+                    <Td align="right">{r.sales}</Td>
+                    <Td align="right">{formatCurrency(r.revenue)}</Td>
+                  </Tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card>
+          <Card>
+            <CardHeader title="Sales by course" />
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Course</Th>
+                  <Th align="right">Sales</Th>
+                  <Th align="right">Revenue</Th>
+                </Tr>
+              </Thead>
+              <tbody>
+                {summary.byCourse.map((r) => (
+                  <Tr key={r.courseName}>
+                    <Td>{r.courseName}</Td>
+                    <Td align="right">{r.sales}</Td>
+                    <Td align="right">{formatCurrency(r.revenue)}</Td>
+                  </Tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card>
+          <Card>
+            <CardHeader title="Sales by UTM content" />
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>UTM Content</Th>
+                  <Th align="right">Sales</Th>
+                  <Th align="right">Revenue</Th>
+                </Tr>
+              </Thead>
+              <tbody>
+                {summary.byUtmContent.map((r) => (
+                  <Tr key={r.utmContent}>
+                    <Td>{r.utmContent}</Td>
+                    <Td align="right">{r.sales}</Td>
+                    <Td align="right">{formatCurrency(r.revenue)}</Td>
+                  </Tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card>
+          <Card>
+            <CardHeader title="Sales by coupon" />
+            <Table>
+              <Thead>
+                <Tr>
+                  <Th>Coupon</Th>
+                  <Th align="right">Sales</Th>
+                  <Th align="right">Revenue</Th>
+                </Tr>
+              </Thead>
+              <tbody>
+                {summary.byCoupon.map((r) => (
+                  <Tr key={r.couponCode}>
+                    <Td>{r.couponCode}</Td>
+                    <Td align="right">{r.sales}</Td>
+                    <Td align="right">{formatCurrency(r.revenue)}</Td>
+                  </Tr>
+                ))}
+              </tbody>
+            </Table>
+          </Card>
+        </div>
+      )}
+
+      <Card>
         {rows.length === 0 ? (
           <EmptyState title="No orders found" subtitle="Try widening your filters" />
         ) : (
