@@ -41,13 +41,13 @@ export default async function InfluencersPage({
       </div>
 
       <Card>
-        <form className="flex items-center gap-2 p-4 border-b border-slate-100">
+        <form className="flex flex-wrap items-center gap-2 p-4 border-b border-slate-100">
           <input
             type="text"
             name="search"
             defaultValue={params.search}
             placeholder="Search by name or email..."
-            className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
+            className="flex-1 min-w-0 basis-full sm:basis-auto rounded-lg border border-slate-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-slate-900"
           />
           <select
             name="status"
