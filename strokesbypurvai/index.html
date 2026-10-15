@@ -4,95 +4,115 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Strokes by Purvai — Original Paintings</title>
-<meta name="description" content="Original handmade paintings by Strokes by Purvai. Browse, pick a piece, and order in a minute.">
+<meta name="description" content="Original artworks and commissions by Strokes by Purvai. Turning imagination into art.">
+<meta name="theme-color" content="#130f12">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500;1,700&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,700;1,6..96,500;1,6..96,700&family=Caveat:wght@500;700&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 <canvas id="trail" aria-hidden="true"></canvas>
+
 <header class="top">
   <a class="brand" href="#top" id="brand"></a>
   <nav>
-    <a href="#shop">Shop</a>
-    <a href="#about">About</a>
+    <a href="#collection">Collection</a>
+    <a href="#spaces">In spaces</a>
     <a href="#commission">Commissions</a>
     <button id="cartBtn" class="cart-btn" aria-label="Open cart">Cart <span id="cartCount">0</span></button>
   </nav>
 </header>
 
 <main id="top">
-  <section class="hero">
-    <svg class="hero-art" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-      <defs>
-        <filter id="paint" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".012 .03" numOctaves="3" seed="4"/><feDisplacementMap in="SourceGraphic" scale="38"/></filter>
-        <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="10"/></filter>
-      </defs>
-      <g filter="url(#paint)" class="blobs">
-        <ellipse class="b1" cx="230" cy="190" rx="260" ry="150" fill="var(--c1)"/>
-        <ellipse class="b2" cx="980" cy="160" rx="230" ry="170" fill="var(--c2)"/>
-        <ellipse class="b3" cx="900" cy="560" rx="300" ry="130" fill="var(--c3)"/>
-        <ellipse class="b4" cx="170" cy="580" rx="210" ry="120" fill="var(--c4)"/>
-      </g>
-      <g filter="url(#rough)" fill="none" stroke-linecap="round">
-        <path class="stroke s1" d="M60 330 C 300 230, 520 430, 760 300 S 1060 260, 1150 360" stroke="var(--c2)" stroke-width="22"/>
-        <path class="stroke s2" d="M100 420 C 340 520, 600 330, 820 450 S 1080 520, 1130 470" stroke="var(--c1)" stroke-width="14"/>
-        <path class="stroke s3" d="M200 120 C 420 60, 640 160, 900 90" stroke="var(--c4)" stroke-width="10"/>
+  <section class="hero" data-sec>
+    <svg class="drips" viewBox="0 0 1000 300" preserveAspectRatio="none" aria-hidden="true">
+      <g fill="none" stroke-linecap="round">
+        <path class="drip" d="M70 0 V150" stroke="var(--c1)" stroke-width="16" style="--l:150;--d:.2s"/>
+        <path class="drip" d="M210 0 V90" stroke="var(--c3)" stroke-width="10" style="--l:90;--d:.5s"/>
+        <path class="drip" d="M330 0 V210" stroke="var(--c2)" stroke-width="14" style="--l:210;--d:.1s"/>
+        <path class="drip" d="M520 0 V120" stroke="var(--c4)" stroke-width="12" style="--l:120;--d:.7s"/>
+        <path class="drip" d="M680 0 V190" stroke="var(--c1)" stroke-width="9" style="--l:190;--d:.35s"/>
+        <path class="drip" d="M820 0 V100" stroke="var(--c2)" stroke-width="16" style="--l:100;--d:.9s"/>
+        <path class="drip" d="M940 0 V170" stroke="var(--c3)" stroke-width="12" style="--l:170;--d:.55s"/>
       </g>
     </svg>
-    <div class="hero-text">
-      <p class="eyebrow hand">handmade · one of a kind</p>
-      <h1 id="heroTitle"></h1>
-      <p class="lead" id="heroTag"></p>
-      <a class="btn" href="#shop">Walk into the gallery</a>
-    </div>
-  </section>
-  <div class="ribbon" aria-hidden="true"><div><span>Acrylics ✦ Watercolor ✦ Graphite ✦ Texture art ✦ Handmade portraits ✦ Commissions open ✦ DM for custom creations ✦ </span><span>Acrylics ✦ Texture art ✦ Handmade portraits ✦ Commissions open ✦ DM for custom creations ✦ </span></div></div>
-
-  <section id="shop" class="wrap">
-    <div class="toolbar">
-      <h2 class="brush">The gallery</h2>
-      <div class="controls">
-        <select id="filter" aria-label="Filter by medium"></select>
-        <select id="sort" aria-label="Sort">
-          <option value="new">Featured</option>
-          <option value="low">Price: low to high</option>
-          <option value="high">Price: high to low</option>
-        </select>
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <p class="hand kicker">original artworks &amp; commissions</p>
+        <h1><span class="h1a">Strokes</span><span class="h1b hand">by Purvai</span></h1>
+        <p class="lead" id="heroTag"></p>
+        <div class="hero-cta">
+          <a class="btn" href="#collection">Enter the gallery</a>
+          <a class="link" href="#commission">Commission a piece →</a>
+        </div>
+      </div>
+      <div class="hero-pic" id="heroPic">
+        <svg viewBox="0 0 974 1060" role="img" aria-label="Buddha in Colour on a wooden sideboard">
+          <defs>
+            <filter id="tear" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".016 .03" numOctaves="4" seed="7"/><feDisplacementMap in="SourceGraphic" scale="80"/></filter>
+            <mask id="tearMask"><g filter="url(#tear)"><path d="M110 100 L880 70 L900 520 L870 970 L120 990 L80 520Z" fill="#fff"/></g></mask>
+          </defs>
+          <g filter="url(#tear)" class="swash"><path d="M150 140 L930 110 L940 560 L900 1010 L150 1030 L100 560Z" fill="var(--c1)"/></g>
+          <image href="img/hero-room.jpg" width="974" height="1060" preserveAspectRatio="xMidYMid slice" mask="url(#tearMask)"/>
+        </svg>
       </div>
     </div>
-    <div id="grid" class="grid"></div>
+    <div class="rail" id="rail" aria-label="Jump to a painting"></div>
   </section>
 
-  <section id="about" class="wrap about">
-    <h2 class="brush">Behind the brush</h2>
-    <p>Every piece here is painted by hand and sold once. Follow along on
-    <a id="igLink" target="_blank" rel="noopener"></a> to see new work first.</p>
-    <ul class="facts">
-      <li>Original artworks &amp; commissions</li>
-      <li id="shipFact"></li>
-      <li>DM for custom creations: portraits, pets, couples, gifts</li>
-    </ul>
+  <div class="ribbon" aria-hidden="true"><div><span>Acrylics ✦ Watercolor ✦ Graphite ✦ Texture art ✦ Handmade portraits ✦ Commissions open ✦ DM for custom creations ✦ </span><span>Acrylics ✦ Watercolor ✦ Graphite ✦ Texture art ✦ Handmade portraits ✦ Commissions open ✦ DM for custom creations ✦ </span></div></div>
+
+  <div id="collection"></div>
+  <div id="rooms"></div>
+
+  <section id="spaces" class="spaces" data-sec>
+    <div class="wrap">
+      <p class="hand kicker">art in spaces</p>
+      <h2 class="big">Art, lived in.</h2>
+      <p class="sub">Paintings look different on a real wall. Here is where some of them ended up.</p>
+      <div class="collage" id="collage"></div>
+    </div>
   </section>
 
-  <section id="commission" class="wrap commission">
-    <h2 class="brush">Want one made for you?</h2>
-    <p>Commissions are open. Tell us the size, colours, and the feeling you want.</p>
-    <a class="btn ghost" id="commissionLink" target="_blank" rel="noopener">Start a commission</a>
+  <section id="commission" class="commission" data-sec>
+    <div class="wrap commission-grid">
+      <div class="c-pic"><svg viewBox="0 0 440 600" role="img" aria-label="Purvai hanging a mountain painting">
+        <defs><filter id="tear2" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency=".02 .035" numOctaves="4" seed="3"/><feDisplacementMap in="SourceGraphic" scale="40"/></filter>
+        <mask id="tearMask2"><g filter="url(#tear2)"><path d="M40 40 L400 30 L410 300 L395 565 L45 570 L25 300Z" fill="#fff"/></g></mask></defs>
+        <g filter="url(#tear2)"><path d="M70 70 L430 60 L425 330 L405 590 L70 595 L45 330Z" fill="var(--c2)"/></g>
+        <image href="img/about-hanging.jpg" width="440" height="600" preserveAspectRatio="xMidYMid slice" mask="url(#tearMask2)"/></svg></div>
+      <div>
+        <p class="hand kicker">made especially for you</p>
+        <h2 class="big">Commission a painting.</h2>
+        <p class="sub">Portraits, pets, couples, gifts, a colour you can't find anywhere. Tell Purvai the idea and she replies with a plan.</p>
+        <ol class="steps">
+          <li><span><b>Send the idea.</b> Subject, mood, colours.</span></li>
+          <li><span><b>Agree the details.</b> Size, medium, deadline, budget.</span></li>
+          <li><span><b>She paints it.</b> By hand, as an original.</span></li>
+          <li><span><b>It reaches you.</b> Packed and shipped.</span></li>
+        </ol>
+        <form id="brief" class="brief">
+          <label>Subject / idea <input name="subject" required placeholder="A portrait of our dog on the beach"></label>
+          <div class="row2"><label>Size <input name="size" placeholder="12 × 16 in"></label>
+          <label>Medium <input name="medium" placeholder="Acrylic"></label></div>
+          <div class="row2"><label>Deadline <input name="deadline" placeholder="Before 20 Dec"></label>
+          <label>Budget <input name="budget" placeholder="₹5,000"></label></div>
+          <label>Your name &amp; contact <input name="contact" required placeholder="Name, phone or email"></label>
+          <button class="btn" type="submit" value="wa">Send brief on WhatsApp</button>
+          <button class="btn ghost" type="submit" value="ig">Send via Instagram DM</button>
+        </form>
+      </div>
+    </div>
   </section>
 </main>
 
-<footer>
+<footer data-sec>
+  <p class="hand" id="thanks"></p>
   <p id="footText"></p>
 </footer>
 
-<!-- Product modal -->
-<dialog id="modal" class="modal">
-  <button class="close" data-close aria-label="Close">×</button>
-  <div id="modalBody"></div>
-</dialog>
+<dialog id="zoom" class="zoom"><button class="close" data-close aria-label="Close">×</button><img id="zoomImg" alt=""></dialog>
 
-<!-- Cart drawer -->
 <aside id="drawer" class="drawer" aria-hidden="true">
   <div class="drawer-head"><h3>Your cart</h3><button class="close" id="drawerClose" aria-label="Close cart">×</button></div>
   <div id="cartItems" class="cart-items"></div>
@@ -103,7 +123,7 @@
     <label>Delivery address <textarea name="address" rows="3" required autocomplete="street-address"></textarea></label>
     <button class="btn" type="submit" value="wa">Order on WhatsApp</button>
     <button class="btn ghost" type="submit" value="ig">Order via Instagram DM</button>
-    <p class="note">Orders are confirmed by message. Payment by UPI/bank transfer after confirmation — nothing is charged on this site.</p>
+    <p class="note">Orders are confirmed by message. Payment by UPI/bank transfer after confirmation. Nothing is charged on this site.</p>
   </form>
 </aside>
 <div id="scrim" class="scrim" hidden></div>
