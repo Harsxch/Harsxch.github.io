@@ -9,14 +9,17 @@ window.SHOP = {
   tagline: "Turning imagination into art.",
 };
 
-// Real photos live in img/ (cropped from the Instagram feed). TITLES, MEDIUMS, SIZES and PRICES are PLACEHOLDERS: fix them.
+// Photos live in img/. Titles and descriptions come from the portfolio PDF.
+// MEDIUM (except graphite/watercolor), SIZE and PRICE are PLACEHOLDERS: fix them. Add sold: true when sold.
 window.PAINTINGS = [
-  { id: "p1", title: "Golden Poppies", image: "img/poppies.jpg", medium: "Acrylic", size: "16 × 12 in", price: 6500, palette: ["#e8a33d"], desc: "Textured poppies, raised and glowing against soft grey." },
-  { id: "p2", title: "Summit Light", image: "img/mountain.jpg", medium: "Acrylic", size: "12 × 16 in", price: 7500, palette: ["#3d6aa8"], desc: "Sunrise catching the peak. Palette-knife texture." },
-  { id: "p3", title: "Lone Boat", image: "img/ocean-boat.jpg", medium: "Acrylic", size: "12 × 16 in", price: 5500, palette: ["#2a6fc4"], desc: "A small boat on restless blue. Painted from above." },
-  { id: "p4", title: "Blue Buddha", image: "img/buddha.jpg", medium: "Acrylic", size: "18 × 24 in", price: 12000, palette: ["#2c6bd1"], desc: "Calm face, loud colour. Lotus and butterflies." },
-  { id: "p5", title: "Textured Heart", image: "img/heart.jpg", medium: "Texture art", size: "8 × 8 in", price: 2500, palette: ["#c45a7a"], desc: "A heart sculpted in thick, tactile paint." },
-  { id: "p6", title: "Ganesha", image: "img/ganesha.jpg", medium: "Acrylic", size: "10 × 10 in", price: 4500, palette: ["#8a8fa0"], desc: "Grey and gold, with a touch of shimmer." },
-  { id: "p7", title: "Polka Muse", image: "img/pink-face.jpg", medium: "Acrylic", size: "8 × 8 in", price: 2200, palette: ["#ee5d9a"], desc: "Playful pop portrait. Bold pink, bolder eyes." },
-  { id: "p8", title: "Specs the Giraffe", image: "img/giraffe.jpg", medium: "Acrylic", size: "12 × 16 in", price: 3500, palette: ["#f08a2c"], desc: "A grinning giraffe against a sunset sky.", sold: true },
+  { id: "p1", title: "Buddha in Colour", image: "img/buddha.jpg", medium: "Acrylic", size: "18 × 24 in", price: 12000, desc: "A vibrant meditation-inspired piece combining bold colour, lotus forms and butterflies." },
+  { id: "p2", title: "Ocean Above", image: "img/ocean-boat.jpg", medium: "Acrylic", size: "12 × 16 in", price: 5500, desc: "A small boat moving through bright, textured water beneath an open blue sky." },
+  { id: "p3", title: "Finding the Peak", image: "img/mountain.jpg", medium: "Acrylic", size: "12 × 16 in", price: 7500, desc: "A textured mountain landscape balancing cool blues with warm, sunlit peaks." },
+  { id: "p4", title: "Sacred Light", image: "img/ganesha.jpg", medium: "Acrylic", size: "10 × 10 in", price: 4500, desc: "A luminous Ganesha painting with soft neutrals, gold details and a calm presence." },
+  { id: "p5", title: "A Little Curious", image: "img/giraffe.jpg", medium: "Acrylic", size: "12 × 16 in", price: 3500, desc: "A playful giraffe portrait with warm sunset tones and a joyful personality." },
+  { id: "p6", title: "A World of Colour", image: "img/world-of-colour.jpg", medium: "Acrylic", size: "6 × 6 in each", price: 6000, desc: "A collection of playful, graphic miniatures exploring colour, character and mood." },
+  { id: "p7", title: "Colour Takes Flight", image: "img/bird.jpg", medium: "Watercolor", size: "8 × 11 in", price: 3000, desc: "A loose, expressive bird study created with watercolor splashes and energetic linework." },
+  { id: "p8", title: "Quiet Strength", image: "img/horse.jpg", medium: "Graphite", size: "12 × 16 in", price: 4000, desc: "A detailed graphite study exploring form, texture and the character of the horse." },
+  { id: "p9", title: "Golden Poppies", image: "img/poppies.jpg", medium: "Texture art", size: "16 × 12 in", price: 6500, desc: "Textured poppies, raised and glowing against soft grey." },
+  { id: "p10", title: "Textured Heart", image: "img/heart.jpg", medium: "Texture art", size: "8 × 8 in", price: 2500, desc: "A heart sculpted in thick, tactile paint." },
 ];
