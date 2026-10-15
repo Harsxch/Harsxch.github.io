@@ -23,3 +23,13 @@ window.PAINTINGS = [
   { id: "p9", title: "Golden Poppies", image: "img/poppies.jpg", medium: "Texture art", size: "16 × 12 in", price: 6500, desc: "Textured poppies, raised and glowing against soft grey." },
   { id: "p10", title: "Textured Heart", image: "img/heart.jpg", medium: "Texture art", size: "8 × 8 in", price: 2500, desc: "A heart sculpted in thick, tactile paint." },
 ];
+
+// "Art, lived in" collage. Captions describe what is visible; edit freely.
+window.SPACES = [
+  { image: "img/space-frames.jpg", caption: "Rose, campsite and moonlit ship, framed" },
+  { image: "img/space-terrace.jpg", caption: "Framed work laid out on the terrace" },
+  { image: "img/space-minis.jpg", caption: "The miniatures on a slatted wall" },
+  { image: "img/space-plants.jpg", caption: "Buddha among the plants" },
+  { image: "img/space-easel.jpg", caption: "Ocean Above, on the easel" },
+  { image: "img/space-stairs.jpg", caption: "A framed rose by the staircase" },
+];
