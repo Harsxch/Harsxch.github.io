@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Strokes by Purvai — Original Paintings</title>
+<meta name="description" content="Original handmade paintings by Strokes by Purvai. Browse, pick a piece, and order in a minute.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500;1,700&family=Jost:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<canvas id="trail" aria-hidden="true"></canvas>
+<header class="top">
+  <a class="brand" href="#top" id="brand"></a>
+  <nav>
+    <a href="#shop">Shop</a>
+    <a href="#about">About</a>
+    <a href="#commission">Commissions</a>
+    <button id="cartBtn" class="cart-btn" aria-label="Open cart">Cart <span id="cartCount">0</span></button>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <svg class="hero-art" viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <filter id="paint" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency=".012 .03" numOctaves="3" seed="4"/><feDisplacementMap in="SourceGraphic" scale="38"/></filter>
+        <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency=".04" numOctaves="2" seed="9"/><feDisplacementMap in="SourceGraphic" scale="10"/></filter>
+      </defs>
+      <g filter="url(#paint)" class="blobs">
+        <ellipse class="b1" cx="230" cy="190" rx="260" ry="150" fill="var(--c1)"/>
+        <ellipse class="b2" cx="980" cy="160" rx="230" ry="170" fill="var(--c2)"/>
+        <ellipse class="b3" cx="900" cy="560" rx="300" ry="130" fill="var(--c3)"/>
+        <ellipse class="b4" cx="170" cy="580" rx="210" ry="120" fill="var(--c4)"/>
+      </g>
+      <g filter="url(#rough)" fill="none" stroke-linecap="round">
+        <path class="stroke s1" d="M60 330 C 300 230, 520 430, 760 300 S 1060 260, 1150 360" stroke="var(--c2)" stroke-width="22"/>
+        <path class="stroke s2" d="M100 420 C 340 520, 600 330, 820 450 S 1080 520, 1130 470" stroke="var(--c1)" stroke-width="14"/>
+        <path class="stroke s3" d="M200 120 C 420 60, 640 160, 900 90" stroke="var(--c4)" stroke-width="10"/>
+      </g>
+    </svg>
+    <div class="hero-text">
+      <p class="eyebrow hand">handmade · one of a kind</p>
+      <h1 id="heroTitle"></h1>
+      <p class="lead" id="heroTag"></p>
+      <a class="btn" href="#shop">Walk into the gallery</a>
+    </div>
+  </section>
+  <div class="ribbon" aria-hidden="true"><div><span>Acrylics ✦ Texture art ✦ Handmade portraits ✦ Commissions open ✦ DM for custom creations ✦ </span><span>Acrylics ✦ Texture art ✦ Handmade portraits ✦ Commissions open ✦ DM for custom creations ✦ </span></div></div>
+
+  <section id="shop" class="wrap">
+    <div class="toolbar">
+      <h2 class="brush">The gallery</h2>
+      <div class="controls">
+        <select id="filter" aria-label="Filter by medium"></select>
+        <select id="sort" aria-label="Sort">
+          <option value="new">Featured</option>
+          <option value="low">Price: low to high</option>
+          <option value="high">Price: high to low</option>
+        </select>
+      </div>
+    </div>
+    <div id="grid" class="grid"></div>
+  </section>
+
+  <section id="about" class="wrap about">
+    <h2 class="brush">Behind the brush</h2>
+    <p>Every piece here is painted by hand and sold once. Follow along on
+    <a id="igLink" target="_blank" rel="noopener"></a> to see new work first.</p>
+    <ul class="facts">
+      <li>Original artworks &amp; commissions</li>
+      <li id="shipFact"></li>
+      <li>DM for custom creations: portraits, pets, couples, gifts</li>
+    </ul>
+  </section>
+
+  <section id="commission" class="wrap commission">
+    <h2 class="brush">Want one made for you?</h2>
+    <p>Commissions are open. Tell us the size, colours, and the feeling you want.</p>
+    <a class="btn ghost" id="commissionLink" target="_blank" rel="noopener">Start a commission</a>
+  </section>
+</main>
+
+<footer>
+  <p id="footText"></p>
+</footer>
+
+<!-- Product modal -->
+<dialog id="modal" class="modal">
+  <button class="close" data-close aria-label="Close">×</button>
+  <div id="modalBody"></div>
+</dialog>
+
+<!-- Cart drawer -->
+<aside id="drawer" class="drawer" aria-hidden="true">
+  <div class="drawer-head"><h3>Your cart</h3><button class="close" id="drawerClose" aria-label="Close cart">×</button></div>
+  <div id="cartItems" class="cart-items"></div>
+  <form id="checkout" class="checkout" hidden>
+    <div class="total-row"><span>Total</span><strong id="cartTotal"></strong></div>
+    <label>Name <input name="name" required autocomplete="name"></label>
+    <label>Phone <input name="phone" required inputmode="tel" autocomplete="tel"></label>
+    <label>Delivery address <textarea name="address" rows="3" required autocomplete="street-address"></textarea></label>
+    <button class="btn" type="submit" value="wa">Order on WhatsApp</button>
+    <button class="btn ghost" type="submit" value="ig">Order via Instagram DM</button>
+    <p class="note">Orders are confirmed by message. Payment by UPI/bank transfer after confirmation — nothing is charged on this site.</p>
+  </form>
+</aside>
+<div id="scrim" class="scrim" hidden></div>
+<div id="toast" class="toast" role="status"></div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
