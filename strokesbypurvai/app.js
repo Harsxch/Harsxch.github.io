@@ -31,7 +31,7 @@
   document.title = `${S.name} — Original Paintings`;
   $("#brand").textContent = S.name;
   $("#heroTitle").textContent = S.tagline;
-  $("#heroTag").textContent = `Paintings by ${S.name}. Pick a piece, order in a minute.`;
+  $("#heroTag").textContent = `Original artworks & commissions by ${S.name}. Pick a piece, or DM for something custom.`;
   $("#shipFact").textContent = S.shipping;
   $("#igLink").href = `https://instagram.com/${S.instagram}`;
   $("#igLink").textContent = `@${S.instagram}`;
