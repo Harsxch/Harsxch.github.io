@@ -42,7 +42,7 @@ export function Hero() {
           transition={{ delay: 0.8, duration: 0.8 }}
           className="mx-auto mt-8 max-w-xl text-center text-[17px] leading-relaxed text-ink-soft sm:text-lg"
         >
-          Hands-on courses in AI, Claude and Python — taught in Hinglish, built around real projects, finished with
+          Hands-on courses in AI, Claude and Python, taught in Hinglish, built around real projects, finished with
           something you can actually show.
         </motion.p>
 

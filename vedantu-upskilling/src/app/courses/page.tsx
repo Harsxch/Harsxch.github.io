@@ -4,7 +4,7 @@ import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "All courses",
-  description: "Explore every Vedantu Upskilling course: AI Income Mastery, Claude Mastery, Python + DSA Mastery, AI Study Mastery — and what's launching next.",
+  description: "Explore every Vedantu Upskilling course: AI Income Mastery, Claude Mastery, Python + DSA Mastery, AI Study Mastery, and what's launching next.",
   alternates: { canonical: `${SITE_URL}/courses` },
 };
 

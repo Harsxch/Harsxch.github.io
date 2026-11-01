@@ -63,7 +63,7 @@ export function ClaudeHero({ course }: { course: Course }) {
           <div className="overflow-hidden rounded-2xl border border-c-line bg-black/40 shadow-[0_40px_100px_-30px_rgba(217,119,87,.35)] backdrop-blur">
             <div className="flex items-center gap-2 border-b border-c-line px-4 py-3">
               <i className="size-3 rounded-full bg-[#ff5f57]" /><i className="size-3 rounded-full bg-[#febc2e]" /><i className="size-3 rounded-full bg-[#28c840]" />
-              <span className="mx-auto font-mono text-xs text-c-muted">claude — illustrative session</span>
+              <span className="mx-auto font-mono text-xs text-c-muted">claude · illustrative session</span>
             </div>
             <div className="min-h-[19rem] p-5 font-mono text-[13px] leading-7 sm:text-sm" aria-hidden>
               {shown.map((l, i) => (<motion.p key={i} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className={l.c ?? "text-c-fg/90"}>{l.t}</motion.p>))}

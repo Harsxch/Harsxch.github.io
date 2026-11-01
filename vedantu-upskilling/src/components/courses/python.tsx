@@ -24,7 +24,7 @@ export function PythonPage({ course }: { course: Course }) {
       </section>
 
       <section className={`${wrap} py-24 sm:py-36`}>
-        <SectionHead mono titleClass={mono} eyebrow="01 · the curriculum" title={<>30 classes. <span className="text-c-accent">4 phases.</span></>} lead={`${course.phaseLabel}. Click through the files — each one is a topic, and the plan it belongs to.`} />
+        <SectionHead mono titleClass={mono} eyebrow="01 · the curriculum" title={<>30 classes. <span className="text-c-accent">4 phases.</span></>} lead={`${course.phaseLabel}. Click through the files. Each one is a topic, and the plan it belongs to.`} />
         <div className="mt-12"><FileExplorer course={course} /></div>
       </section>
 
@@ -38,7 +38,7 @@ export function PythonPage({ course }: { course: Course }) {
           <div className="pointer-events-none absolute -top-24 -right-24 size-80 rounded-full bg-[radial-gradient(circle,rgba(125,255,90,.25),transparent_65%)]" />
           <p className="text-xs tracking-widest text-c-accent uppercase">03 · phase 4 · showcase</p>
           <h2 className="mt-5 max-w-[16ch] text-[clamp(2rem,4.8vw,4rem)] leading-[1.02] font-bold tracking-[-0.04em]">Project: <span className="text-c-accent">StudySprint</span></h2>
-          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-c-fg/80">Build your academic command center — the final project of the course.</p>
+          <p className="mt-5 max-w-xl text-[15px] leading-relaxed text-c-fg/80">Build your academic command center, the final project of the course.</p>
           <p className="mt-8 text-sm text-c-muted"><span className="text-c-accent">$</span> python studysprint.py<span className="caret" /></p>
         </Reveal>
       </section>

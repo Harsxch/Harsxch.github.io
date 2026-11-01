@@ -136,7 +136,7 @@ export function FileExplorer({ course }: { course: Course }) {
                 const yes = it.plans.includes(p.id);
                 return (
                   <div key={p.id} className={`flex items-center justify-between rounded-lg border px-4 py-3 ${yes ? "border-c-accent/40 bg-c-accent/10" : "border-c-line opacity-50"}`}>
-                    <span>{p.name}</span><span className={yes ? "text-c-accent" : "text-c-muted"}>{yes ? "✓ included" : "— not included"}</span>
+                    <span>{p.name}</span><span className={yes ? "text-c-accent" : "text-c-muted"}>{yes ? "✓ included" : "✕ not included"}</span>
                   </div>
                 );
               })}

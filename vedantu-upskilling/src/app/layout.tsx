@@ -15,7 +15,7 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: `${SITE_NAME} — Learn skills that move you forward`, template: `%s · ${SITE_NAME}` },
+  title: { default: `${SITE_NAME}: Learn skills that move you forward`, template: `%s · ${SITE_NAME}` },
   description:
     "Hands-on courses from Vedantu for students and early-career learners: AI Income Mastery, Claude Mastery, Python + DSA Mastery and AI Study Mastery.",
   openGraph: { type: "website", siteName: SITE_NAME, locale: "en_IN" },

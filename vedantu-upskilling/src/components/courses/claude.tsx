@@ -38,7 +38,7 @@ export function ClaudePage({ course }: { course: Course }) {
       </section>
 
       <section className={`${wrap} py-12 sm:py-24`}>
-        <SectionHead eyebrow="Phase 5 · Get internships" title="A pipeline, not a prayer." lead="You learn the search, the applications, the outreach, the tracker and the interview prep — then run them like a system. (Illustration of the five steps.)" />
+        <SectionHead eyebrow="Phase 5 · Get internships" title="A pipeline, not a prayer." lead="You learn the search, the applications, the outreach, the tracker and the interview prep, then run them like a system. (Illustration of the five steps.)" />
         <div className="mt-12"><InternshipPipeline /></div>
       </section>
 

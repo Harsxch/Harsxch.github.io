@@ -24,7 +24,7 @@ export function Voices() {
               transition={{ duration: 0.45 }}
             >
               <p className="font-display text-[clamp(1.8rem,4.4vw,3.6rem)] leading-[1.1]">“{r.text}”</p>
-              <footer className="mt-6 text-[15px] text-c-muted">— {r.name}</footer>
+              <footer className="mt-6 text-[15px] text-c-muted">{r.name}</footer>
             </motion.blockquote>
           </AnimatePresence>
         </div>
