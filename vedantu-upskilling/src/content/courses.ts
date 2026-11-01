@@ -107,7 +107,7 @@ export const courses: Course[] = [
         tagline: "35+ AI tools",
         price: 999,
         mrp: 3999,
-        checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6ab63b58e3b0d573b8903a1",
+        checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6ab63b58e3b0d573b8903a1f",
       },
       {
         id: "full",
