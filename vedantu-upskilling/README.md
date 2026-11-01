@@ -41,7 +41,7 @@ Events: `page_view`, `course_card_click`, `cta_click`, `checkout_click`, `coming
 Any Node host (Vercel etc.): root directory `vedantu-upskilling`, build `npm run build`, start `npm run start`, set the env vars above.
 
 ## Open [TODO] items (nothing below was invented)
-- Checkout URLs for AI Income, Claude Mastery, AI Study (Python points at its existing Vedantu page; confirm it maps to both plans). Confirm checkout reads `utm_*` / `ref`.
+- Checkout URLs are wired for all 7 plans. **Verify the AI Income ₹999 link:** its ID `6ab63b58e3b0d573b8903a1` is 23 characters (all others are 24), so a character may have been dropped. Confirm checkout reads `utm_*` / `ref`.
 - Instructor for AI Income + Claude: named "Harsh Priyam" from the student reviews and photo in the PDF (not explicitly labelled). Confirm, and add bio/credentials.
 - Python + AI Study: FAQs. Claude, Python, AI Study: student reviews (none supplied).
 - Personality Development + Video Editing: everything (curriculum, teacher, price, language, dates). Pages only use the themes from the brief.

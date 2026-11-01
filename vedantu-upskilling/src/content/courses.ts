@@ -107,7 +107,7 @@ export const courses: Course[] = [
         tagline: "35+ AI tools",
         price: 999,
         mrp: 3999,
-        checkoutUrl: null,
+        checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6ab63b58e3b0d573b8903a1",
       },
       {
         id: "full",
@@ -116,7 +116,7 @@ export const courses: Course[] = [
         price: 1499,
         mrp: 10000,
         recommended: true,
-        checkoutUrl: null,
+        checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6ab63752127e5c285b60cdf6",
       },
     ],
     phaseLabel: "5-phase journey · from learning to earning",
@@ -230,7 +230,7 @@ export const courses: Course[] = [
     ],
     lectures: "38+ lectures",
     plans: [
-      { id: "batch", name: "Batch only", tagline: "Tools + skill up", price: 999, mrp: 3999, checkoutUrl: null },
+      { id: "batch", name: "Batch only", tagline: "Tools + skill up", price: 999, mrp: 3999, checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6a9520fcdd5a18279d6498d7" },
       {
         id: "full",
         name: "Batch + Internship Mastery",
@@ -238,7 +238,7 @@ export const courses: Course[] = [
         price: 1499,
         mrp: 10000,
         recommended: true,
-        checkoutUrl: null,
+        checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6a95216a345c7f79e5cdb570",
       },
     ],
     phaseLabel: "5-phase journey · from learning to earning",
@@ -360,8 +360,7 @@ export const courses: Course[] = [
         tagline: "Python basics · Phase 1 (12 classes)",
         price: 999,
         mrp: 3999,
-        // [TODO confirm] existing Vedantu page; confirm it maps to this variant
-        checkoutUrl: "https://courses.vedantu.com/python-dsa-mastery-harsh-sir/",
+        checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6ab0fff176591f6fe5d0dab1",
       },
       {
         id: "mastery",
@@ -370,8 +369,7 @@ export const courses: Course[] = [
         price: 1499,
         mrp: 10000,
         recommended: true,
-        // [TODO confirm] existing Vedantu page; confirm it maps to this variant
-        checkoutUrl: "https://courses.vedantu.com/python-dsa-mastery-harsh-sir/",
+        checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6ab0ff5e9735bd3c9897f549",
       },
     ],
     phaseLabel: "4-phase journey · from beginner to pro",
@@ -466,7 +464,7 @@ export const courses: Course[] = [
       { value: "8–12", label: "Grades" },
     ],
     plans: [
-      { id: "main", name: "AI Study Mastery", price: 499, mrp: 10000, recommended: true, checkoutUrl: null },
+      { id: "main", name: "AI Study Mastery", price: 499, mrp: 10000, recommended: true, checkoutUrl: "https://www.vedantu.com/payment/BUNDLE/6acf2c96c75a433c418d1313" },
     ],
     phaseLabel: "4-phase journey · from beginner to pro",
     phases: [
