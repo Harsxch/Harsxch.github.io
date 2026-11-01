@@ -1,0 +1,124 @@
+@import "tailwindcss";
+
+/* ── Brand tokens (from vedantu.com: orange #FF693D, deep navy #01202B) ───────── */
+:root {
+  --brand-orange: #ff693d;
+  --brand-orange-press: #ef5c32;
+  --brand-navy: #01202b;
+  --brand-plum: #6d366c; /* Vedantu theme-color */
+  --paper: #f6f3ee;
+  --paper-2: #efebe4;
+  --ink: #01202b;
+  --ink-soft: #4b5b63;
+  --hairline: #e4dfd6;
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SF Mono", Menlo, monospace;
+  --font-soft: "Fraunces Variable", "Instrument Serif", Georgia, serif;
+  --font-hand: "Caveat", "Bradley Hand", cursive;
+  --font-cine: "Anton", "Impact", "Arial Narrow", sans-serif;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+  --color-brand: var(--brand-orange);
+  --color-navy: var(--brand-navy);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-hairline: var(--hairline);
+  --color-c-bg: var(--c-bg);
+  --color-c-surface: var(--c-surface);
+  --color-c-surface2: var(--c-surface2);
+  --color-c-fg: var(--c-fg);
+  --color-c-muted: var(--c-muted);
+  --color-c-accent: var(--c-accent);
+  --color-c-accent2: var(--c-accent2);
+  --color-c-line: var(--c-line);
+  --color-c-on: var(--c-on);
+}
+
+/* ── Per-course colour tokens. Each course is its own world. ───────────────────── */
+[data-theme="ai-income"] {
+  --c-bg: #090705; --c-surface: #130e09; --c-surface2: #1c150d;
+  --c-fg: #f7efe3; --c-muted: #a6988a; --c-accent: #ffb52e; --c-accent2: #ff7a1a;
+  --c-line: rgba(255, 190, 110, 0.16); --c-on: #1b1002;
+}
+[data-theme="claude"] {
+  --c-bg: #15110e; --c-surface: #1e1914; --c-surface2: #28211b;
+  --c-fg: #f2e8dc; --c-muted: #a39687; --c-accent: #d97757; --c-accent2: #e9a07f;
+  --c-line: rgba(233, 160, 127, 0.16); --c-on: #1a0d07;
+}
+[data-theme="python"] {
+  --c-bg: #050806; --c-surface: #0b110c; --c-surface2: #121a13;
+  --c-fg: #eaf6e8; --c-muted: #86a088; --c-accent: #7dff5a; --c-accent2: #35c24a;
+  --c-line: rgba(125, 255, 90, 0.16); --c-on: #04120a;
+}
+[data-theme="ai-study"] {
+  --c-bg: #08131a; --c-surface: #0e1d26; --c-surface2: #14283a;
+  --c-fg: #fff3e4; --c-muted: #93a8b3; --c-accent: #ffa63d; --c-accent2: #ff7f50;
+  --c-line: rgba(255, 166, 61, 0.18); --c-on: #1d0f02;
+}
+[data-theme="personality"] {
+  --c-bg: #150a15; --c-surface: #1f111f; --c-surface2: #2a172a;
+  --c-fg: #f6ebdd; --c-muted: #b19db1; --c-accent: #e8c9a0; --c-accent2: #c98bc9;
+  --c-line: rgba(232, 201, 160, 0.16); --c-on: #1e1018;
+}
+[data-theme="video"] {
+  --c-bg: #050506; --c-surface: #0d0d10; --c-surface2: #15151a;
+  --c-fg: #f1f1f3; --c-muted: #8e8e98; --c-accent: #ff3b30; --c-accent2: #5bd3ff;
+  --c-line: rgba(255, 255, 255, 0.1); --c-on: #ffffff;
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-feature-settings: "cv11", "ss03";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+::selection { background: var(--brand-orange); color: #fff; }
+:focus-visible { outline: 2px solid var(--c-accent, var(--brand-orange)); outline-offset: 3px; border-radius: 6px; }
+
+.font-display { font-family: var(--font-serif); letter-spacing: -0.02em; }
+.font-soft { font-family: var(--font-soft); }
+.font-hand { font-family: var(--font-hand); }
+.font-cine { font-family: var(--font-cine); letter-spacing: 0.01em; }
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* shared utility look: hairline + noise */
+.noise::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+.no-scrollbar { scrollbar-width: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+@keyframes marquee { to { transform: translateX(-50%); } }
+@keyframes blink { 50% { opacity: 0; } }
+@keyframes float-y { 50% { transform: translateY(-10px); } }
+@keyframes pulse-ring { 0% { transform: scale(0.8); opacity: 0.7; } 100% { transform: scale(2.2); opacity: 0; } }
+@keyframes grain { 0%,100% { transform: translate(0,0); } 25% { transform: translate(-3%,2%); } 50% { transform: translate(2%,-3%); } 75% { transform: translate(-2%,-2%); } }
+@keyframes sweep { from { transform: translateX(-120%); } to { transform: translateX(220%); } }
+
+.caret::after { content: "▍"; margin-left: 2px; animation: blink 1s steps(1) infinite; color: var(--c-accent); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+}
+
+/* defaults so shared components also work on the light pages */
+:root {
+  --c-bg: var(--paper); --c-surface: #fff; --c-surface2: var(--paper-2);
+  --c-fg: var(--ink); --c-muted: var(--ink-soft); --c-accent: var(--brand-orange);
+  --c-accent2: var(--brand-orange-press); --c-line: var(--hairline); --c-on: #fff;
+}
