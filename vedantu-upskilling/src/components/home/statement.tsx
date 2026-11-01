@@ -17,7 +17,7 @@ export function Statement() {
   return (
     <section className="px-4 py-24 sm:px-6 sm:py-40">
       <div ref={ref} className="mx-auto max-w-[1100px]">
-        <p className="font-display text-[clamp(2rem,5.2vw,4.4rem)] leading-[1.06] text-ink">
+        <p className="font-display text-[clamp(1.84rem,4.06vw,3.43rem)] leading-[1.06] text-ink">
           {words.map((w, i) => (
             <Word key={i} w={w} p={scrollYProgress} range={[i / words.length, Math.min(1, (i + 3) / words.length)]} />
           ))}

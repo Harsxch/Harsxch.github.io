@@ -1,12 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import Script from "next/script";
-import "@fontsource-variable/inter";
-import "@fontsource-variable/jetbrains-mono";
-import "@fontsource-variable/fraunces";
-import "@fontsource/instrument-serif";
-import "@fontsource/instrument-serif/400-italic.css";
-import "@fontsource/caveat/600.css";
-import "@fontsource/anton";
 import "./globals.css";
 import { Providers } from "@/components/providers";
 import { Nav } from "@/components/nav";

@@ -10,10 +10,10 @@ export function VideoPage({ course }: { course: Course }) {
     <>
       <VideoHero course={course} />
       <section className={`${wrap} py-24 sm:py-36`}>
-        <SectionHead titleClass="font-cine uppercase" eyebrow="The reel" title="Six themes. One timeline." lead="Drag the playhead. These are the themes the course is built around. The full curriculum, teacher, price and start date come at launch." />
+        <SectionHead titleClass="font-display" eyebrow="The reel" title="Six themes. One timeline." lead="Drag the playhead. These are the themes the course is built around. The full curriculum, teacher, price and start date come at launch." />
         <div className="mt-12"><Scrubber items={course.positioning!} /></div>
       </section>
-      <SoonNotify course={course} title="Be in the first cut." titleClass="font-cine uppercase" />
+      <SoonNotify course={course} title="Be in the first cut." titleClass="font-display" />
     </>
   );
 }

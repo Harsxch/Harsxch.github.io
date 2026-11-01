@@ -1,13 +1,13 @@
 import type { ThemeId } from "@/content/courses";
 
-/** Each course world has its own typographic voice. */
+/** Typography is identical for every course (Apple SF system). Identity comes from colour, art and motion. */
 export const titleClass: Record<ThemeId, string> = {
-  "ai-income": "font-display tracking-[-0.02em]",
-  claude: "font-display tracking-[-0.02em]",
-  python: "font-mono font-bold tracking-[-0.04em]",
-  "ai-study": "font-soft font-semibold tracking-[-0.03em]",
-  personality: "font-display italic tracking-[-0.02em]",
-  video: "font-cine uppercase tracking-[0.005em]",
+  "ai-income": "font-display",
+  claude: "font-display",
+  python: "font-display",
+  "ai-study": "font-display",
+  personality: "font-display",
+  video: "font-display",
 };
 export const dotColor: Record<ThemeId, string> = {
   "ai-income": "#ffb52e", claude: "#d97757", python: "#7dff5a",

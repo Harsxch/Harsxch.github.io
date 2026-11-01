@@ -3,7 +3,8 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useRef } from "react";
-import { liveCourses, startPrice, inr, soonCourses } from "@/content/courses";
+import { liveCourses, soonCourses } from "@/content/courses";
+import { PriceBlock } from "@/components/price-block";
 import { track } from "@/lib/analytics";
 import { titleClass } from "@/lib/theme-type";
 import { SplitWords } from "@/components/ui/reveal";
@@ -31,9 +32,9 @@ export function Hero() {
           Vedantu Upskilling · {liveCourses.length} live courses, {soonCourses.length} on the way
         </motion.p>
 
-        <h1 className="font-display mx-auto mt-7 max-w-[15ch] text-center text-[clamp(3.4rem,10.5vw,9.5rem)] leading-[0.9] text-ink">
+        <h1 className="font-display mx-auto mt-7 max-w-[15ch] text-center text-[clamp(3.13rem,8.19vw,7.41rem)] leading-[0.9] text-ink">
           <SplitWords text="Learn skills that move you" />
-          <span className="text-brand italic"><SplitWords text="forward." delay={0.35} /></span>
+          <span className="text-brand "><SplitWords text="forward." delay={0.35} /></span>
         </h1>
 
         <motion.p
@@ -63,6 +64,9 @@ export function Hero() {
             See the four worlds ↓
           </Link>
         </motion.div>
+        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.15 }} className="mt-6 text-center text-[14px] text-ink-soft">
+          Join <b className="font-semibold text-ink">7,200+</b> learners building skills for what&apos;s next.
+        </motion.p>
 
         <div id="worlds" className="no-scrollbar -mx-4 mt-16 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0 sm:pb-0">
           {liveCourses.map((c, i) => (
@@ -86,10 +90,10 @@ export function Hero() {
                   <h2 className={`${titleClass[c.theme]} text-[28px] leading-[1.02] sm:text-[30px] ${c.theme === "python" ? "text-[22px] sm:text-[22px]" : ""}`}>
                     {c.title}
                   </h2>
-                  <p className="mt-2 flex items-center justify-between text-[13px] text-c-fg/70">
-                    <span>from {inr(startPrice(c) ?? 0)}</span>
+                  <div className="mt-2 flex items-end justify-between text-[13px] text-c-fg/70">
+                    <PriceBlock course={c} size="sm" showLabel={false} />
                     <span className="grid size-8 place-items-center rounded-full bg-c-accent text-c-on transition group-hover:translate-x-1"><ArrowRight className="size-4" /></span>
-                  </p>
+                  </div>
                 </div>
               </Link>
             </motion.div>

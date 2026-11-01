@@ -3,7 +3,8 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowUpRight, Lock } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { courses, inr, startPrice } from "@/content/courses";
+import { courses } from "@/content/courses";
+import { PriceBlock } from "@/components/price-block";
 import { TileArt } from "@/components/art/tile-art";
 import { track } from "@/lib/analytics";
 import { titleClass } from "@/lib/theme-type";
@@ -49,10 +50,10 @@ export function CoursesGrid() {
                       )}
                       {c.audienceTag && <span className="rounded-full border border-c-fg/25 px-3 py-1 text-[11px] text-c-fg/80">{c.audienceTag}</span>}
                     </div>
-                    <h2 className={`${titleClass[c.theme]} text-[clamp(1.9rem,3.6vw,3.2rem)] leading-[0.98] ${c.theme === "python" ? "text-[clamp(1.5rem,2.6vw,2.2rem)]" : ""}`}>{c.title}</h2>
+                    <h2 className={`${titleClass[c.theme]} text-[clamp(1.75rem,2.81vw,2.5rem)] leading-[0.98] ${c.theme === "python" ? "text-[clamp(1.38rem,2.03vw,1.72rem)]" : ""}`}>{c.title}</h2>
                     <p className="mt-2 max-w-md text-[14.5px] leading-snug text-c-fg/75">{c.blurb}</p>
-                    <div className="mt-5 flex items-center justify-between text-sm">
-                      <span className="tabular font-medium">{soon ? "Notify me at launch" : `from ${inr(startPrice(c) ?? 0)}`}</span>
+                    <div className="mt-5 flex items-end justify-between text-sm">
+                      <PriceBlock course={c} size="md" />
                       <span className="grid size-10 place-items-center rounded-full bg-c-fg text-c-bg transition group-hover:rotate-45"><ArrowUpRight className="size-5" /></span>
                     </div>
                   </div>

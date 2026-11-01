@@ -111,7 +111,7 @@ function StudyArt() {
           </g>
         ))}
         <g transform="rotate(-6 200 440)"><rect x="110" y="410" width="180" height="64" rx="10" fill="#fff3e4" opacity=".95" />
-          <text x="200" y="448" textAnchor="middle" fontSize="22" fontFamily="var(--font-hand)" fill="#1d0f02">a² + b² = c²  ✓</text></g>
+          <text x="200" y="448" textAnchor="middle" fontSize="22" fontFamily="var(--font-semibold)" fill="#1d0f02">a² + b² = c²  ✓</text></g>
       </svg>
     </div>
   );
@@ -123,7 +123,7 @@ function PersonalityArt() {
     <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_50%_0%,rgba(232,201,160,.28),transparent_70%)]">
       <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" className="size-full">
         <path d="M200 0 L120 330 H280Z" fill="#e8c9a0" opacity=".08" />
-        <text x="200" y="300" textAnchor="middle" fontSize="190" fontStyle="italic" fontFamily="var(--font-serif)" fill="#e8c9a0" opacity=".9">Aa</text>
+        <text x="200" y="300" textAnchor="middle" fontSize="190" fontFamily="var(--font-display)" fill="#e8c9a0" opacity=".9">Aa</text>
         <g stroke="#c98bc9" strokeLinecap="round" strokeWidth="3">
           {Array.from({ length: 27 }).map((_, i) => {
             const h = 8 + Math.abs(Math.sin(i * 0.7) * 38) + (i % 3) * 5;

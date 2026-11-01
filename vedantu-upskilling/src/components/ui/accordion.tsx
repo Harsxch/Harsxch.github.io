@@ -23,11 +23,11 @@ export function Accordion({ items, variant = "line" }: { items: Faq[]; variant?:
                 className="group flex w-full items-start gap-5 py-5 text-left sm:py-6"
               >
                 <span
-                  className={`mt-1 w-7 shrink-0 text-xs tabular opacity-50 ${variant === "mono" ? "font-mono" : ""}`}
+                  className={`mt-1 w-7 shrink-0 text-xs tabular opacity-50 `}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className={`flex-1 text-[17px] leading-snug font-medium sm:text-lg ${variant === "soft" ? "font-soft" : ""}`}>
+                <span className={`flex-1 text-[17px] leading-snug font-medium sm:text-lg ${variant === "soft" ? "font-display" : ""}`}>
                   {f.q}
                 </span>
                 <motion.span

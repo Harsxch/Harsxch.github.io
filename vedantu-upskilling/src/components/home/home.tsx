@@ -1,4 +1,5 @@
 import { Hero } from "./hero";
+import { CredibilityStrip } from "@/components/proof";
 import { Statement } from "./statement";
 import { CourseStack } from "./course-stack";
 import { Why } from "./why";
@@ -11,6 +12,7 @@ export function Home() {
   return (
     <>
       <Hero />
+      <CredibilityStrip />
       <Statement />
       <CourseStack />
       <Why />

@@ -602,6 +602,21 @@ export const soonCourses = courses.filter((c) => c.status === "coming-soon");
 export const getCourse = (slug: string) => courses.find((c) => c.slug === slug);
 
 export const inr = (n: number) => `₹${n.toLocaleString("en-IN")}`;
+/** The plan we recommend (carries the `recommended` flag; falls back to the highest-priced plan). */
+export const recommendedPlan = (c: Course) => c.plans.find((p) => p.recommended) ?? c.plans[c.plans.length - 1];
+/** The lower-priced alternative, if the course has more than one plan. */
+export const entryPlan = (c: Course) => {
+  const rec = recommendedPlan(c);
+  const rest = c.plans.filter((p) => p !== rec);
+  return rest.length ? rest.reduce((a, b) => (a.price <= b.price ? a : b)) : undefined;
+};
+/** Items the recommended plan adds on top of the entry plan (taken straight from the phase data). */
+export const upgradeItems = (c: Course) => {
+  const rec = recommendedPlan(c);
+  const ent = entryPlan(c);
+  if (!ent) return [];
+  return c.phases.flatMap((ph) => ph.items.filter((i) => i.plans.includes(rec.id) && !i.plans.includes(ent.id)).map((i) => i.label));
+};
 export const startPrice = (c: Course) =>
   c.plans.length ? Math.min(...c.plans.map((p) => p.price)) : null;
 export const topPlan = (c: Course) => c.plans.find((p) => p.recommended) ?? c.plans[c.plans.length - 1];

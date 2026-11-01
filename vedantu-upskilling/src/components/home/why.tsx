@@ -12,18 +12,18 @@ export function Why() {
     <section id="why" className="scroll-mt-20 px-4 py-24 sm:px-6 sm:py-36">
       <div className="mx-auto grid max-w-[1240px] gap-12 lg:grid-cols-[0.8fr_1.2fr]">
         <div>
-          <p className="font-mono text-[11px] tracking-[0.2em] text-brand uppercase">Why learn with Vedantu</p>
-          <h2 className="font-display mt-5 text-[clamp(2.6rem,6vw,5rem)] leading-[0.95]">
-            Less lecture.<br />More <span className="text-brand italic">leverage.</span>
+          <p className="text-[11px] tracking-[0.2em] text-brand uppercase">Why learn with Vedantu</p>
+          <h2 className="font-display mt-5 text-[clamp(2.39rem,4.68vw,3.9rem)] leading-[0.95]">
+            Less lecture.<br />More <span className="text-brand ">leverage.</span>
           </h2>
         </div>
         <ol className="divide-y divide-hairline border-y border-hairline">
           {ROWS.map(([t, d], i) => (
             <li key={t}>
               <Reveal delay={i * 0.05} className="grid gap-2 py-7 sm:grid-cols-[3.5rem_1fr] sm:py-9">
-                <span className="font-mono text-sm text-ink-soft tabular">0{i + 1}</span>
+                <span className="text-sm text-ink-soft tabular">0{i + 1}</span>
                 <div>
-                  <h3 className="font-display text-[clamp(1.7rem,3.2vw,2.6rem)] leading-tight">{t}</h3>
+                  <h3 className="font-display text-[clamp(1.56rem,2.5vw,2.03rem)] leading-tight">{t}</h3>
                   <p className="mt-2 max-w-xl text-[16px] leading-relaxed text-ink-soft">{d}</p>
                 </div>
               </Reveal>

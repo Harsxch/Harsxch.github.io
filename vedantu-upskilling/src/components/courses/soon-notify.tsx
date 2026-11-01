@@ -10,8 +10,8 @@ export function SoonNotify({ course, title, titleClass = "font-display" }: { cou
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_90%_at_90%_120%,var(--c-accent),transparent_70%)] opacity-20" />
         <div className="relative grid gap-10 lg:grid-cols-[1fr_1.1fr] lg:items-end">
           <div>
-            <p className="font-mono text-[11px] tracking-[0.22em] text-c-accent uppercase">Launching soon</p>
-            <h2 className={`${titleClass} mt-4 text-[clamp(2.2rem,5vw,4.2rem)] leading-[0.98]`}>{title}</h2>
+            <p className="text-[11px] tracking-[0.22em] text-c-accent uppercase">Launching soon</p>
+            <h2 className={`${titleClass} mt-4 text-[clamp(2.02rem,3.9vw,3.28rem)] leading-[0.98]`}>{title}</h2>
             <p className="mt-4 max-w-md text-[15px] leading-relaxed text-c-muted">Curriculum, price and start date will be announced at launch. Leave your details and we&apos;ll tell you first.</p>
           </div>
           <NotifyForm course={course} />

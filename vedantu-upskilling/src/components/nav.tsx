@@ -121,7 +121,7 @@ export function Nav() {
             exit={{ opacity: 0 }}
             className="fixed inset-x-0 top-14 bottom-0 overflow-y-auto bg-[#0b0b0d] px-6 pt-6 pb-16 text-white md:hidden"
           >
-            <p className="font-mono text-[11px] tracking-widest text-white/40 uppercase">Courses</p>
+            <p className="text-[11px] tracking-widest text-white/40 uppercase">Courses</p>
             <ul className="mt-3">
               {courses.map((c, i) => (
                 <motion.li key={c.slug} initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.04 * i }}>

@@ -18,13 +18,13 @@ export function StudyHero({ course }: { course: Course }) {
       <div className="mx-auto grid min-h-[100svh] max-w-[1240px] items-center gap-12 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[1fr_1fr]">
         <div>
           <p className="inline-flex items-center gap-2 rounded-full bg-c-accent/15 px-4 py-1.5 text-[13px] font-medium text-c-accent"><Brain className="size-4" />{course.eyebrow}</p>
-          <h1 className="font-soft mt-6 text-[clamp(3.2rem,8vw,6.6rem)] leading-[0.94] font-semibold tracking-[-0.035em]">
+          <h1 className="font-display mt-6 text-[clamp(2.94rem,6.24vw,5.15rem)] leading-[0.94] font-semibold tracking-[-0.035em]">
             AI Study <span className="relative inline-block">Mastery
               <motion.svg viewBox="0 0 300 20" className="absolute -bottom-2 left-0 w-full overflow-visible text-c-accent" aria-hidden>
                 <motion.path d="M4 12 C 60 2, 120 18, 180 8 S 270 12, 296 6" stroke="currentColor" strokeWidth="6" strokeLinecap="round" fill="none" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ delay: 0.6, duration: 1 }} />
               </motion.svg></span>
           </h1>
-          <p className="font-soft mt-8 max-w-md text-[clamp(1.4rem,2.6vw,2rem)] leading-snug text-c-fg/90">{course.tagline}</p>
+          <p className="font-display mt-8 max-w-md text-[clamp(1.29rem,2.03vw,1.56rem)] leading-snug text-c-fg/90">{course.tagline}</p>
           <ul className="mt-7 space-y-3 text-[16.5px]">
             {course.highlights.map((h) => (<li key={h} className="flex gap-3 text-c-fg/85"><span className="mt-1 grid size-5 shrink-0 place-items-center rounded-full bg-c-accent text-c-on"><BookOpenCheck className="size-3" /></span>{h}</li>))}
           </ul>
@@ -39,9 +39,9 @@ export function StudyHero({ course }: { course: Course }) {
         <div className="relative mx-auto h-[28rem] w-full max-w-[34rem] sm:h-[32rem]" aria-hidden>
           <motion.div initial={{ opacity: 0, rotate: -9, y: 30 }} animate={{ opacity: 1, rotate: -4, y: 0 }} transition={{ delay: 0.2, duration: 0.9 }}
             className="absolute top-4 left-0 w-[62%] rounded-2xl bg-[#fff3e4] p-5 text-[#1d0f02] shadow-2xl">
-            <p className="font-hand text-2xl">Revision notes</p>
+            <p className="font-semibold text-2xl">Revision notes</p>
             <div className="mt-3 space-y-2">{[90, 72, 84, 55].map((w, i) => (<i key={i} className="block h-1.5 rounded-full bg-[#1d0f02]/15" style={{ width: `${w}%` }} />))}</div>
-            <p className="font-hand mt-4 text-xl text-[#d4570d]">a² + b² = c² ✓</p>
+            <p className="font-semibold mt-4 text-xl text-[#d4570d]">a² + b² = c² ✓</p>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.9 }}
             className="absolute top-24 right-0 w-[68%] rounded-2xl border border-c-line bg-c-surface2 p-5 shadow-2xl sm:top-28">
@@ -72,13 +72,13 @@ export function StudyStages({ course }: { course: Course }) {
       <div ref={ref} className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-4 sm:-mx-6 sm:px-6" tabIndex={0} aria-label="Four study stages">
         {course.phases.map((ph, i) => (
           <article key={ph.n} className="relative min-h-[28rem] w-[84%] shrink-0 snap-center overflow-hidden rounded-[32px] p-7 sm:w-[26rem] sm:p-9" style={{ background: TINTS[i][0], color: TINTS[i][1] }}>
-            <p className="font-hand text-3xl opacity-70">Stage {ph.n}</p>
-            <h3 className="font-soft mt-1 text-[clamp(1.7rem,2.6vw,2.2rem)] leading-tight font-semibold tracking-[-0.02em]">{ph.title}</h3>
+            <p className="font-semibold text-3xl opacity-70">Stage {ph.n}</p>
+            <h3 className="font-display mt-1 text-[clamp(1.56rem,2.03vw,1.72rem)] leading-tight font-semibold tracking-[-0.02em]">{ph.title}</h3>
             {ph.kicker && <p className="mt-2 text-[14.5px] opacity-75">{ph.kicker}</p>}
             <ul className="mt-6 space-y-3 text-[15px]">
               {ph.items.map((it) => (<li key={it.label} className="flex gap-3"><ListChecks className="mt-0.5 size-4 shrink-0" />{it.label}</li>))}
             </ul>
-            <span className="font-soft pointer-events-none absolute -right-3 -bottom-10 text-[11rem] leading-none font-semibold opacity-[0.12]">{ph.n}</span>
+            <span className="font-display pointer-events-none absolute -right-3 -bottom-10 text-[11rem] leading-none font-semibold opacity-[0.12]">{ph.n}</span>
           </article>
         ))}
       </div>
@@ -97,7 +97,7 @@ export function StudyToys() {
   return (
     <div className="grid gap-5 lg:grid-cols-2">
       <div className="rounded-[32px] border border-c-line bg-c-surface p-7 sm:p-9">
-        <p className="font-hand text-3xl text-c-accent">Mind map creator</p>
+        <p className="font-semibold text-3xl text-c-accent">Mind map creator</p>
         <p className="mt-1 text-sm text-c-muted">Pick a subject. A topic turns into branches. (Illustrative demo.)</p>
         <div className="mt-5 flex gap-2">{Object.keys(MAPS).map((k) => (<button key={k} onClick={() => setSubj(k)} aria-pressed={k === subj} className={`rounded-full px-4 py-2 text-sm transition ${k === subj ? "bg-c-accent text-c-on" : "border border-c-line text-c-fg/80"}`}>{k}</button>))}</div>
         <div className="relative mt-6 h-72">
@@ -118,7 +118,7 @@ export function StudyToys() {
         </div>
       </div>
       <div className="rounded-[32px] border border-c-line bg-c-surface p-7 sm:p-9">
-        <p className="font-hand text-3xl text-c-accent">Quiz & flashcards</p>
+        <p className="font-semibold text-3xl text-c-accent">Quiz & flashcards</p>
         <p className="mt-1 text-sm text-c-muted">Tap a card to flip it. (Illustrative demo.)</p>
         <div className="mt-6 grid gap-3">
           {CARDS.map(([q, a], i) => (

@@ -13,7 +13,7 @@ export function Voices() {
     <section data-theme="ai-income" className="noise relative overflow-hidden bg-c-bg px-4 py-24 text-c-fg sm:px-6 sm:py-36">
       <div className="pointer-events-none absolute -top-40 left-1/2 size-[700px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,181,46,.18),transparent_65%)]" />
       <div className="relative mx-auto max-w-[1100px]">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-c-accent uppercase">In their words · AI Income Mastery students</p>
+        <p className="text-[11px] tracking-[0.2em] text-c-accent uppercase">In their words · AI Income Mastery students</p>
         <div className="mt-8 min-h-[16rem] sm:min-h-[19rem]" aria-live="polite">
           <AnimatePresence mode="wait">
             <motion.blockquote
@@ -23,7 +23,7 @@ export function Voices() {
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.45 }}
             >
-              <p className="font-display text-[clamp(1.8rem,4.4vw,3.6rem)] leading-[1.1]">“{r.text}”</p>
+              <p className="font-display text-[clamp(1.66rem,3.43vw,2.81rem)] leading-[1.1]">“{r.text}”</p>
               <footer className="mt-6 text-[15px] text-c-muted">{r.name}</footer>
             </motion.blockquote>
           </AnimatePresence>

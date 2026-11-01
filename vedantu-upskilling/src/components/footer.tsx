@@ -20,7 +20,7 @@ export function Footer() {
             <p className="font-display mt-6 max-w-xs text-3xl leading-tight opacity-90">Learn skills that move you forward.</p>
           </div>
           <div>
-            <h2 className="font-mono text-[11px] tracking-widest uppercase opacity-50">Courses</h2>
+            <h2 className="text-[11px] tracking-widest uppercase opacity-50">Courses</h2>
             <ul className="mt-4 space-y-2.5 text-[14px]">
               {courses.map((c) => (
                 <li key={c.slug}>
@@ -33,7 +33,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h2 className="font-mono text-[11px] tracking-widest uppercase opacity-50">Company</h2>
+            <h2 className="text-[11px] tracking-widest uppercase opacity-50">Company</h2>
             <ul className="mt-4 space-y-2.5 text-[14px]">
               {[["About", "/about"], ["Contact & support", "/contact"], ["Refund policy", "/refund"], ["Terms", "/terms"], ["Privacy", "/privacy"]].map(([l, h]) => (
                 <li key={h}><Link href={h} className="opacity-75 transition hover:opacity-100">{l}</Link></li>
@@ -41,7 +41,7 @@ export function Footer() {
             </ul>
           </div>
           <div>
-            <h2 className="font-mono text-[11px] tracking-widest uppercase opacity-50">Good to know</h2>
+            <h2 className="text-[11px] tracking-widest uppercase opacity-50">Good to know</h2>
             <p className="mt-4 text-[13px] leading-relaxed opacity-65">
               Prices include GST. Enrolment and payment happen on Vedantu&apos;s checkout. No course can guarantee a job or an internship.
             </p>

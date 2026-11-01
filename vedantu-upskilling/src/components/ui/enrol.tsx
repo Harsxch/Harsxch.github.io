@@ -98,7 +98,7 @@ function PendingDialog({ course, plan, onClose }: { course: Course; plan?: Plan;
       <div className="p-6 sm:p-8">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <p className="font-mono text-[11px] tracking-widest text-white/50 uppercase">Checkout not connected yet</p>
+            <p className="text-[11px] tracking-widest text-white/50 uppercase">Checkout not connected yet</p>
             <h2 className="mt-2 text-2xl font-semibold tracking-tight">{course.title}</h2>
             {plan && (
               <p className="mt-1 text-white/60">

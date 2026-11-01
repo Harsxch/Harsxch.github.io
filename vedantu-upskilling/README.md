@@ -24,6 +24,11 @@ npm run lint && npm run typecheck
 - `src/app/globals.css`: brand tokens (Vedantu orange `#FF693D`, navy `#01202B`) and the six per-course colour themes (`[data-theme=…]`).
 - `src/lib/attribution.ts`, `analytics.ts`: creator/UTM capture and pluggable analytics.
 
+## Pricing, proof and typography
+- **Prices:** edit `plans` in `src/content/courses.ts` (`price`, `mrp`, `recommended`, `checkoutUrl`). The recommended plan gets the visual lead everywhere (cards, pricing sections, sticky bar, CTAs); the entry plan stays visible and buyable. "Everything in X, plus N more" is computed from the phase data, so nothing is hand-written.
+- **Social proof:** the 7,200+ enrolment figure lives in `src/content/site.ts` (`ENROLLED`). It is cumulative across ALL courses and every mention says so. Do not add per-course counts.
+- **Typography:** one Apple system for the whole site: SF Pro Display for headings, SF Pro Text for everything else, via `-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text"` with Helvetica Neue / Segoe UI / Roboto fallbacks. No font files are bundled or downloaded. SF Mono is used only inside code and terminal illustrations. Course identity comes from colour, artwork and motion, never from a different typeface.
+
 ## Add a course
 1. Add an entry to `courses` in `src/content/courses.ts` (pick a `theme`).
 2. For a new look: add a theme block in `globals.css`, a page component in `src/components/courses/`, and register it in `PAGES` in `src/app/courses/[slug]/page.tsx`, plus `TileArt` artwork in `src/components/art/tile-art.tsx`.

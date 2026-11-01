@@ -1,8 +1,9 @@
 import { ArrowUpRight } from "lucide-react";
 import Link from "next/link";
-import { liveCourses, inr, startPrice } from "@/content/courses";
+import { liveCourses } from "@/content/courses";
 import { titleClass } from "@/lib/theme-type";
-import { TileArt } from "@/components/art/tile-art";
+import { PanelArt } from "@/components/art/panel-art";
+import { PriceBlock } from "@/components/price-block";
 import { Reveal } from "@/components/ui/reveal";
 
 /** Stacking full-bleed panels. Each course gets its own palette, type voice and artwork. */
@@ -20,21 +21,18 @@ export function CourseStack() {
             <div className="grid min-h-[inherit] items-stretch lg:grid-cols-[1.05fr_1fr]">
               <div className="relative z-10 flex flex-col justify-between gap-12 p-7 sm:p-12 lg:p-16">
                 <div>
-                  <p className="font-mono text-[11px] tracking-[0.2em] text-c-accent uppercase">
+                  <p className="text-[11px] tracking-[0.2em] text-c-accent uppercase">
                     0{i + 1} · {c.eyebrow}
                   </p>
                   <Reveal>
-                    <h2 className={`${titleClass[c.theme]} mt-5 text-[clamp(2.6rem,6.4vw,5.6rem)] leading-[0.95] ${c.theme === "python" ? "text-[clamp(2rem,4.6vw,4rem)]" : ""}`}>
+                    <h2 className={`${titleClass[c.theme]} mt-5 text-[clamp(2.39rem,4.99vw,4.37rem)] leading-[0.95] ${c.theme === "python" ? "text-[clamp(1.84rem,3.59vw,3.12rem)]" : ""}`}>
                       {c.title}
                     </h2>
                   </Reveal>
                   <p className="mt-5 max-w-md text-[17px] leading-relaxed text-c-muted">{c.tagline} {c.blurb}</p>
                 </div>
                 <div className="flex flex-wrap items-end justify-between gap-6">
-                  <div>
-                    <p className="text-xs tracking-wide text-c-muted uppercase">Starts at</p>
-                    <p className="tabular text-4xl font-semibold tracking-tight">{inr(startPrice(c) ?? 0)}</p>
-                  </div>
+                  <PriceBlock course={c} size="lg" />
                   <Link
                     href={`/courses/${c.slug}`}
                     className="group inline-flex items-center gap-2 rounded-full bg-c-accent px-6 py-3.5 text-[15px] font-semibold text-c-on transition hover:brightness-110"
@@ -44,8 +42,8 @@ export function CourseStack() {
                 </div>
               </div>
               <div className="relative min-h-[320px] lg:min-h-0">
-                <TileArt theme={c.theme} big />
-                <div className="absolute inset-0 bg-gradient-to-r from-c-bg via-transparent to-transparent max-lg:bg-gradient-to-b" />
+                <PanelArt theme={c.theme} />
+                <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-c-bg to-transparent max-lg:hidden" />
               </div>
             </div>
           </article>

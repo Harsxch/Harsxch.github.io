@@ -24,16 +24,16 @@ export function IncomeHero({ course }: { course: Course }) {
             <Sparkles className="size-3.5" /> {course.eyebrow}
             {course.badge && <b className="ml-1 rounded-full bg-c-accent px-2 py-0.5 text-[10px] text-c-on uppercase">{course.badge}</b>}
           </motion.p>
-          <h1 className="font-display mt-6 text-[clamp(3.6rem,10vw,8.4rem)] leading-[0.88] [text-wrap:balance]">
+          <h1 className="font-display mt-6 text-[clamp(3.31rem,7.8vw,6.55rem)] leading-[0.88] [text-wrap:balance]">
             <span className="block bg-gradient-to-b from-[#fff6df] via-[#ffd36b] to-c-accent2 bg-clip-text text-transparent">
               <SplitWords text="AI Income" />
             </span>
-            <span className="block bg-gradient-to-b from-[#ffd36b] to-c-accent2 bg-clip-text text-transparent italic">
+            <span className="block bg-gradient-to-b from-[#ffd36b] to-c-accent2 bg-clip-text text-transparent ">
               <SplitWords text="Mastery" delay={0.25} />
             </span>
           </h1>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
-            className="font-display mt-4 text-[clamp(1.6rem,3.2vw,2.5rem)] text-c-fg/90 italic">
+            className="font-display mt-4 text-[clamp(1.47rem,2.5vw,1.95rem)] text-c-fg/90 ">
             {course.tagline}
           </motion.p>
           <motion.ul initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85 }} className="mt-7 grid gap-2.5 text-[16px] sm:grid-cols-2">
@@ -107,7 +107,7 @@ export function IncomeNumbers({ stats }: { stats: { value: string; label: string
         {stats.map((s) => (
           <div key={s.label} className="bg-c-bg px-5 py-10 sm:py-14">
             <dt className="order-2 mt-3 text-sm text-c-muted">{s.label}</dt>
-            <dd className="font-display bg-gradient-to-b from-[#fff6df] to-c-accent2 bg-clip-text text-[clamp(2.6rem,5.6vw,4.6rem)] leading-none text-transparent"><CountUp value={s.value} /></dd>
+            <dd className="font-display bg-gradient-to-b from-[#fff6df] to-c-accent2 bg-clip-text text-[clamp(2.39rem,4.37vw,3.59rem)] leading-none text-transparent"><CountUp value={s.value} /></dd>
           </div>
         ))}
       </dl>
@@ -132,16 +132,16 @@ export function IncomePath({ course }: { course: Course }) {
       <div className="sticky top-14 flex h-[calc(100svh-3.5rem)] items-center overflow-hidden">
         <div className="mx-auto grid w-full max-w-[1240px] items-center gap-8 px-4 sm:px-6 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
-            <p className="font-mono text-[11px] tracking-[0.22em] text-c-accent uppercase">{course.phaseLabel}</p>
+            <p className="text-[11px] tracking-[0.22em] text-c-accent uppercase">{course.phaseLabel}</p>
             <AnimatePresence mode="wait">
               <motion.div key={active} initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -16 }} transition={{ duration: 0.45 }}>
-                <p className="font-display mt-5 text-[clamp(5rem,14vw,11rem)] leading-[0.8] text-c-accent/25">0{ph.n}</p>
-                <h2 className="font-display -mt-6 text-[clamp(2.8rem,7vw,5.6rem)] leading-none sm:-mt-10">{ph.title}</h2>
+                <p className="font-display mt-5 text-[clamp(4.6rem,10.92vw,8.58rem)] leading-[0.8] text-c-accent/25">0{ph.n}</p>
+                <h2 className="font-display -mt-6 text-[clamp(2.58rem,5.46vw,4.37rem)] leading-none sm:-mt-10">{ph.title}</h2>
                 <ul className="mt-6 space-y-2.5 text-[16px] text-c-fg/85">
                   {ph.items.map((it) => (
                     <li key={it.label} className="flex items-start gap-3">
                       <span className="mt-2 size-1.5 shrink-0 rounded-full bg-c-accent" />
-                      <span>{it.label}{!it.plans.includes("batch") && <em className="ml-2 rounded-full border border-c-accent/40 px-2 py-0.5 text-[10px] tracking-wider text-c-accent not-italic uppercase">Full batch</em>}</span>
+                      <span>{it.label}{!it.plans.includes("batch") && <em className="ml-2 rounded-full border border-c-accent/40 px-2 py-0.5 text-[10px] tracking-wider text-c-accent">Full batch</em>}</span>
                     </li>
                   ))}
                 </ul>
@@ -189,8 +189,8 @@ export function PromptStudio() {
   return (
     <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
       <div>
-        <p className="font-mono text-[11px] tracking-[0.22em] text-c-accent uppercase">Try the idea</p>
-        <h2 className="font-display mt-4 text-[clamp(2.2rem,5vw,4rem)] leading-[0.98]">One good prompt. <span className="text-c-accent italic">Many outcomes.</span></h2>
+        <p className="text-[11px] tracking-[0.22em] text-c-accent uppercase">Try the idea</p>
+        <h2 className="font-display mt-4 text-[clamp(2.02rem,3.9vw,3.12rem)] leading-[0.98]">One good prompt. <span className="text-c-accent ">Many outcomes.</span></h2>
         <p className="mt-5 max-w-md text-c-muted">Pick a goal. See what a structured prompt looks like. This is an illustrative sample, not course material.</p>
         <div role="tablist" aria-label="Pick a goal" className="mt-7 flex flex-wrap gap-2">
           {GOALS.map((x, i) => (
@@ -200,9 +200,9 @@ export function PromptStudio() {
         </div>
       </div>
       <div className="overflow-hidden rounded-3xl border border-c-line bg-c-surface">
-        <div className="flex items-center gap-2 border-b border-c-line px-5 py-3"><i className="size-2.5 rounded-full bg-c-accent" /><i className="size-2.5 rounded-full bg-c-accent/40" /><i className="size-2.5 rounded-full bg-c-accent/20" /><span className="ml-3 font-mono text-xs text-c-muted">prompt.txt · sample</span></div>
+        <div className="flex items-center gap-2 border-b border-c-line px-5 py-3"><i className="size-2.5 rounded-full bg-c-accent" /><i className="size-2.5 rounded-full bg-c-accent/40" /><i className="size-2.5 rounded-full bg-c-accent/20" /><span className="ml-3 text-xs text-c-muted">prompt.txt · sample</span></div>
         <div className="p-6 sm:p-8">
-          <p className="min-h-[7.5rem] font-mono text-[15px] leading-relaxed text-c-fg" aria-live="polite">{typed}<span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-c-accent align-middle" /></p>
+          <p className="min-h-[7.5rem] text-[16px] leading-relaxed text-c-fg" aria-live="polite">{typed}<span className="ml-0.5 inline-block h-4 w-2 animate-pulse bg-c-accent align-middle" /></p>
           <div className="mt-6 grid gap-3 sm:grid-cols-3">
             {GOALS[g].out.map((o, i) => (
               <motion.div key={`${g}-${o}`} initial={{ opacity: 0, y: 12 }} animate={{ opacity: done ? 1 : 0.15, y: done ? 0 : 12 }} transition={{ delay: done ? i * 0.12 : 0 }}

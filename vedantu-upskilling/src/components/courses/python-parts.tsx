@@ -17,7 +17,7 @@ function hl(src: string) {
         <span className="whitespace-pre">
           {parts.map((t, i) => {
             let c = "text-[#d8f0d4]";
-            if (t.startsWith("#")) c = "text-[#4d7a52] italic";
+            if (t.startsWith("#")) c = "text-[#4d7a52] ";
             else if (/^f?"/.test(t)) c = "text-[#ffd479]";
             else if (/^\d+$/.test(t)) c = "text-[#ff9f6b]";
             else if (KW.has(t)) c = "text-[#7dff5a]";
@@ -55,17 +55,17 @@ export function PythonHero({ course }: { course: Course }) {
       <div className="absolute inset-0 -z-10 opacity-[0.06] [background-image:radial-gradient(var(--c-accent)_1px,transparent_1px)] [background-size:24px_24px]" />
       <div className="mx-auto grid min-h-[100svh] max-w-[1240px] items-center gap-10 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[1fr_1.05fr]">
         <div>
-          <p className="inline-flex items-center gap-2 rounded-md border border-c-line bg-c-surface px-3 py-1.5 font-mono text-xs text-c-accent"><i className="size-1.5 animate-pulse rounded-full bg-c-accent" />{course.eyebrow}</p>
+          <p className="inline-flex items-center gap-2 rounded-md border border-c-line bg-c-surface px-3 py-1.5 text-xs text-c-accent"><i className="size-1.5 animate-pulse rounded-full bg-c-accent" />{course.eyebrow}</p>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}
-            className="mt-6 font-mono text-[clamp(2.1rem,4.7vw,4.3rem)] leading-[1.04] font-bold tracking-[-0.05em]">
+            className="mt-6 text-[clamp(1.93rem,3.67vw,3.35rem)] leading-[1.04] font-bold tracking-[-0.05em]">
             <span className="block"><span className="text-c-accent">Python</span> + DSA</span><span className="block">Mastery</span>
           </motion.h1>
-          <p className="mt-5 font-mono text-[clamp(1.05rem,1.8vw,1.35rem)] text-c-fg/80">{course.tagline}</p>
-          <ul className="mt-7 space-y-2.5 font-mono text-[14px]">
+          <p className="mt-5 text-[clamp(0.97rem,1.4vw,1.05rem)] text-c-fg/80">{course.tagline}</p>
+          <ul className="mt-7 space-y-2.5 text-[14px]">
             {course.highlights.map((h) => (<li key={h} className="flex gap-3 text-c-fg/85"><span className="text-c-accent">{">>>"}</span>{h}</li>))}
           </ul>
           <div className="mt-9 flex flex-wrap items-center gap-5">
-            <EnrolButton course={course} plan={p} where="hero" className="inline-flex h-14 items-center gap-3 rounded-lg bg-c-accent px-8 font-mono text-[15px] font-bold text-c-on shadow-[0_0_50px_-8px_var(--c-accent)] transition hover:brightness-110">
+            <EnrolButton course={course} plan={p} where="hero" className="inline-flex h-14 items-center gap-3 rounded-lg bg-c-accent px-8 text-[15px] font-bold text-c-on shadow-[0_0_50px_-8px_var(--c-accent)] transition hover:brightness-110">
               <Play className="size-4 fill-current" /> run enrol() · {inr(p.price)}
             </EnrolButton>
             {t.photo && (
@@ -130,7 +130,7 @@ export function FileExplorer({ course }: { course: Course }) {
               <span>phase {ph.n} / {ph.title.toLowerCase()} / {slug(it.label)}.py</span>
               <span className="rounded bg-c-accent/15 px-2 py-0.5 text-c-accent">{sel[1] + 1} of {ph.items.length}</span>
             </div>
-            <p className="mt-6 text-[clamp(1.4rem,2.8vw,2.2rem)] leading-snug font-semibold"><span className="text-c-muted"># </span>{it.label}</p>
+            <p className="mt-6 text-[clamp(1.29rem,2.18vw,1.72rem)] leading-snug font-semibold"><span className="text-c-muted"># </span>{it.label}</p>
             <div className="mt-8 grid gap-2 text-sm">
               {course.plans.map((p) => {
                 const yes = it.plans.includes(p.id);
