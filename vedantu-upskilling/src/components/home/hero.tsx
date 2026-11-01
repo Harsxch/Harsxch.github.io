@@ -27,13 +27,9 @@ export function Hero() {
   return (
     <section ref={ref} className="relative overflow-hidden pt-24 pb-16 sm:pt-28">
       <div className="relative mx-auto max-w-[1240px] px-4 sm:px-6">
-        <p className="fade-up mx-auto w-fit rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[12px] font-medium tracking-wide text-ink/75">
-          Vedantu Upskilling · {liveCourses.length} live courses, {soonCourses.length} on the way
-        </p>
-
-        <h1 className="font-display mx-auto mt-5 max-w-[15ch] text-center text-[clamp(2.9rem,7.2vw,6.1rem)] leading-[0.93] text-ink">
+        <h1 className="font-display mx-auto max-w-[15ch] text-balance text-center text-[clamp(2.9rem,7.2vw,6.1rem)] leading-[0.93] text-ink">
           <SplitWords text="Learn skills that move you" />
-          <span className="bg-gradient-to-b from-[#ffb08f] via-brand to-[#e8451a] bg-clip-text text-transparent [filter:drop-shadow(0_0_38px_rgba(255,105,61,.55))]"><SplitWords text="forward." delay={0.35} /></span>
+          <span className="block"><SplitWords text="forward." delay={0.35} wordClassName="bg-gradient-to-b from-[#ffb08f] via-brand to-[#e8451a] bg-clip-text text-transparent" /></span>
         </h1>
 
         <p className="mx-auto mt-6 max-w-2xl text-center text-[17px] leading-relaxed text-ink-soft sm:text-lg">
