@@ -23,16 +23,20 @@ export function Backdrop({ theme }: { theme: ThemeId }) {
 }
 
 /* ── shared canvas runner: pauses off-screen, respects reduced motion, caps DPR ── */
-function Canvas({ init, frame, fade = 0 }: { init: (w: number, h: number) => unknown; frame: (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, s: never) => void; fade?: number }) {
+function Canvas({ init, frame, fade = 0 }: { init: (w: number, h: number, low: boolean) => unknown; frame: (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, s: never) => void; fade?: number }) {
   const ref = useRef<HTMLCanvasElement>(null);
   useEffect(() => {
     const c = ref.current!;
     const ctx = c.getContext("2d")!;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let w = 0, h = 0, raf = 0, state: unknown, alive = true;
-    const size = () => { const d = Math.min(devicePixelRatio || 1, 1.5); w = c.width = innerWidth * d; h = c.height = innerHeight * d; state = init(w, h); };
+    const low = innerWidth < 700 || (navigator.hardwareConcurrency ?? 8) <= 4;
+    let w = 0, h = 0, raf = 0, state: unknown, alive = true, prev = 0;
+    // weak/small devices render at 0.7x and 30fps; CSS scales the canvas up (these are soft glows, not text)
+    const size = () => { const d = low ? 0.7 : Math.min(devicePixelRatio || 1, 1.25); w = c.width = innerWidth * d; h = c.height = innerHeight * d; state = init(w, h, low); };
     const loop = (t: number) => {
       if (!alive) return;
+      if (low && t - prev < 30) { raf = requestAnimationFrame(loop); return; }
+      prev = t;
       if (fade) { ctx.globalCompositeOperation = "destination-out"; ctx.fillStyle = `rgba(0,0,0,${fade})`; ctx.fillRect(0, 0, w, h); ctx.globalCompositeOperation = "source-over"; } else ctx.clearRect(0, 0, w, h);
       frame(ctx, w, h, t, state as never);
       if (!reduce) raf = requestAnimationFrame(loop);
@@ -45,7 +49,7 @@ function Canvas({ init, frame, fade = 0 }: { init: (w: number, h: number) => unk
 
 /* ───────────────────────── AI INCOME: flow field ───────────────────────── */
 type Flow = { x: number; y: number; a: number; v: number; hot: boolean }[];
-const flowInit = (w: number, h: number): Flow => Array.from({ length: 150 }, () => ({ x: Math.random() * w, y: Math.random() * h, a: 0.25 + Math.random() * 0.6, v: 0.5 + Math.random() * 1.4, hot: Math.random() < 0.08 }));
+const flowInit = (w: number, h: number, low: boolean): Flow => Array.from({ length: low ? 60 : 130 }, () => ({ x: Math.random() * w, y: Math.random() * h, a: 0.25 + Math.random() * 0.6, v: 0.5 + Math.random() * 1.4, hot: Math.random() < 0.08 }));
 const flowFrame = (ctx: CanvasRenderingContext2D, w: number, h: number, t: number, P: Flow) => {
   const k = w / 1400 + 0.5;
   for (const p of P) {
@@ -70,8 +74,8 @@ function FlowScene() {
 
 /* ───────────────────────── PYTHON: a graph being walked ───────────────────────── */
 type G = { nodes: { x: number; y: number; d: number }[]; cols: number; rows: number; t0: number; sx: number; sy: number; gap: number };
-const graphInit = (w: number, h: number): G => {
-  const gap = Math.max(70, w / 18), cols = Math.ceil(w / gap) + 1, rows = Math.ceil(h / gap) + 1;
+const graphInit = (w: number, h: number, low: boolean): G => {
+  const gap = Math.max(low ? 54 : 70, w / (low ? 8 : 18)), cols = Math.ceil(w / gap) + 1, rows = Math.ceil(h / gap) + 1;
   const nodes = Array.from({ length: cols * rows }, (_, i) => ({ x: (i % cols) * gap + (Math.sin(i * 12.9) * gap) / 5, y: Math.floor(i / cols) * gap + (Math.cos(i * 7.7) * gap) / 5, d: 0 }));
   return { nodes, cols, rows, t0: 0, sx: Math.floor(cols * 0.7), sy: Math.floor(rows * 0.3), gap };
 };

@@ -66,7 +66,7 @@ html { transition: --atmos 1.4s ease; }
 /* AI Study is the one LIGHT world: a student's paper notebook with navy ink and an amber highlighter */
 [data-theme="ai-study"] {
   --c-bg: #f6ecd8; --c-surface: #fffaf0; --c-surface2: #fff0d2;
-  --c-fg: #1b2a38; --c-muted: #566676; --c-accent: #d45f00; --c-accent2: #ff9f43;
+  --c-fg: #1b2a38; --c-muted: #566676; --c-accent: #b84e00; --c-accent2: #ff9f43;
   --c-line: rgba(27, 42, 56, 0.15); --c-on: #ffffff;
 }
 [data-theme="personality"] {
@@ -100,12 +100,15 @@ h1, h2, h3 { font-family: var(--font-display); }
 
 /* shared utility look: hairline + noise */
 .noise::after {
-  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.07; mix-blend-mode: overlay;
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 0.05;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 .no-scrollbar { scrollbar-width: none; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 
+@keyframes word-up { from { transform: translateY(110%); } to { transform: translateY(0); } }
+@keyframes fade-up { from { opacity: 0.01; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.fade-up { animation: fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) both; }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes blink { 50% { opacity: 0; } }
 @keyframes float-y { 50% { transform: translateY(-10px); } }
@@ -124,5 +127,5 @@ h1, h2, h3 { font-family: var(--font-display); }
 :root {
   --c-bg: var(--paper); --c-surface: #fff; --c-surface2: var(--paper-2);
   --c-fg: var(--ink); --c-muted: var(--ink-soft); --c-accent: var(--brand-orange);
-  --c-accent2: var(--brand-orange-press); --c-line: var(--hairline); --c-on: #fff;
+  --c-accent2: var(--brand-orange-press); --c-line: var(--hairline); --c-on: #1a0a02;
 }

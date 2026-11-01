@@ -48,7 +48,7 @@ export function Nav() {
       }`}
     >
       {/* blur lives on its own layer: backdrop-filter on the header would trap the fixed mobile menu inside it */}
-      <div aria-hidden className={`absolute inset-0 -z-10 backdrop-blur-xl backdrop-saturate-150 transition-colors duration-500 ${bgTone}`} />
+      <div aria-hidden className={`absolute inset-0 -z-10 backdrop-blur-lg transition-colors duration-500 ${bgTone}`} />
       <nav aria-label="Primary" className="mx-auto flex h-14 max-w-[1240px] items-center justify-between px-4 sm:px-6">
         <Link href="/" aria-label="Vedantu Upskilling home" className="rounded-md">
           <Wordmark />
@@ -134,7 +134,7 @@ export function Nav() {
               ))}
             </ul>
             <div className="mt-8 grid gap-3 text-[15px]">
-              <Link href="/courses" className="rounded-full bg-[#ff693d] px-5 py-3.5 text-center font-semibold">All courses</Link>
+              <Link href="/courses" className="rounded-full bg-[#ff693d] px-5 py-3.5 text-center font-semibold text-[#1a0a02]">All courses</Link>
               <Link href="/#why" className="px-2 py-2 text-white/70">Why Vedantu</Link>
               <Link href="/about" className="px-2 py-2 text-white/70">About</Link>
               <Link href="/contact" className="px-2 py-2 text-white/70">Contact</Link>

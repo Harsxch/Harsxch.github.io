@@ -33,19 +33,25 @@ function Embers() {
     const ctx = c.getContext("2d")!;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     let w = 0, h = 0, raf = 0, last = 0;
-    const N = 46;
+    const low = innerWidth < 700 || (navigator.hardwareConcurrency ?? 8) <= 4;
+    const N = low ? 20 : 40;
+    // one pre-rendered glow sprite instead of a blurred arc per particle per frame
+    const sp = document.createElement("canvas"); sp.width = sp.height = 48;
+    const sc = sp.getContext("2d")!; const g = sc.createRadialGradient(24, 24, 0, 24, 24, 24);
+    g.addColorStop(0, "rgba(255,190,110,1)"); g.addColorStop(0.25, "rgba(255,120,60,.55)"); g.addColorStop(1, "rgba(255,105,61,0)");
+    sc.fillStyle = g; sc.fillRect(0, 0, 48, 48);
     const P = Array.from({ length: N }, () => ({ x: Math.random(), y: Math.random(), s: 0.4 + Math.random() * 1.9, v: 0.012 + Math.random() * 0.03, ph: Math.random() * 6.28, a: 0.25 + Math.random() * 0.6 }));
-    const size = () => { const d = Math.min(window.devicePixelRatio || 1, 1.5); w = c.width = innerWidth * d; h = c.height = innerHeight * d; };
+    const size = () => { const d = low ? 1 : Math.min(window.devicePixelRatio || 1, 1.25); w = c.width = innerWidth * d; h = c.height = innerHeight * d; };
     const draw = (t: number) => {
-      const dt = Math.min(48, t - last); last = t;
+      if (low && t - last < 30) { raf = requestAnimationFrame(draw); return; }
+      const dt = Math.min(64, t - last); last = t;
       ctx.clearRect(0, 0, w, h);
       for (const p of P) {
         p.y -= (p.v * dt) / 1000; p.x += Math.sin(t / 1800 + p.ph) * 0.00022 * dt;
         if (p.y < -0.05) { p.y = 1.05; p.x = Math.random(); }
         const tw = 0.55 + 0.45 * Math.sin(t / 700 + p.ph);
-        ctx.beginPath(); ctx.fillStyle = `rgba(255,${150 + p.s * 25 | 0},${70 + p.s * 10 | 0},${p.a * tw})`;
-        ctx.shadowColor = "rgba(255,105,61,.9)"; ctx.shadowBlur = 8 * p.s;
-        ctx.arc(p.x * w, p.y * h, p.s * (w / 1400 + 0.6), 0, 6.283); ctx.fill();
+        const r = p.s * (w / 1400 + 0.6) * 3.2;
+        ctx.globalAlpha = p.a * tw; ctx.drawImage(sp, p.x * w - r, p.y * h - r, r * 2, r * 2);
       }
       if (!reduce) raf = requestAnimationFrame(draw);
     };

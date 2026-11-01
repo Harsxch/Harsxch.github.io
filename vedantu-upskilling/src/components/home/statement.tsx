@@ -6,7 +6,7 @@ const TEXT =
   "Vedantu Upskilling is where students learn the skills class never got to, in Hinglish, through projects, and with a finish line you can put on a resume.";
 
 function Word({ w, range, p }: { w: string; range: [number, number]; p: MotionValue<number> }) {
-  const o = useTransform(p, range, [0.14, 1]);
+  const o = useTransform(p, range, [0.5, 1]);
   return <motion.span style={{ opacity: o }} className="inline-block pr-[0.28em]">{w}</motion.span>;
 }
 

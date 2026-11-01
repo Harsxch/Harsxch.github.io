@@ -46,7 +46,7 @@ function Income() {
       <circle cx="110" cy="150" r="72" fill="none" stroke="#ffb52e" strokeOpacity=".12" strokeDasharray="2 9" />
       <circle cx="152" cy="132" r="4" fill="#ffd36b" />
       <circle cx="84" cy="206" r="3" fill="#ff7a1a" />
-      <text x="28" y="60" fill="#ffd36b" opacity=".85" fontSize="12" fontFamily="var(--font-mono)">prompt → tool → income</text>
+      <text x="200" y="118" textAnchor="middle" fill="#ffd36b" opacity=".8" fontSize="12" fontFamily="var(--font-mono)">prompt → tool → income</text>
     </svg>
   );
 }
@@ -55,7 +55,7 @@ function Income() {
 function ClaudeArt() {
   return (
     <div className="absolute inset-0 bg-[radial-gradient(120%_80%_at_80%_100%,rgba(217,119,87,.28),transparent_60%)]">
-      <div className="absolute top-[14%] right-[-6%] left-[10%] rounded-xl border border-[#d97757]/25 bg-black/35 p-4 font-mono text-[11px] leading-6 text-[#f2e8dc]/80 shadow-2xl backdrop-blur">
+      <div className="absolute top-[25%] right-[9%] left-[12%] rounded-xl border border-[#d97757]/25 bg-black/35 p-3 font-mono text-[10px] leading-5 whitespace-nowrap text-[#f2e8dc]/80 shadow-2xl backdrop-blur">
         <div className="mb-2 flex gap-1.5">
           <i className="size-2 rounded-full bg-[#d97757]" /><i className="size-2 rounded-full bg-[#d97757]/50" /><i className="size-2 rounded-full bg-[#d97757]/25" />
         </div>
@@ -77,7 +77,7 @@ function PythonArt() {
   const k = "text-[#7dff5a]", f = "text-[#b9f6ff]", s = "text-[#ffd479]", c = "text-white/35";
   return (
     <div className="absolute inset-0 bg-[radial-gradient(90%_70%_at_20%_100%,rgba(125,255,90,.2),transparent_60%)]">
-      <div className="absolute inset-x-[8%] top-[12%] rounded-xl border border-[#7dff5a]/20 bg-black/50 p-4 font-mono text-[11px] leading-6 shadow-2xl">
+      <div className="absolute inset-x-[11%] top-[23%] rounded-xl border border-[#7dff5a]/20 bg-black/50 p-3 font-mono text-[10px] leading-5 whitespace-nowrap shadow-2xl">
         <p className={c}># 30 classes → 1 real project</p>
         <p><span className={k}>def</span> <span className={f}>sort_it</span>(xs):</p>
         <p>&nbsp;&nbsp;<span className={k}>for</span> i <span className={k}>in</span> <span className={f}>range</span>(<span className={f}>len</span>(xs)):</p>
@@ -100,11 +100,11 @@ function StudyArt() {
     <div className="absolute inset-0 bg-[radial-gradient(100%_70%_at_75%_0%,rgba(255,166,61,.22),transparent_60%)]">
       <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice" className="size-full">
         <g stroke="#ffa63d" strokeOpacity=".5" strokeWidth="1.5" fill="none" strokeDasharray="3 5">
-          <path d="M200 230 C 150 170, 110 150, 80 120" /><path d="M200 230 C 260 160, 300 150, 330 110" />
+          <path d="M200 230 C 168 218, 140 198, 118 178" /><path d="M200 230 C 236 214, 268 192, 290 170" />
           <path d="M200 230 C 140 300, 110 330, 90 380" /><path d="M200 230 C 270 300, 310 320, 340 360" />
         </g>
         <circle cx="200" cy="230" r="34" fill="#ffa63d" /><text x="200" y="236" textAnchor="middle" fontSize="15" fontWeight="700" fill="#1d0f02">Topic</text>
-        {[[80, 120, "Notes"], [330, 110, "Quiz"], [90, 380, "Maths"], [340, 360, "Plan"]].map(([x, y, t]) => (
+        {[[118, 178, "Notes"], [290, 170, "Quiz"], [96, 372, "Maths"], [330, 352, "Plan"]].map(([x, y, t]) => (
           <g key={String(t)}>
             <rect x={Number(x) - 36} y={Number(y) - 16} width="72" height="32" rx="16" fill="#0e1d26" stroke="#ffa63d" strokeOpacity=".6" />
             <text x={Number(x)} y={Number(y) + 5} textAnchor="middle" fontSize="13" fill="#fff3e4">{t}</text>

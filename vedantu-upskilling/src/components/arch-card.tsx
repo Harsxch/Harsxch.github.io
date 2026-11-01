@@ -42,9 +42,9 @@ export function ArchCard({ course: c, variant = "hero", where }: { course: Cours
         <Link
           href={`/courses/${c.slug}`}
           onClick={() => track("course_card_click", { course: c.slug, where })}
-          className={`relative block overflow-hidden rounded-t-[999px] rounded-b-[30px] bg-c-bg text-white ring-1 ring-white/15 transition duration-500 group-hover:ring-white/40 ${listing ? "aspect-[3/4.25]" : "aspect-[3/4.1]"} ${soon ? "saturate-[0.55] group-hover:saturate-100" : ""}`}
+          className={`relative block overflow-hidden rounded-t-[999px] rounded-b-[30px] bg-c-bg text-white ring-1 ring-white/15 transition duration-500 group-hover:ring-white/40 ${listing ? "aspect-[3/4.25]" : "aspect-[3/4.35]"} ${soon ? "saturate-[0.55] group-hover:saturate-100" : ""}`}
         >
-          <TileArt theme={c.theme} lift={listing ? "tall" : true} className="transition duration-700 group-hover:scale-[1.06]" />
+          <TileArt theme={c.theme} lift="tall" className="transition duration-700 group-hover:scale-[1.06]" />
           <i aria-hidden className="absolute inset-2.5 rounded-t-[999px] rounded-b-[22px] border border-white/10 transition group-hover:border-white/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
           <div className={`absolute inset-x-0 bottom-0 ${listing ? "p-6 sm:p-7" : "p-5 sm:p-6"}`}>
