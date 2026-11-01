@@ -9,6 +9,7 @@ import { AiStudyPage } from "@/components/courses/ai-study";
 import { PersonalityPage } from "@/components/courses/personality";
 import { VideoPage } from "@/components/courses/video";
 import { StickyBar } from "@/components/courses/kit-client";
+import { Backdrop } from "@/components/courses/backdrops";
 
 // Each course renders through its OWN page composition. Shared kit only supplies plumbing.
 const PAGES: Record<ThemeId, (p: { course: Course }) => React.JSX.Element> = {
@@ -63,9 +64,10 @@ export default async function CoursePage({ params }: { params: Promise<{ slug: s
   };
 
   return (
-    <div data-theme={course.theme} className="bg-c-bg text-c-fg">
+    <div data-theme={course.theme} className="relative bg-c-bg text-c-fg">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ld).replace(/</g, "\\u003c") }} />
-      <Page course={course} />
+      <Backdrop theme={course.theme} />
+      <div className="relative z-10"><Page course={course} /></div>
       {course.status === "live" && <StickyBar course={course} />}
     </div>
   );

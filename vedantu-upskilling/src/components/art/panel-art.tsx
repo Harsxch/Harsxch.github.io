@@ -30,7 +30,7 @@ function useTick(ms: number, mod: number) {
 /* ───────────────────────────── AI INCOME ───────────────────────────── */
 const ORBIT = [PenTool, ImageIcon, Video, Mic, Workflow, Search];
 const CHIPS: [string, string, string, number][] = [
-  ["Write", "8%", "66%", 0], ["Design", "22%", "82%", 1.2], ["Automate", "64%", "74%", 2.1], ["Research", "70%", "12%", 0.7],
+  ["Write", "8%", "66%", 0], ["Design", "22%", "82%", 1.2], ["Automate", "64%", "74%", 2.1], ["Research", "62%", "20%", 0.7],
 ];
 
 function IncomeScene() {
@@ -55,7 +55,7 @@ function IncomeScene() {
         ))}
       </svg>
 
-      <div className="absolute top-[34%] left-[40%] aspect-square w-[44%] -translate-x-1/2 -translate-y-1/2">
+      <div className="absolute top-[42%] left-[46%] aspect-square w-[50%] -translate-x-1/2 -translate-y-1/2">
         <i className="absolute inset-0 rounded-full border border-dashed border-c-accent/25" />
         <i className="absolute inset-[16%] rounded-full border border-dashed border-c-accent/20" />
         <div className="absolute inset-0 animate-[spin_36s_linear_infinite]">
@@ -95,14 +95,14 @@ function ClaudeScene() {
   return (
     <>
       <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_75%_90%,rgba(217,119,87,.3),transparent_65%)]" />
-      <div className="absolute top-[12%] right-[8%] left-[12%] overflow-hidden rounded-2xl border border-c-line bg-black/45 shadow-2xl backdrop-blur">
+      <div className="absolute top-[22%] right-[10%] left-[12%] overflow-hidden rounded-2xl border border-c-line bg-black/45 shadow-2xl backdrop-blur">
         <div className="flex gap-1.5 border-b border-c-line px-4 py-3"><i className="size-2.5 rounded-full bg-[#ff5f57]" /><i className="size-2.5 rounded-full bg-[#febc2e]" /><i className="size-2.5 rounded-full bg-[#28c840]" /></div>
         <div className="min-h-[15rem] p-5 font-mono text-[13px] leading-7">
           {TERM.slice(0, Math.min(t, TERM.length)).map(([x, c], i) => (<motion.p key={i} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className={c}>{x}</motion.p>))}
           <p className="caret text-c-accent">❯ </p>
         </div>
       </div>
-      <motion.div animate={{ rotate: 360 }} transition={{ duration: 16, repeat: Infinity, ease: "linear" }} className="absolute top-[7%] left-[7%] size-12 text-c-accent">
+      <motion.div animate={{ rotate: 360 }} transition={{ duration: 16, repeat: Infinity, ease: "linear" }} className="absolute top-[11%] left-[41%] size-12 text-c-accent">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z" /></svg>
       </motion.div>
       <div className="absolute right-[8%] bottom-[9%] left-[12%] flex flex-wrap gap-2">
@@ -139,7 +139,7 @@ function PythonScene() {
     <>
       <div className="absolute inset-0 bg-[radial-gradient(65%_60%_at_25%_95%,rgba(125,255,90,.22),transparent_65%)]" />
       <div className="absolute inset-0 opacity-[0.07] [background-image:radial-gradient(var(--c-accent)_1px,transparent_1px)] [background-size:22px_22px]" />
-      <div className="absolute top-[11%] right-[8%] left-[10%] overflow-hidden rounded-xl border border-c-line bg-[#070d08]/90 shadow-[0_0_80px_-24px_var(--c-accent)]">
+      <div className="absolute top-[21%] right-[10%] left-[11%] overflow-hidden rounded-xl border border-c-line bg-[#070d08]/90 shadow-[0_0_80px_-24px_var(--c-accent)]">
         <div className="flex items-center justify-between border-b border-c-line px-4 py-2.5 font-mono text-xs text-c-muted"><span>main.py</span><span className="rounded bg-c-accent px-2 py-0.5 text-c-on">▶ run</span></div>
         <div className="min-h-[13rem] p-4 font-mono text-[13px] leading-6">
           {CODE.slice(0, Math.min(t, CODE.length)).map(([x, c], k) => (<motion.div key={k} initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex"><span className="w-6 shrink-0 text-[#3d5a41]">{k + 1}</span><span className={`whitespace-pre ${c}`}>{x}</span></motion.div>))}
@@ -155,7 +155,7 @@ function PythonScene() {
 }
 
 /* ───────────────────────────── AI STUDY ───────────────────────────── */
-const NODES: [string, number, number][] = [["Notes", 22, 26], ["Quiz", 76, 22], ["Maths", 18, 74], ["Plan", 78, 72]];
+const NODES: [string, number, number][] = [["Notes", 24, 36], ["Quiz", 72, 40], ["Maths", 20, 74], ["Plan", 76, 74]];
 
 function StudyScene() {
   const flip = useTick(2600, 2);
@@ -164,17 +164,17 @@ function StudyScene() {
     <>
       <div className="absolute inset-0 bg-[radial-gradient(65%_55%_at_70%_10%,rgba(255,166,61,.3),transparent_65%)]" />
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-0 size-full">
-        {NODES.map(([n, x, y]) => (<motion.line key={n} x1="50" y1="46" x2={x} y2={y} stroke="var(--c-accent)" strokeOpacity=".5" strokeDasharray="1.4 1.8" strokeWidth=".35" vectorEffect="non-scaling-stroke" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2 }} />))}
+        {NODES.map(([n, x, y]) => (<motion.line key={n} x1="50" y1="54" x2={x} y2={y} stroke="var(--c-accent)" strokeOpacity=".5" strokeDasharray="1.4 1.8" strokeWidth=".35" vectorEffect="non-scaling-stroke" initial={{ pathLength: 0 }} animate={{ pathLength: 1 }} transition={{ duration: 1.2 }} />))}
       </svg>
-      <motion.div animate={{ scale: [1, 1.07, 1] }} transition={{ duration: 3.2, repeat: Infinity }} className="absolute top-[46%] left-1/2 grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-c-accent text-lg font-bold text-c-on shadow-[0_0_70px_-6px_var(--c-accent)]">Topic</motion.div>
+      <motion.div animate={{ scale: [1, 1.07, 1] }} transition={{ duration: 3.2, repeat: Infinity }} className="absolute top-[54%] left-1/2 grid size-24 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-c-accent text-lg font-bold text-c-on shadow-[0_0_70px_-6px_var(--c-accent)]">Topic</motion.div>
       {NODES.map(([n, x, y], k) => (
         <span key={n} className="absolute -translate-x-1/2 -translate-y-1/2 rounded-full border border-c-accent/60 bg-c-surface px-4 py-2 text-sm text-c-fg" style={{ left: `${x}%`, top: `${y}%`, animation: `float-y ${5 + k * 0.7}s ease-in-out ${k * 0.5}s infinite` }}>{n}</span>
       ))}
-      <motion.div animate={{ rotateX: flip ? 180 : 0 }} transition={{ duration: 0.7 }} style={{ transformStyle: "preserve-3d", perspective: 800 }} className="absolute top-[6%] right-[8%] h-20 w-44">
+      <motion.div animate={{ rotateX: flip ? 180 : 0 }} transition={{ duration: 0.7 }} style={{ transformStyle: "preserve-3d", perspective: 800 }} className="absolute top-[16%] right-[12%] h-20 w-40">
         <span className="absolute inset-0 grid place-items-center rounded-2xl bg-[#fff3e4] px-3 text-center text-[13px] font-medium text-[#1d0f02] [backface-visibility:hidden]">Area of a circle?</span>
         <span className="absolute inset-0 grid place-items-center rounded-2xl bg-c-accent px-3 text-center text-sm font-semibold text-c-on [backface-visibility:hidden] [transform:rotateX(180deg)]">π × r²</span>
       </motion.div>
-      <div className="absolute bottom-[7%] left-[8%] w-44 rounded-2xl border border-c-line bg-c-bg/80 p-4 backdrop-blur">
+      <div className="absolute bottom-[9%] left-[10%] w-44 rounded-2xl border border-c-line bg-c-bg/80 p-4 backdrop-blur">
         <p className="text-[11px] tracking-widest text-c-accent uppercase">Study plan</p>
         {["Maths", "Science", "English", "Revise"].map((x, k) => (
           <p key={x} className="mt-2 flex items-center gap-2 text-[13px]"><span className={`grid size-4 place-items-center rounded border text-[10px] transition-colors duration-500 ${k < done ? "border-c-accent bg-c-accent text-c-on" : "border-c-line"}`}>{k < done ? "✓" : ""}</span>{x}</p>

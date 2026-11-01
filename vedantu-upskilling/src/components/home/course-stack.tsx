@@ -41,9 +41,11 @@ export function CourseStack() {
                   </Link>
                 </div>
               </div>
-              <div className="relative min-h-[320px] lg:min-h-0">
-                <PanelArt theme={c.theme} />
-                <div className="absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-c-bg to-transparent max-lg:hidden" />
+              <div className="relative p-5 pt-0 lg:p-10 lg:pl-0">
+                <div className="relative h-full min-h-[420px] overflow-hidden rounded-t-[999px] rounded-b-[32px] bg-c-surface/70 ring-1 ring-c-line shadow-[0_30px_80px_-30px_rgba(0,0,0,.6)] max-lg:mx-auto max-lg:max-w-md">
+                  <PanelArt theme={c.theme} />
+                  <i aria-hidden className="pointer-events-none absolute inset-2.5 rounded-t-[999px] rounded-b-[24px] border border-white/10" />
+                </div>
               </div>
             </div>
           </article>

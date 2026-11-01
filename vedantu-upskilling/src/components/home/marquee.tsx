@@ -7,7 +7,7 @@ const ITEMS = [
 export function Marquee() {
   const row = [...ITEMS, ...ITEMS];
   return (
-    <section aria-label="What you walk away with" className="overflow-hidden border-y border-white/10 bg-navy py-10 text-white sm:py-14">
+    <section aria-label="What you walk away with" className="overflow-hidden border-y border-white/10 bg-black/25 py-10 text-white backdrop-blur-[2px] sm:py-14">
       <p className="mb-6 px-6 text-center text-[11px] tracking-[0.2em] text-white/50 uppercase">What you walk away with</p>
       <div className="flex w-max gap-12 whitespace-nowrap" style={{ animation: "marquee 48s linear infinite" }}>
         {row.map((t, i) => (

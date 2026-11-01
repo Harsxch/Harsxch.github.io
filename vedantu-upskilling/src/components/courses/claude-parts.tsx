@@ -31,7 +31,7 @@ export function ClaudeHero({ course }: { course: Course }) {
   const shown = SCRIPT.slice(0, Math.min(n, SCRIPT.length));
   const ready = n >= 7;
   return (
-    <section className="relative isolate overflow-hidden bg-c-bg">
+    <section className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_85%_10%,rgba(217,119,87,.22),transparent_65%),radial-gradient(40%_40%_at_0%_100%,rgba(217,119,87,.1),transparent_70%)]" />
       <div className="mx-auto grid min-h-[100svh] max-w-[1240px] items-center gap-12 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[0.95fr_1.05fr]">
         <div>

@@ -6,11 +6,12 @@
   --brand-orange-press: #ef5c32;
   --brand-navy: #01202b;
   --brand-plum: #6d366c; /* Vedantu theme-color */
-  --paper: #f6f3ee;
-  --paper-2: #efebe4;
-  --ink: #01202b;
-  --ink-soft: #4b5b63;
-  --hairline: #e4dfd6;
+  /* First Light: the site lives on Vedantu navy and brightens to orange dawn as you scroll */
+  --paper: #00141c;
+  --paper-2: #032330;
+  --ink: #f6f0e8;
+  --ink-soft: rgba(246, 240, 232, 0.66);
+  --hairline: rgba(255, 255, 255, 0.13);
 
   /* Apple type system. SF Pro is used where the OS provides it; no font files are bundled or downloaded. */
   --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, Arial, sans-serif;
@@ -21,6 +22,9 @@
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
+
+@property --atmos { syntax: "<color>"; inherits: true; initial-value: #ff693d; }
+html { transition: --atmos 1.4s ease; }
 
 @theme inline {
   --font-sans: var(--font-text);
@@ -59,10 +63,11 @@
   --c-fg: #eaf6e8; --c-muted: #86a088; --c-accent: #7dff5a; --c-accent2: #35c24a;
   --c-line: rgba(125, 255, 90, 0.16); --c-on: #04120a;
 }
+/* AI Study is the one LIGHT world: a student's paper notebook with navy ink and an amber highlighter */
 [data-theme="ai-study"] {
-  --c-bg: #08131a; --c-surface: #0e1d26; --c-surface2: #14283a;
-  --c-fg: #fff3e4; --c-muted: #93a8b3; --c-accent: #ffa63d; --c-accent2: #ff7f50;
-  --c-line: rgba(255, 166, 61, 0.18); --c-on: #1d0f02;
+  --c-bg: #f6ecd8; --c-surface: #fffaf0; --c-surface2: #fff0d2;
+  --c-fg: #1b2a38; --c-muted: #566676; --c-accent: #d45f00; --c-accent2: #ff9f43;
+  --c-line: rgba(27, 42, 56, 0.15); --c-on: #ffffff;
 }
 [data-theme="personality"] {
   --c-bg: #150a15; --c-surface: #1f111f; --c-surface2: #2a172a;

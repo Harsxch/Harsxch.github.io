@@ -14,7 +14,7 @@ export function IncomeHero({ course }: { course: Course }) {
   const p = course.plans.find((x) => x.recommended)!;
   const t = course.teachers[0];
   return (
-    <section className="noise relative isolate overflow-hidden bg-c-bg">
+    <section className="noise relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_80%_20%,rgba(255,181,46,.22),transparent_65%),radial-gradient(50%_50%_at_10%_100%,rgba(255,122,26,.14),transparent_70%)]" />
       <div className="absolute inset-0 -z-10 opacity-[0.07] [background-image:linear-gradient(var(--c-accent)_1px,transparent_1px),linear-gradient(90deg,var(--c-accent)_1px,transparent_1px)] [background-size:72px_72px] [mask-image:radial-gradient(70%_70%_at_60%_40%,#000,transparent)]" />
       <div className="mx-auto grid min-h-[100svh] max-w-[1240px] items-center gap-10 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[1.1fr_0.9fr]">

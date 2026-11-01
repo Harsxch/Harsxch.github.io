@@ -10,8 +10,8 @@ export function Voices() {
   const [i, setI] = useState(0);
   const r = all[i];
   return (
-    <section data-theme="ai-income" className="noise relative overflow-hidden bg-c-bg px-4 py-24 text-c-fg sm:px-6 sm:py-36">
-      <div className="pointer-events-none absolute -top-40 left-1/2 size-[700px] -translate-x-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,181,46,.18),transparent_65%)]" />
+    <section data-theme="ai-income" className="relative overflow-hidden px-4 py-24 text-c-fg sm:px-6 sm:py-40">
+      <div className="pointer-events-none absolute top-1/2 left-1/2 size-[900px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,181,46,.22),transparent_62%)]" />
       <div className="relative mx-auto max-w-[1100px]">
         <p className="text-[11px] tracking-[0.2em] text-c-accent uppercase">In their words · AI Income Mastery students</p>
         <div className="mt-8 min-h-[16rem] sm:min-h-[19rem]" aria-live="polite">

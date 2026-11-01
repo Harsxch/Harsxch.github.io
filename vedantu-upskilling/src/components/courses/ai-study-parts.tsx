@@ -13,7 +13,7 @@ export function StudyHero({ course }: { course: Course }) {
   useEffect(() => { const id = setInterval(() => setK((v) => (v + 1) % (STEPS.length + 2)), 1100); return () => clearInterval(id); }, []);
   const p = course.plans[0];
   return (
-    <section className="relative isolate overflow-hidden bg-c-bg">
+    <section className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(60%_60%_at_80%_0%,rgba(255,166,61,.25),transparent_65%),radial-gradient(50%_50%_at_0%_100%,rgba(255,127,80,.14),transparent_70%)]" />
       <div className="mx-auto grid min-h-[100svh] max-w-[1240px] items-center gap-12 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[1fr_1fr]">
         <div>

@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer
       data-theme={theme}
-      className={`relative border-t ${theme ? "border-c-line bg-c-bg text-c-fg" : "border-white/10 bg-navy text-white"}`}
+      className={`relative border-t ${theme ? "border-c-line bg-c-bg text-c-fg" : "border-white/10 bg-black/30 text-white backdrop-blur-sm"}`}
     >
       <div className="mx-auto max-w-[1240px] px-4 py-16 sm:px-6 sm:py-20">
         <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">

@@ -50,7 +50,7 @@ export function PythonHero({ course }: { course: Course }) {
   const p = course.plans.find((x) => x.recommended)!;
   const t = course.teachers[0];
   return (
-    <section className="relative isolate overflow-hidden bg-c-bg">
+    <section className="relative isolate overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(55%_55%_at_15%_90%,rgba(125,255,90,.16),transparent_70%),radial-gradient(40%_40%_at_90%_0%,rgba(53,194,74,.12),transparent_70%)]" />
       <div className="absolute inset-0 -z-10 opacity-[0.06] [background-image:radial-gradient(var(--c-accent)_1px,transparent_1px)] [background-size:24px_24px]" />
       <div className="mx-auto grid min-h-[100svh] max-w-[1240px] items-center gap-10 px-4 pt-28 pb-16 sm:px-6 lg:grid-cols-[1fr_1.05fr]">

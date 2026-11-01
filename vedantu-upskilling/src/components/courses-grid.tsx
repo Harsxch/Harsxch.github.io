@@ -1,66 +1,30 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowUpRight, Lock } from "lucide-react";
-import Link from "next/link";
 import { useState } from "react";
 import { courses } from "@/content/courses";
-import { PriceBlock } from "@/components/price-block";
-import { TileArt } from "@/components/art/tile-art";
-import { track } from "@/lib/analytics";
-import { titleClass } from "@/lib/theme-type";
+import { ArchCard } from "@/components/arch-card";
 
 const FILTERS = [["all", "All"], ["live", "Live now"], ["coming-soon", "Launching soon"]] as const;
-// asymmetric bento spans (lg: 6 cols)
-const SPAN = ["lg:col-span-4", "lg:col-span-2", "lg:col-span-2", "lg:col-span-4", "lg:col-span-3", "lg:col-span-3"];
 
 export function CoursesGrid() {
   const [f, setF] = useState<(typeof FILTERS)[number][0]>("all");
   const list = courses.filter((c) => f === "all" || c.status === f);
   return (
     <div>
-      <div role="tablist" aria-label="Filter courses" className="flex gap-2">
+      <div role="tablist" aria-label="Filter courses" className="flex flex-wrap gap-2">
         {FILTERS.map(([k, l]) => (
           <button key={k} role="tab" aria-selected={f === k} onClick={() => setF(k)}
-            className={`rounded-full border px-4 py-2 text-[13px] font-medium transition ${f === k ? "border-ink bg-ink text-white" : "border-black/10 text-ink-soft hover:border-black/30"}`}>
-            {l}
-          </button>
+            className={`rounded-full border px-4 py-2 text-[13px] font-medium transition ${f === k ? "border-white bg-white text-black" : "border-white/15 text-ink-soft hover:border-white/40 hover:text-ink"}`}>{l}</button>
         ))}
       </div>
-      <motion.div layout className="mt-8 grid gap-4 lg:auto-rows-[minmax(460px,auto)] lg:grid-cols-6">
+      <motion.div layout className="mt-12 grid gap-x-7 gap-y-16 sm:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence mode="popLayout">
-          {list.map((c, i) => {
-            const soon = c.status === "coming-soon";
-            const big = f === "all" ? SPAN[courses.indexOf(c)] : f === "live" ? SPAN[i] : "lg:col-span-3";
-            return (
-              <motion.div key={c.slug} layout initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.97 }}
-                transition={{ duration: 0.5, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }} className={big}>
-                <Link href={`/courses/${c.slug}`} data-theme={c.theme}
-                  onClick={() => track("course_card_click", { course: c.slug, where: "listing" })}
-                  className="group relative isolate flex h-full min-h-[440px] flex-col justify-end overflow-hidden rounded-[32px] bg-c-bg p-6 text-c-fg ring-1 ring-black/10 sm:p-8">
-                  <TileArt theme={c.theme} lift="tall" className="transition duration-700 group-hover:scale-[1.04]" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-transparent" />
-                  <div className="relative">
-                    <div className="mb-3 flex items-center gap-2">
-                      {soon ? (
-                        <span className="inline-flex items-center gap-1.5 rounded-full border border-c-fg/30 px-3 py-1 text-[11px] tracking-[0.16em] uppercase backdrop-blur"><Lock className="size-3" /> Launching soon</span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 rounded-full bg-c-accent px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-c-on uppercase">
-                          <i className="size-1.5 rounded-full bg-c-on" /> {c.badge ?? "Live now"}
-                        </span>
-                      )}
-                      {c.audienceTag && <span className="rounded-full border border-c-fg/25 px-3 py-1 text-[11px] text-c-fg/80">{c.audienceTag}</span>}
-                    </div>
-                    <h2 className={`${titleClass[c.theme]} text-[clamp(1.75rem,2.81vw,2.5rem)] leading-[0.98] ${c.theme === "python" ? "text-[clamp(1.38rem,2.03vw,1.72rem)]" : ""}`}>{c.title}</h2>
-                    <p className="mt-2 max-w-md text-[14.5px] leading-snug text-c-fg/75">{c.blurb}</p>
-                    <div className="mt-5 flex items-end justify-between text-sm">
-                      <PriceBlock course={c} size="md" />
-                      <span className="grid size-10 place-items-center rounded-full bg-c-fg text-c-bg transition group-hover:rotate-45"><ArrowUpRight className="size-5" /></span>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            );
-          })}
+          {list.map((c, i) => (
+            <motion.div key={c.slug} layout initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96 }}
+              transition={{ duration: 0.6, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }} className={i % 3 === 1 ? "lg:mt-14" : ""}>
+              <ArchCard course={c} variant="listing" where="listing" />
+            </motion.div>
+          ))}
         </AnimatePresence>
       </motion.div>
     </div>

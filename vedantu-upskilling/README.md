@@ -24,6 +24,11 @@ npm run lint && npm run typecheck
 - `src/app/globals.css`: brand tokens (Vedantu orange `#FF693D`, navy `#01202B`) and the six per-course colour themes (`[data-theme=…]`).
 - `src/lib/attribution.ts`, `analytics.ts`: creator/UTM capture and pluggable analytics.
 
+## Visual identity: "First Light"
+- **Concept:** Vedantu navy night that brightens to orange dawn as you scroll ("move forward", literally), with embers drifting upward. Each course is an **arched doorway** into its own world; hovering a doorway tints the whole sky to that world's colour. Code: `components/atmosphere.tsx`, `components/arch-card.tsx`.
+- **Course worlds** (`components/courses/backdrops.tsx`) are different systems, not recolours: AI Income = flow field, Claude = blueprint table, Python = a graph being walked, AI Study = paper notebook (the one light world), Personality = aurora, Video = film light-leaks and sprocket edges.
+- **Motion:** canvases run at capped DPR, fall back to a still frame under `prefers-reduced-motion`, and the sky unmounts on course pages (they bring their own backdrop).
+
 ## Pricing, proof and typography
 - **Prices:** edit `plans` in `src/content/courses.ts` (`price`, `mrp`, `recommended`, `checkoutUrl`). The recommended plan gets the visual lead everywhere (cards, pricing sections, sticky bar, CTAs); the entry plan stays visible and buyable. "Everything in X, plus N more" is computed from the phase data, so nothing is hand-written.
 - **Social proof:** the 7,200+ enrolment figure lives in `src/content/site.ts` (`ENROLLED`). It is cumulative across ALL courses and every mention says so. Do not add per-course counts.

@@ -5,8 +5,8 @@ import { dotColor } from "@/lib/theme-type";
 export function FinalCta() {
   return (
     <section className="px-3 pb-3 sm:px-5">
-      <div className="noise relative mx-auto max-w-[1360px] overflow-hidden rounded-[36px] bg-navy px-6 py-24 text-center text-white sm:rounded-[48px] sm:py-36">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(60%_80%_at_50%_120%,rgba(255,105,61,.5),transparent_65%)]" />
+      <div className="noise relative mx-auto max-w-[1360px] overflow-hidden rounded-[36px] bg-[radial-gradient(120%_95%_at_50%_135%,#ff693d_0%,#d4421a_30%,#4a1a14_55%,#01202b_80%)] px-6 py-28 text-center text-white ring-1 ring-white/15 sm:rounded-[48px] sm:py-40">
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(40%_50%_at_50%_100%,rgba(255,220,170,.55),transparent_70%)]" />
         <h2 className="font-display relative mx-auto max-w-[14ch] text-[clamp(2.76rem,7.02vw,6.24rem)] leading-[0.9]">
           Pick a world. <span className="text-brand ">Start building.</span>
         </h2>

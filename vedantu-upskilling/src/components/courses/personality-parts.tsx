@@ -15,7 +15,7 @@ export function PersonalityHero({ course }: { course: Course }) {
   return (
     <section
       onPointerMove={(e) => { const r = e.currentTarget.getBoundingClientRect(); mx.set(((e.clientX - r.left) / r.width) * 100); my.set(((e.clientY - r.top) / r.height) * 100); }}
-      className="noise relative isolate flex min-h-[100svh] items-center overflow-hidden bg-c-bg"
+      className="noise relative isolate flex min-h-[100svh] items-center overflow-hidden "
     >
       <motion.div style={{ background: bg }} className="absolute inset-0 -z-10" />
       <div className="absolute inset-x-0 bottom-0 -z-10 h-1/2 bg-gradient-to-t from-[#6d366c]/30 to-transparent" />

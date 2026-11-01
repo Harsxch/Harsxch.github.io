@@ -19,7 +19,7 @@ export default function CoursesPage() {
       <p className="mt-6 max-w-xl text-[17px] leading-relaxed text-ink-soft">
         Every course has its own look, its own tools and its own finish line. Pick the one that matches what you want to build.
       </p>
-      <p className="mt-8 inline-flex items-center gap-2 rounded-full border border-hairline bg-white/60 px-4 py-2 text-[14px] text-ink-soft">
+      <p className="mt-8 inline-flex items-center gap-2 rounded-full border border-hairline bg-white/5 px-4 py-2 text-[14px] text-ink-soft">
         <i className="size-2 rounded-full bg-brand" />Trusted by <b className="font-semibold text-ink">{ENROLLED.value}</b> {ENROLLED.short}.
       </p>
       <div className="mt-10"><CoursesGrid /></div>

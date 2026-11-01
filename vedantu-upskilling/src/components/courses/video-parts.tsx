@@ -7,7 +7,7 @@ const tc = (f: number) => { const s = Math.floor(f / 24); return `00:${String(Ma
 
 export function VideoHero({ course }: { course: Course }) {
   return (
-    <section className="relative isolate flex min-h-[100svh] flex-col justify-between overflow-hidden bg-black">
+    <section className="relative isolate flex min-h-[100svh] flex-col justify-between overflow-hidden">
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(70%_60%_at_70%_30%,rgba(255,59,48,.28),transparent_65%),radial-gradient(60%_60%_at_20%_80%,rgba(91,211,255,.14),transparent_70%)]" />
       <div className="pointer-events-none absolute -inset-[50%] -z-10 opacity-[0.09]" style={{ animation: "grain 0.9s steps(4) infinite", backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")" }} />
       <div className="h-[7vh] bg-black" />
