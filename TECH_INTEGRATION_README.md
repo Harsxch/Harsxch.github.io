@@ -24,7 +24,17 @@ Single-screen signup wall collecting: Full name, Mobile (OTP-verified), Email, G
 | `constants.ts` | Grades, exams, boards, board-visibility grades, country codes, policy URLs |
 | `services/otpService.ts` | **OTP boundary** (mock + real stub) |
 | `services/submitSignup.ts` | **Submit boundary** (replace body) |
+| `services/accountService.ts` | **Returning-student lookup/update boundary** (demo localStorage) |
+| `components/ReturningWall, WelcomeBack, ProfileEditForm, PageShell` | Returning-student UI |
 | `styles.css` | All styling, CSS variables at top |
+
+## Returning-student flow (second screen)
+Open the demo and use the **Demo view** switcher (or `#/returning`). Flow: enter mobile → OTP → account lookup → **Welcome back, <first name>** with saved details (grade, exam, board, city/state, masked mobile and email) → optional **Edit** (name, email, grade, exam, board, state, city; mobile is the login identity and not editable) → **Continue**. Unknown number → "We couldn't find an account" with a Sign-up button. "Not <name>?" resets.
+- Components: `ReturningWall`, `WelcomeBack`, `ProfileEditForm`, shared `PageShell`; data layer `services/accountService.ts`.
+- **Demo data only:** accounts live in browser localStorage plus a built-in sample (`9876543210`, Asha Rao). Students created through the demo signup are saved so you can revisit them.
+- **Tech must replace `accountService.ts`** with Vedantu's user/profile service. Look up the account only **after** server-side OTP verification (do not reveal whether a number is registered beforehand), and authorise profile updates from the authenticated session.
+- The New/Returning switcher in `App.tsx` is demo-only; the platform decides which flow to show.
+- Not built: a real session/token, dashboard destination, "last visit" tracking, and prompts for stale data (for example auto-suggesting the next grade).
 
 ## Fields and validation
 | Field | Rule |

@@ -1,7 +1,7 @@
 import type { SignupPayload } from "../types.ts";
 import { CheckIcon } from "./icons.tsx";
 
-export function SuccessState({ payload, onReset }: { payload: SignupPayload; onReset: () => void }) {
+export function SuccessState({ payload, onReset, onSeeReturning }: { payload: SignupPayload; onReset: () => void; onSeeReturning?: () => void }) {
   return (
     <div className="success" role="status">
       <div className="success-mark"><CheckIcon width={28} height={28} strokeWidth={3} /></div>
@@ -12,7 +12,12 @@ export function SuccessState({ payload, onReset }: { payload: SignupPayload; onR
         <pre>{JSON.stringify(payload, null, 2)}</pre>
         <p className="muted small">Demo only: nothing was sent to any server.</p>
       </details>
-      <button type="button" className="secondary" onClick={onReset}>Start over</button>
+      <div className="success-actions">
+        {onSeeReturning && (
+          <button type="button" className="secondary primary-ish" onClick={onSeeReturning}>See the returning-student view</button>
+        )}
+        <button type="button" className="secondary" onClick={onReset}>Start over</button>
+      </div>
     </div>
   );
 }

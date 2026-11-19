@@ -6,6 +6,7 @@ import { ConsentCheckbox } from "./ConsentCheckbox.tsx";
 import { EmailInput } from "./EmailInput.tsx";
 import { GradeDropdown } from "./GradeDropdown.tsx";
 import { LocationDropdowns } from "./LocationDropdowns.tsx";
+import { PageShell } from "./PageShell.tsx";
 import { MobileInput } from "./MobileInput.tsx";
 import { ShieldIcon } from "./icons.tsx";
 import { SignupHeader } from "./SignupHeader.tsx";
@@ -14,13 +15,7 @@ import { SuccessState } from "./SuccessState.tsx";
 import { TargetExamDropdown } from "./TargetExamDropdown.tsx";
 import { TextInput } from "./TextInput.tsx";
 
-const POINTS = [
-  "Live classes with teachers who know your name",
-  "Doubt solving whenever you get stuck",
-  "Practice and plans built around your exam",
-];
-
-export function SignupWall() {
+export function SignupWall({ onSeeReturning }: { onSeeReturning?: () => void }) {
   const f = useSignupForm();
   const { values: v, errors } = f;
   const [showSuccess, setShowSuccess] = useState(false);
@@ -50,11 +45,9 @@ export function SignupWall() {
       : "Fill in all required fields to continue";
 
   return (
-    <main className="page">
-      <div className="shell">
-        <section className="card" aria-labelledby="signup-title">
+    <PageShell labelledBy="signup-title">
           {showSuccess && f.payload ? (
-            <SuccessState payload={f.payload} onReset={() => { setShowSuccess(false); f.reset(); }} />
+            <SuccessState payload={f.payload} onReset={() => { setShowSuccess(false); f.reset(); }} onSeeReturning={onSeeReturning} />
           ) : (
             <>
               <SignupHeader />
@@ -141,26 +134,10 @@ export function SignupWall() {
                 </div>
               </form>
               <p className="secure">
-                <ShieldIcon width={16} height={16} /> <strong>100% SAFE &amp; SECURE,</strong> we never post without your permission
+                <ShieldIcon width={16} height={16} /> <span><strong>100% SAFE &amp; SECURE,</strong> we never post without your permission</span>
               </p>
             </>
           )}
-        </section>
-
-        <aside className="panel" aria-label="Why Vedantu">
-          <div className="panel-inner">
-            <p className="eyebrow">Learn with Vedantu</p>
-            <h2>Learning that gives you the attention you deserve.</h2>
-            <ul>
-              {POINTS.map((p) => (
-                <li key={p}>
-                  <span className="tick" aria-hidden="true">✓</span> {p}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </aside>
-      </div>
-    </main>
+    </PageShell>
   );
 }

@@ -1,6 +1,7 @@
 import { useCallback, useMemo, useReducer, useState } from "react";
 import { EMPTY_VALUES, type FieldName, type SignupPayload, type SignupValues } from "./types.ts";
 import { buildPayload, isBoardApplicable, validateForm } from "./validation.ts";
+import { saveAccount } from "./services/accountService.ts";
 import { submitSignup } from "./services/submitSignup.ts";
 
 type Action =
@@ -69,6 +70,7 @@ export function useSignupForm() {
     try {
       const res = await submitSignup(built);
       if (res.ok) {
+        saveAccount(built); // demo only: lets the returning-student view find this student
         setPayload(built);
         setStatus("success");
       } else {
