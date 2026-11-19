@@ -36,7 +36,7 @@ Single-screen signup wall collecting: Full name, Mobile (OTP-verified), Email, G
 | Target exam | Required; 7 options (JEE, NEET, CUET, CAT, Other engg entrance exam, Other, Not decided yet); searchable, clearable |
 | Board | Required only when visible; 35 options; searchable; CBSE, ICSE/ISC, IB, IGCSE pinned on top under "Popular boards" |
 | State | Required; searchable dropdown of 36 states/UTs (`src/signup/locations.ts`) |
-| City | Required; searchable; options depend on State (curated major cities + "Other"); cleared when State changes; disabled until State chosen |
+| City | Required; searchable; options depend on State (~4,200 cities from `src/signup/data/india-cities.json`, plus "Other"); cleared when State changes; disabled until State chosen |
 | Consent | Required; unchecked by default; Privacy/Terms links |
 
 Dropdowns: type-to-search (punctuation-insensitive, e.g. `jk`, `tn`), Arrow/Home/End/Enter/Esc, ARIA combobox, 44px rows, 16px inputs (no iOS zoom), empty-result state.
@@ -79,7 +79,7 @@ Dropdowns: type-to-search (punctuation-insensitive, e.g. `jk`, `tn`), Arrow/Home
 6. Embedding as a modal: `SignupWall` renders its own page shell (`.page/.shell/.panel`); use `.card` content only if embedding.
 
 ## Assumptions / limitations
-- State/City list is a curated sample (major cities only), not full master data. Replace `locations.ts` with Vedantu's canonical location data.
+- State/City data comes from the open-source `country-state-city` dataset (ISC licence), plus a few common spellings. Names may differ from Vedantu's master (e.g. Gurgaon/Gurugram). Replace `data/india-cities.json` with Vedantu's canonical location data.
 - Single-screen form (per brief) rather than the stepwise flow in the user-flow PDF.
 - Country list is a short, hand-picked set; confirm with product.
 - Email typo suggestions are heuristic and never block submission.
