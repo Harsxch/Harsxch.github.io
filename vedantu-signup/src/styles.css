@@ -209,3 +209,7 @@ input.control { display: block; }
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
+
+.dd.disabled .dd-box { background: #f3f5f6; cursor: not-allowed; }
+.dd.disabled .dd-input { cursor: not-allowed; }
+.dd.disabled .dd-chevron { opacity: .4; }

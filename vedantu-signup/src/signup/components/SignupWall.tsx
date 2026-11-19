@@ -5,6 +5,7 @@ import { BoardDropdown } from "./BoardDropdown.tsx";
 import { ConsentCheckbox } from "./ConsentCheckbox.tsx";
 import { EmailInput } from "./EmailInput.tsx";
 import { GradeDropdown } from "./GradeDropdown.tsx";
+import { LocationDropdowns } from "./LocationDropdowns.tsx";
 import { MobileInput } from "./MobileInput.tsx";
 import { ShieldIcon } from "./icons.tsx";
 import { SignupHeader } from "./SignupHeader.tsx";
@@ -114,6 +115,17 @@ export function SignupWall() {
                     />
                   </div>
                 )}
+
+                <LocationDropdowns
+                  state={v.state}
+                  city={v.city}
+                  stateError={f.errorFor("state")}
+                  cityError={f.errorFor("city")}
+                  onState={(value) => { f.dispatch({ type: "setState", value }); f.touch("state"); }}
+                  onCity={(value) => { f.dispatch({ type: "set", field: "city", value }); f.touch("city"); }}
+                  onStateBlur={() => f.touch("state")}
+                  onCityBlur={() => f.touch("city")}
+                />
 
                 <ConsentCheckbox
                   checked={v.consent}

@@ -8,6 +8,7 @@ type Action =
   | { type: "setMobile"; value: string }
   | { type: "setCountry"; value: string }
   | { type: "setGrade"; value: string }
+  | { type: "setState"; value: string }
   | { type: "verified" }
   | { type: "unverify" }
   | { type: "reset" };
@@ -26,6 +27,9 @@ function reducer(s: SignupValues, a: Action): SignupValues {
     case "setGrade":
       // Board not applicable => clear it from state.
       return { ...s, grade: a.value, board: isBoardApplicable(a.value) ? s.board : "" };
+    case "setState":
+      // City list depends on state => reset city when state changes.
+      return { ...s, state: a.value, city: a.value === s.state ? s.city : "" };
     case "unverify":
       return { ...s, verifiedMobile: null };
     case "verified":
@@ -55,7 +59,7 @@ export function useSignupForm() {
   const submit = async (): Promise<FieldName | null> => {
     if (status === "submitting") return null; // no duplicate submissions
     setSubmitAttempted(true);
-    const order: FieldName[] = ["name", "mobile", "email", "grade", "targetExam", "board", "consent"];
+    const order: FieldName[] = ["name", "mobile", "email", "grade", "targetExam", "board", "state", "city", "consent"];
     const firstInvalid = order.find((f) => errors[f]);
     if (firstInvalid) return firstInvalid;
 

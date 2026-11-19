@@ -6,7 +6,7 @@ import { EMPTY_VALUES, type SignupValues } from "../src/signup/types.ts";
 
 const valid = (o: Partial<SignupValues> = {}): SignupValues => ({
   ...EMPTY_VALUES, name: "Asha Rao", mobile: "9876543210", verifiedMobile: "9876543210",
-  email: "asha@example.com", grade: "12th", targetExam: "NEET", board: "CBSE", consent: true, ...o,
+  email: "asha@example.com", grade: "12th", targetExam: "NEET", board: "CBSE", state: "Karnataka", city: "Bengaluru", consent: true, ...o,
 });
 
 test("option counts and order", () => {
@@ -60,4 +60,14 @@ test("payload omits board when not applicable", () => {
   assert.equal(p.mobile, "+919876543210");
   assert.equal(p.mobile_verified, true);
   assert.equal(buildPayload(valid()).board, "CBSE");
+});
+
+test("state and city rules", () => {
+  assert.ok(validateForm(valid({ state: "", city: "" })).state);
+  assert.ok(validateForm(valid({ city: "" })).city);
+  assert.ok(validateForm(valid({ city: "Mumbai" })).city); // city not in selected state
+  assert.equal(validateForm(valid({ city: "Other" })).city, undefined);
+  const p = buildPayload(valid());
+  assert.equal(p.state, "Karnataka");
+  assert.equal(p.city, "Bengaluru");
 });

@@ -1,4 +1,5 @@
 import { BOARD_GRADES, BOARDS, GRADES, TARGET_EXAMS } from "./constants.ts";
+import { LOCATIONS, citiesFor } from "./locations.ts";
 import type { SignupErrors, SignupPayload, SignupValues } from "./types.ts";
 
 export const isBoardApplicable = (grade: string) => BOARD_GRADES.includes(grade);
@@ -97,6 +98,8 @@ export function validateForm(v: SignupValues): SignupErrors {
   if (isBoardApplicable(v.grade) && !BOARDS.some((b) => b.value === v.board)) {
     e.board = "Select your board";
   }
+  if (!(v.state in LOCATIONS)) e.state = "Select your state";
+  if (v.state in LOCATIONS && !citiesFor(v.state).includes(v.city)) e.city = "Select your city";
   if (!v.consent) e.consent = "Please accept to continue";
   return e;
 }
@@ -109,6 +112,8 @@ export function buildPayload(v: SignupValues): SignupPayload {
     email: v.email.trim(),
     grade: v.grade,
     target_exam: v.targetExam,
+    state: v.state,
+    city: v.city,
     consent: v.consent,
   };
   if (isBoardApplicable(v.grade) && v.board) payload.board = v.board;

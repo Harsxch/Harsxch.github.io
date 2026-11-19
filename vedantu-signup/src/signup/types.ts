@@ -8,6 +8,8 @@ export interface SignupValues {
   grade: string;
   targetExam: string;
   board: string;
+  state: string;
+  city: string;
   consent: boolean;
 }
 
@@ -18,6 +20,8 @@ export type FieldName =
   | "grade"
   | "targetExam"
   | "board"
+  | "state"
+  | "city"
   | "consent";
 
 export type SignupErrors = Partial<Record<FieldName, string>>;
@@ -32,6 +36,8 @@ export interface SignupPayload {
   target_exam: string;
   /** Omitted when Board does not apply to the selected grade. */
   board?: string;
+  state: string;
+  city: string;
   consent: boolean;
 }
 
@@ -44,5 +50,7 @@ export const EMPTY_VALUES: SignupValues = {
   grade: "",
   targetExam: "",
   board: "",
+  state: "",
+  city: "",
   consent: false,
 };

@@ -15,6 +15,7 @@ interface Props {
   searchPlaceholder?: string;
   emptyText?: string;
   clearable?: boolean;
+  disabled?: boolean;
   onChange: (value: string) => void;
   onBlur?: () => void;
 }
@@ -32,6 +33,7 @@ export function SearchableDropdown({
   searchPlaceholder,
   emptyText = "No matches found",
   clearable = true,
+  disabled = false,
   onChange,
   onBlur,
 }: Props) {
@@ -49,7 +51,7 @@ export function SearchableDropdown({
   }, [options, query]);
 
   const openMenu = () => {
-    if (open) return;
+    if (open || disabled) return;
     setOpen(true);
     setQuery("");
     const i = options.findIndex((o) => o.value === value);
@@ -120,7 +122,7 @@ export function SearchableDropdown({
     <Field id={id} label={label} error={error}>
       <div
         ref={rootRef}
-        className={`dd${open ? " open" : ""}`}
+        className={`dd${open ? " open" : ""}${disabled ? " disabled" : ""}`}
         onBlur={(e) => {
           if (!rootRef.current?.contains(e.relatedTarget as Node)) {
             closeMenu();
@@ -143,6 +145,7 @@ export function SearchableDropdown({
             aria-describedby={error ? `${id}-error` : undefined}
             autoComplete="off"
             readOnly={!searchable}
+            disabled={disabled}
             placeholder={open && searchable ? searchPlaceholder ?? "Type to search" : placeholder}
             value={open && searchable ? query : value}
             onChange={(e) => {
@@ -154,7 +157,7 @@ export function SearchableDropdown({
             onFocus={() => searchable && openMenu()}
             onKeyDown={onKeyDown}
           />
-          {clearable && value && (
+          {clearable && value && !disabled && (
             <button
               type="button"
               className="dd-icon-btn"
