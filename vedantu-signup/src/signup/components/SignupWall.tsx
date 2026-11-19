@@ -60,7 +60,7 @@ export function SignupWall() {
               <form noValidate onSubmit={onSubmit} className="form">
                 <TextInput
                   id="name"
-                  label="Name"
+                  label="Full name"
                   placeholder="Enter your full name"
                   autoComplete="name"
                   value={v.name}

@@ -12,7 +12,7 @@ npm run build      # typecheck + production build
 ```
 
 ## What it does
-Single-screen signup wall collecting: Name, Mobile (OTP-verified), Email, Grade, Target exam, Board (conditional), Consent. Inline validation, typo-suggest for email, loading/success states. Styled after Vedantu's existing modal flow (Poppins, coral orange, navy ink, "100% SAFE & SECURE" line). The wordmark is a **text placeholder**: swap for the official logo asset.
+Single-screen signup wall collecting: Full name, Mobile (OTP-verified), Email, Grade, Target exam, Board (conditional), Consent. Inline validation, typo-suggest for email, loading/success states. Styled after Vedantu's existing modal flow (Poppins, coral orange, navy ink, "100% SAFE & SECURE" line). The wordmark is a **text placeholder**: swap for the official logo asset.
 
 ## Structure (`src/signup/`)
 | File | Role |
@@ -29,11 +29,11 @@ Single-screen signup wall collecting: Name, Mobile (OTP-verified), Email, Grade,
 ## Fields and validation
 | Field | Rule |
 |---|---|
-| Name | Required; whitespace-only rejected; no character restrictions |
+| Full name (payload key `name`) | Required; whitespace-only rejected; no character restrictions |
 | Mobile | +91 default. India: 10 digits, starts 6-9. Other codes: 6-14 digits. Must be OTP-verified. Editing the number or code revokes verification |
 | Email | Required; structure only (`a@b.tld`). Typo suggestion (non-blocking) when the domain is 1 edit away from gmail/yahoo/outlook/hotmail/icloud/rediffmail/live/protonmail, e.g. gmial.com, gmal.com, yahho.com, outlok.com |
 | Grade | Required; exactly 11 options in the specified order |
-| Target exam | Required; 7 options; searchable, clearable |
+| Target exam | Required; 7 options (JEE, NEET, CUET, CAT, Other engg entrance exam, Other, Not decided yet); searchable, clearable |
 | Board | Required only when visible; 35 options; searchable; CBSE, ICSE/ISC, IB, IGCSE pinned on top under "Popular boards" |
 | Consent | Required; unchecked by default; Privacy/Terms links |
 

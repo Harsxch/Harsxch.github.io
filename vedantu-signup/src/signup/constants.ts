@@ -27,7 +27,7 @@ export const TARGET_EXAMS = [
   "NEET",
   "CUET",
   "CAT",
-  "GATE",
+  "Other engg entrance exam",
   "Other",
   "Not decided yet",
 ] as const;
